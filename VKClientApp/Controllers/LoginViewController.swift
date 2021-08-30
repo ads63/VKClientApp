@@ -9,17 +9,36 @@ import UIKit
 
 class LoginViewController: UIViewController {
     @IBOutlet var loginTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var scrollView: UIScrollView!
 
     @IBAction func loginButtonPressed(_ sender: Any) {
         if isValid() {
             // valid login, do something
-            print("ok")
+            performSegue(
+                withIdentifier: "loginSegue",
+                sender: nil)
         } else {
             // invalid login, report error
-            print("error")
+            showAlert()
         }
+    }
+
+    func showAlert() {
+        let alertController = UIAlertController(
+            title: "Error",
+            message: "Incorrect username or password",
+            preferredStyle: .alert)
+        let alertItem = UIAlertAction(
+            title: "press to continue",
+            style: .cancel) { _ in
+                self.loginTextField.text = ""
+                self.passwordTextField.text = ""
+        }
+        alertController.addAction(alertItem)
+        present(alertController,
+                animated: true,
+                completion: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -55,10 +74,12 @@ class LoginViewController: UIViewController {
 
     @objc func keyboardWasShown(notification: Notification) {
         let info = notification.userInfo! as NSDictionary
-        let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue)
+        let kbSize = (info.value(
+            forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue)
             .cgRectValue
             .size
-        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: kbSize.height, right: 0.0)
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0,
+                                         bottom: kbSize.height, right: 0.0)
 
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
@@ -88,7 +109,7 @@ class LoginViewController: UIViewController {
     }
 
     func isValid() -> Bool {
-        return loginTextField.text != "" && passwordTextField.text != ""
+        loginTextField.text != "" && passwordTextField.text != ""
     }
 
     override func viewDidLoad() {
