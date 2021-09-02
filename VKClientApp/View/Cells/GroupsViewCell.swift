@@ -10,8 +10,8 @@ import UIKit
 class GroupsViewCell: UITableViewCell {
     @IBOutlet var groupImage: UIImageView!
     @IBOutlet var groupLabel: UILabel!
-    
-    //    override func awakeFromNib() {
+
+//    override func awakeFromNib() {
 //        super.awakeFromNib()
 //        // Initialization code
 //    }
@@ -26,7 +26,7 @@ class GroupsViewCell: UITableViewCell {
         groupImage.image = group.image
         groupLabel.text = group.groupName
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
     }

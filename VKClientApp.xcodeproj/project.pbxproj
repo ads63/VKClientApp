@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160AC84126DFC0190044FE5D /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160AC84026DFC0190044FE5D /* ShadowView.swift */; };
 		1641393F26D4134600287F22 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1641393E26D4134600287F22 /* FriendsViewController.swift */; };
 		1654819726D6A365002F8292 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1654819626D6A365002F8292 /* User.swift */; };
 		1654819A26D6A3F8002F8292 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1654819926D6A3F8002F8292 /* Group.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		160AC84026DFC0190044FE5D /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		1641393E26D4134600287F22 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		1654819626D6A365002F8292 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1654819926D6A3F8002F8292 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -86,6 +88,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		165481B826DE4C8B002F8292 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				160AC84026DFC0190044FE5D /* ShadowView.swift */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
 		16DF759126CA7E2F00150AB2 = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +123,7 @@
 				16DF75A826CA7E3100150AB2 /* LaunchScreen.storyboard */,
 				16DF75AB26CA7E3100150AB2 /* Info.plist */,
 				1654819826D6A371002F8292 /* Models */,
+				165481B826DE4C8B002F8292 /* CustomViews */,
 			);
 			path = VKClientApp;
 			sourceTree = "<group>";
@@ -220,6 +231,7 @@
 				165481A926D95CA8002F8292 /* GroupsViewController.swift in Sources */,
 				165481A126D7CF1A002F8292 /* FriendDetailsCollectionViewController.swift in Sources */,
 				1654819A26D6A3F8002F8292 /* Group.swift in Sources */,
+				160AC84126DFC0190044FE5D /* ShadowView.swift in Sources */,
 				16DF759E26CA7E3000150AB2 /* AppDelegate.swift in Sources */,
 				16DF75A026CA7E3000150AB2 /* SceneDelegate.swift in Sources */,
 				1654819D26D7A65C002F8292 /* FriendsCell.swift in Sources */,

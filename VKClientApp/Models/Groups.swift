@@ -10,10 +10,14 @@ import UIKit
 
 struct Groups {
     static var groups = [
-        Group(image: UIImage(named: "MySQL"), groupName: "MySQL", isMember: false),
-        Group(image: UIImage(named: "oracle"), groupName: "Oracle", isMember: true),
-        Group(image: UIImage(named: "postgresql"), groupName: "PostgreSQL", isMember: true),
-        Group(image: UIImage(named: "PostgresPro"), groupName: "PostgresPro", isMember: false)
+        Group(image: UIImage(named: "MySQL"), groupName: "MySQL",
+              isMember: false),
+        Group(image: UIImage(named: "oracle"), groupName: "Oracle",
+              isMember: true),
+        Group(image: UIImage(named: "postgresql"), groupName: "PostgreSQL",
+              isMember: true),
+        Group(image: UIImage(named: "PostgresPro"), groupName: "PostgresPro",
+              isMember: false)
     ]
     static func resetGroups(newGroups: [Group]) {
         groups.removeAll()

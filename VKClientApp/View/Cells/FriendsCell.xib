@@ -4,50 +4,87 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="friendsListCell" id="KGk-i7-Jjw" customClass="FriendsCell" customModule="VKClientApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vkq-1D-3PC">
-                        <rect key="frame" x="8" y="8" width="64" height="64"/>
+                    <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="CC9-3o-3Cz" userLabel="ShadowView" customClass="ShadowView" customModule="VKClientApp" customModuleProvider="target">
+                        <rect key="frame" x="15" y="0.0" width="44" height="44"/>
+                        <subviews>
+                            <view opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5f7-2b-crL" userLabel="AvatarImage" customClass="UIImageView">
+                                <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" image="YES"/>
+                                </accessibility>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5f7-2b-crL" secondAttribute="height" multiplier="1:1" id="GGo-6Y-W7X"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="64" id="Byi-fR-cL1"/>
-                            <constraint firstAttribute="width" constant="64" id="hgF-bR-bmB"/>
+                            <constraint firstAttribute="width" secondItem="CC9-3o-3Cz" secondAttribute="height" multiplier="1:1" id="6fY-8P-atq"/>
+                            <constraint firstAttribute="height" constant="44" id="DTQ-AR-riM"/>
+                            <constraint firstItem="5f7-2b-crL" firstAttribute="bottom" secondItem="CC9-3o-3Cz" secondAttribute="bottom" id="Lox-S3-es9"/>
+                            <constraint firstItem="5f7-2b-crL" firstAttribute="trailing" secondItem="CC9-3o-3Cz" secondAttribute="trailing" id="iFb-xY-S34"/>
+                            <constraint firstItem="5f7-2b-crL" firstAttribute="top" secondItem="CC9-3o-3Cz" secondAttribute="top" id="jDu-2Z-QZv"/>
+                            <constraint firstItem="5f7-2b-crL" firstAttribute="leading" secondItem="CC9-3o-3Cz" secondAttribute="leading" id="xZR-TU-AoX"/>
+                            <constraint firstAttribute="width" constant="44" id="zpP-4K-jjR"/>
                         </constraints>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQx-NN-f0f">
-                        <rect key="frame" x="88" y="8" width="216" height="64"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="none" adjustsFontSizeToFit="NO" id="OKn-dx-TFg" userLabel="FriendNameLabel">
+                        <rect key="frame" x="114" y="12" width="201" height="25"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="vkq-1D-3PC" secondAttribute="bottom" constant="8" id="ALS-ir-86c"/>
-                    <constraint firstAttribute="bottom" secondItem="vkq-1D-3PC" secondAttribute="bottom" constant="8" id="W4m-pf-fu9"/>
-                    <constraint firstItem="hQx-NN-f0f" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="eFq-sA-YrS"/>
-                    <constraint firstItem="vkq-1D-3PC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="ehT-f7-TMu"/>
-                    <constraint firstItem="vkq-1D-3PC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="hft-gK-riY"/>
-                    <constraint firstAttribute="bottom" secondItem="hQx-NN-f0f" secondAttribute="bottom" constant="8" id="ihk-Wr-Pl0"/>
-                    <constraint firstItem="vkq-1D-3PC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="ma6-mP-ZDa"/>
-                    <constraint firstItem="vkq-1D-3PC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="o0F-Ya-7EI"/>
-                    <constraint firstItem="hQx-NN-f0f" firstAttribute="leading" secondItem="vkq-1D-3PC" secondAttribute="trailing" constant="16" id="wKr-EG-gdJ"/>
+                    <constraint firstItem="CC9-3o-3Cz" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="23Q-L8-CVd"/>
+                    <constraint firstAttribute="bottom" secondItem="CC9-3o-3Cz" secondAttribute="bottom" id="ElW-Bo-Sor"/>
+                    <constraint firstItem="CC9-3o-3Cz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="aaN-oc-XbT"/>
+                    <constraint firstItem="OKn-dx-TFg" firstAttribute="centerY" secondItem="CC9-3o-3Cz" secondAttribute="centerY" id="iZH-nY-Q4V"/>
+                    <constraint firstItem="OKn-dx-TFg" firstAttribute="leading" secondItem="CC9-3o-3Cz" secondAttribute="trailing" constant="60" id="tWv-pZ-tMp"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                    <color key="value" systemColor="systemGray2Color"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                    <real key="value" value="0.90000000000000002"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                    <real key="value" value="0.20000000000000001"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="avatarImage" destination="vkq-1D-3PC" id="IBV-26-mZD"/>
-                <outlet property="nickNameLabel" destination="hQx-NN-f0f" id="5Tw-Ix-5pm"/>
+                <outlet property="AvatarImage" destination="5f7-2b-crL" id="WSZ-4f-Zcd"/>
+                <outlet property="avatarImage" destination="5f7-2b-crL" id="3zW-aC-79s"/>
+                <outlet property="friendNameLabel" destination="OKn-dx-TFg" id="OCD-Vb-rT1"/>
+                <outlet property="shadowView" destination="CC9-3o-3Cz" id="Phs-Yi-a70"/>
             </connections>
-            <point key="canvasLocation" x="131.8840579710145" y="136.60714285714286"/>
+            <point key="canvasLocation" x="269.56521739130437" y="132.58928571428572"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
