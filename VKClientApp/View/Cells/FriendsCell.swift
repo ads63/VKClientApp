@@ -30,9 +30,10 @@ class FriendsCell: UITableViewCell {
         }
     }
 
-    func configure(user: User) {
+    func configure(user: User, color: UIColor) {
         avatarImage.image = user.avatar
         friendNameLabel.text = user.userName
+        backgroundConfiguration?.backgroundColor = color
     }
 
     override func awakeFromNib() {
@@ -43,7 +44,7 @@ class FriendsCell: UITableViewCell {
         shadowView.layer.masksToBounds = false
         shadowView.layer.cornerRadius = cornerRadius
         shadowView.layer.shadowColor = shadowColor.cgColor
-        shadowView.layer.shadowOffset = CGSize(width: 5.0, height: 5.0)
+        shadowView.layer.shadowOffset = CGSize(width: 5.0, height: 0.0)
         shadowView.layer.shadowRadius = shadowRadius
         shadowView.layer.shadowOpacity = shadowOpacity
 

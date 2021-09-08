@@ -29,7 +29,8 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) ->
-        UICollectionViewCell {
+        UICollectionViewCell
+    {
         guard
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "friendDetailsCell",
@@ -76,7 +77,10 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 }
 
 extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize
+    {
         CGSize(width: 150.0, height: 150.0)
     }
 }

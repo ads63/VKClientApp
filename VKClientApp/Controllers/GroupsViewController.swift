@@ -8,8 +8,11 @@
 import UIKit
 
 class GroupsViewController: UITableViewController {
+    @IBOutlet var searchBar: UISearchBar!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
         tableView.register(
             UINib(
                 nibName: "GroupsViewCell",
@@ -24,6 +27,7 @@ class GroupsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        searchBar.text = Groups.filterJoined
         tableView.reloadData()
     }
 
@@ -55,15 +59,9 @@ class GroupsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView,
-                            titleForFooterInSection section: Int) -> String?
-    {
-        return "swipe to exit"
-    }
-
-    override func tableView(_ tableView: UITableView,
                             titleForHeaderInSection section: Int) -> String?
     {
-        return "My Groups"
+        return "Swipe left to exit group"
     }
 
     /*
@@ -79,10 +77,13 @@ class GroupsViewController: UITableViewController {
     /*
      // Override to support editing the table view.
      */
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath)
+    {
         if editingStyle == .delete {
-            // Delete the row from the data source
             Groups.leaveGroup(index: indexPath.row)
+            // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -111,4 +112,11 @@ class GroupsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
+}
+
+extension GroupsViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        Groups.filterJoined = searchText
+        tableView.reloadData()
+    }
 }

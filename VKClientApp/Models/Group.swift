@@ -7,8 +7,12 @@
 
 import UIKit
 
-struct Group {
+struct Group: Equatable {
+    let id: Int
     let image: UIImage?
     let groupName: String
     var isMember: Bool
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }
