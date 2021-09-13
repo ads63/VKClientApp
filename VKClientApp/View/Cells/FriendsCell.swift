@@ -8,6 +8,8 @@
 import UIKit
 
 class FriendsCell: UITableViewCell {
+    var parentTableViewController: FriendsViewController?
+
     @IBOutlet var shadowView: ShadowView!
     @IBOutlet var avatarImage: UIImageView!
     @IBOutlet var friendNameLabel: UILabel!
@@ -30,10 +32,22 @@ class FriendsCell: UITableViewCell {
         }
     }
 
-    func configure(user: User, color: UIColor) {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 2,
+                                                                     left: 0,
+                                                                     bottom: 2,
+                                                                     right: 0))
+    }
+
+    func configure(controller: FriendsViewController, user: User, color: UIColor) {
+        parentTableViewController = controller
         avatarImage.image = user.avatar
         friendNameLabel.text = user.userName
         backgroundConfiguration?.backgroundColor = color
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapCell(sender:)))
+        avatarImage.isUserInteractionEnabled = true
+        avatarImage.addGestureRecognizer(tapGestureRecognizer)
     }
 
     override func awakeFromNib() {
@@ -50,5 +64,21 @@ class FriendsCell: UITableViewCell {
 
         avatarImage.layer.cornerRadius = cornerRadius
         avatarImage.layer.masksToBounds = true
+    }
+
+    @objc func tapCell(sender: UITapGestureRecognizer) {
+        UIView.animate(
+            withDuration: 0.2,
+            delay: 0.0,
+            usingSpringWithDamping: 0.005,
+            initialSpringVelocity: 1.0,
+            options: [
+                .curveEaseOut
+            ]) {
+            self.shadowView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        } completion: { _ in
+            self.shadowView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            self.parentTableViewController?.tapCell(cell: self)
+        }
     }
 }

@@ -31,6 +31,20 @@ class FriendsViewController: UITableViewController {
         .sorted(by: { $0 < $1 })
     private var friendID: Int?
 
+    func openPhotoCollection(indexPath: IndexPath) {
+        guard
+            let id = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row].id
+        else { return }
+        friendID = id
+        performSegue(
+            withIdentifier: "photoSegue",
+            sender: nil)
+    }
+
+    func tapCell(cell: FriendsCell) {
+        openPhotoCollection(indexPath: tableView.indexPath(for: cell)!)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(
@@ -68,7 +82,7 @@ class FriendsViewController: UITableViewController {
             for: indexPath) as? FriendsCell,
             let user = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row]
         else { return UITableViewCell() }
-        cell.configure(user: user, color: tableColor)
+        cell.configure(controller: self, user: user, color: tableColor)
         return cell
     }
 
@@ -79,12 +93,7 @@ class FriendsViewController: UITableViewController {
             at: indexPath,
             animated: true)
         }
-        guard let id = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row].id
-        else { return }
-        friendID = id
-        performSegue(
-            withIdentifier: "photoSegue",
-            sender: nil)
+        openPhotoCollection(indexPath: indexPath)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -104,6 +113,7 @@ class FriendsViewController: UITableViewController {
                          color: tableColor.withAlphaComponent(0.5))
         return header
     }
+
     /*
      // Override to support conditional editing of the table view.
      override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

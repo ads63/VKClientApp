@@ -67,16 +67,38 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" textContentType="password"/>
                                     </textField>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bBm-QE-rFo">
+                                        <rect key="frame" x="107.66666666666667" y="285.66666666666669" width="20" height="20"/>
+                                        <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="g9T-Ol-H0g">
+                                        <rect key="frame" x="177.66666666666666" y="285.66666666666669" width="20" height="20"/>
+                                        <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="YZr-I2-6q1">
+                                        <rect key="frame" x="247.66666666666663" y="285.66666666666669" width="20" height="20"/>
+                                        <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                    </imageView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="k3D-rX-dJe" secondAttribute="trailing" constant="20" id="89B-Be-FzL"/>
+                                    <constraint firstItem="YZr-I2-6q1" firstAttribute="width" secondItem="g9T-Ol-H0g" secondAttribute="width" id="9CB-SX-OLE"/>
                                     <constraint firstItem="7ud-Tb-SdH" firstAttribute="top" secondItem="LE8-oV-02A" secondAttribute="bottom" priority="800" constant="30" id="DQ6-5E-j80"/>
                                     <constraint firstItem="Siw-CD-c5T" firstAttribute="centerX" secondItem="ZjQ-FT-GIQ" secondAttribute="centerX" id="Du8-5A-hiz"/>
+                                    <constraint firstItem="bBm-QE-rFo" firstAttribute="top" secondItem="k3D-rX-dJe" secondAttribute="bottom" constant="4" id="IZc-rd-nRh"/>
                                     <constraint firstItem="LE8-oV-02A" firstAttribute="centerX" secondItem="ZjQ-FT-GIQ" secondAttribute="centerX" id="PAo-Fj-Wd7"/>
+                                    <constraint firstItem="g9T-Ol-H0g" firstAttribute="width" secondItem="bBm-QE-rFo" secondAttribute="width" id="RsK-W2-kim"/>
+                                    <constraint firstItem="YZr-I2-6q1" firstAttribute="leading" secondItem="g9T-Ol-H0g" secondAttribute="trailing" constant="50" id="Srt-5I-brP"/>
                                     <constraint firstItem="k3D-rX-dJe" firstAttribute="centerX" secondItem="ZjQ-FT-GIQ" secondAttribute="centerX" id="ZMI-Ew-rtS"/>
                                     <constraint firstItem="k3D-rX-dJe" firstAttribute="top" secondItem="Siw-CD-c5T" secondAttribute="bottom" constant="140" id="a7G-MM-mGf"/>
                                     <constraint firstItem="LE8-oV-02A" firstAttribute="top" secondItem="k3D-rX-dJe" secondAttribute="bottom" constant="30" id="b3f-mk-DOY"/>
                                     <constraint firstItem="Siw-CD-c5T" firstAttribute="top" secondItem="ZjQ-FT-GIQ" secondAttribute="top" constant="80" id="bvk-M1-PPy"/>
+                                    <constraint firstItem="g9T-Ol-H0g" firstAttribute="top" secondItem="bBm-QE-rFo" secondAttribute="top" id="ecb-QV-G3o"/>
+                                    <constraint firstItem="YZr-I2-6q1" firstAttribute="top" secondItem="g9T-Ol-H0g" secondAttribute="top" id="gi0-23-WAc"/>
+                                    <constraint firstItem="YZr-I2-6q1" firstAttribute="height" secondItem="g9T-Ol-H0g" secondAttribute="height" id="iBz-pM-6LH"/>
+                                    <constraint firstItem="g9T-Ol-H0g" firstAttribute="centerX" secondItem="k3D-rX-dJe" secondAttribute="centerX" id="mXd-BD-lWJ"/>
+                                    <constraint firstItem="g9T-Ol-H0g" firstAttribute="height" secondItem="bBm-QE-rFo" secondAttribute="height" id="qyw-bv-LBA"/>
+                                    <constraint firstItem="g9T-Ol-H0g" firstAttribute="leading" secondItem="bBm-QE-rFo" secondAttribute="trailing" constant="50" id="v1T-vV-xoj"/>
                                     <constraint firstItem="LE8-oV-02A" firstAttribute="width" secondItem="k3D-rX-dJe" secondAttribute="width" id="vPF-Dh-BKl"/>
                                     <constraint firstItem="7ud-Tb-SdH" firstAttribute="centerX" secondItem="ZjQ-FT-GIQ" secondAttribute="centerX" id="x3L-Ea-n2i"/>
                                     <constraint firstAttribute="bottom" secondItem="7ud-Tb-SdH" secondAttribute="bottom" constant="15" id="yGg-Dh-LUW"/>
@@ -99,14 +121,17 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="centerDotImage" destination="g9T-Ol-H0g" id="ShW-ds-0Z2"/>
+                        <outlet property="leftDotImage" destination="bBm-QE-rFo" id="8cK-nk-0Gl"/>
                         <outlet property="loginTextField" destination="k3D-rX-dJe" id="zss-M0-2N2"/>
                         <outlet property="passwordTextField" destination="LE8-oV-02A" id="UlY-Xm-T7c"/>
+                        <outlet property="rightDotImage" destination="YZr-I2-6q1" id="hWa-h5-qqZ"/>
                         <outlet property="scrollView" destination="ZjQ-FT-GIQ" id="akI-Gy-BKF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-8094" y="-6217"/>
+            <point key="canvasLocation" x="-8095.1999999999998" y="-6217.2413793103451"/>
         </scene>
         <!--Add Groups View Controller-->
         <scene sceneID="hLa-eW-9nm">
@@ -332,6 +357,7 @@
     </scenes>
     <resources>
         <image name="background" width="2232" height="3150"/>
+        <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="person.2.circle" catalog="system" width="128" height="121"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>

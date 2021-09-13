@@ -11,6 +11,9 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var rightDotImage: UIImageView!
+    @IBOutlet var centerDotImage: UIImageView!
+    @IBOutlet var leftDotImage: UIImageView!
 
     @IBAction func loginButtonPressed(_ sender: Any) {
         if isValid() {
@@ -39,6 +42,38 @@ class LoginViewController: UIViewController {
         present(alertController,
                 animated: true,
                 completion: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        UIView.animate(
+            withDuration: 1,
+            delay: 0,
+            options: [
+                .repeat,
+                .autoreverse
+            ]) {
+            self.leftDotImage.alpha = 0
+        }
+        UIView.animate(
+            withDuration: 1,
+            delay: 0.5,
+            options: [
+                .repeat,
+                .autoreverse
+            ]) {
+            self.centerDotImage.alpha = 0
+        }
+        UIView.animate(
+            withDuration: 1,
+            delay: 1,
+            options: [
+                .repeat,
+                .autoreverse
+            ]) {
+            self.rightDotImage.alpha = 0
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
