@@ -21,6 +21,8 @@
 		165481B126D9606B002F8292 /* GroupsViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 165481AF26D9606B002F8292 /* GroupsViewCell.xib */; };
 		165481B326DBCB34002F8292 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165481B226DBCB34002F8292 /* Groups.swift */; };
 		165481B526DCE450002F8292 /* AddGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165481B426DCE450002F8292 /* AddGroupsViewController.swift */; };
+		16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */; };
+		16D89AE726E7C936000031AC /* FriendsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */; };
 		16DF759E26CA7E3000150AB2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DF759D26CA7E3000150AB2 /* AppDelegate.swift */; };
 		16DF75A026CA7E3000150AB2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DF759F26CA7E3000150AB2 /* SceneDelegate.swift */; };
 		16DF75A226CA7E3000150AB2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DF75A126CA7E3000150AB2 /* LoginViewController.swift */; };
@@ -44,6 +46,8 @@
 		165481AF26D9606B002F8292 /* GroupsViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupsViewCell.xib; sourceTree = "<group>"; };
 		165481B226DBCB34002F8292 /* Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		165481B426DCE450002F8292 /* AddGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupsViewController.swift; sourceTree = "<group>"; };
+		16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSectionHeader.swift; sourceTree = "<group>"; };
+		16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendsSectionHeader.xib; sourceTree = "<group>"; };
 		16DF759A26CA7E3000150AB2 /* VKClientApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKClientApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16DF759D26CA7E3000150AB2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16DF759F26CA7E3000150AB2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,12 +82,14 @@
 		1654819F26D7A667002F8292 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */,
 				1654819B26D7A65C002F8292 /* FriendsCell.swift */,
 				1654819C26D7A65C002F8292 /* FriendsCell.xib */,
 				165481A426D95171002F8292 /* FriendCollectionViewCell.swift */,
 				165481A526D95171002F8292 /* FriendCollectionViewCell.xib */,
 				165481AE26D9606B002F8292 /* GroupsViewCell.swift */,
 				165481AF26D9606B002F8292 /* GroupsViewCell.xib */,
+				16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -207,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				165481A726D95171002F8292 /* FriendCollectionViewCell.xib in Resources */,
+				16D89AE726E7C936000031AC /* FriendsSectionHeader.xib in Resources */,
 				16DF75AA26CA7E3100150AB2 /* LaunchScreen.storyboard in Resources */,
 				165481B126D9606B002F8292 /* GroupsViewCell.xib in Resources */,
 				16DF75A726CA7E3100150AB2 /* Assets.xcassets in Resources */,
@@ -235,6 +242,7 @@
 				16DF759E26CA7E3000150AB2 /* AppDelegate.swift in Sources */,
 				16DF75A026CA7E3000150AB2 /* SceneDelegate.swift in Sources */,
 				1654819D26D7A65C002F8292 /* FriendsCell.swift in Sources */,
+				16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */,
 				165481B326DBCB34002F8292 /* Groups.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

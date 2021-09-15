@@ -5,44 +5,73 @@
 //  Created by Алексей Шинкарев on 23.08.2021.
 //
 
-import Foundation
 import UIKit
 
 class FriendsViewController: UITableViewController {
-    private var friends = [0: User(avatar: UIImage(named: "batman"),
-                                   userName: "batman"),
-                           1: User(avatar: UIImage(named: "egghead"),
-                                   userName: "egghead"),
-                           2: User(avatar: UIImage(named: "deadhead"),
-                                   userName: "deadhead"),
-                           3: User(avatar: UIImage(named: "guy"),
-                                   userName: "guy"),
-                           4: User(avatar: UIImage(named: "batman"),
-                                   userName: "batman2"),
-                           5: User(avatar: UIImage(named: "egghead"),
-                                   userName: "egghead2"),
-                           6: User(avatar: UIImage(named: "deadhead"),
-                                   userName: "deadhead2"),
-                           7: User(avatar: UIImage(named: "guy"),
-                                   userName: "guy2")]
+    private let tableColor = UIColor.systemTeal
+    private var friends: [User] = [User(id: 0, avatar: UIImage(named: "batman"),
+                                        userName: "batman"),
+                                   User(id: 1, avatar: UIImage(named: "egghead"),
+                                        userName: "egghead"),
+                                   User(id: 2, avatar: UIImage(named: "deadhead"),
+                                        userName: "deadhead"),
+                                   User(id: 3, avatar: UIImage(named: "guy"),
+                                        userName: "guy"),
+                                   User(id: 4, avatar: UIImage(named: "batman"),
+                                        userName: "batman2"),
+                                   User(id: 5, avatar: UIImage(named: "egghead"),
+                                        userName: "egghead2"),
+                                   User(id: 6, avatar: UIImage(named: "deadhead"),
+                                        userName: "deadhead2"),
+                                   User(id: 7, avatar: UIImage(named: "guy"),
+                                        userName: "guy2")]
+    private lazy var groupedFriends: [Character: [User]] =
+        Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
+    private lazy var groupKeys: [Character] = groupedFriends.keys
+        .sorted(by: { $0 < $1 })
     private var friendID: Int?
+
+    func openPhotoCollection(indexPath: IndexPath) {
+        guard
+            let id = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row].id
+        else { return }
+        friendID = id
+        performSegue(
+            withIdentifier: "photoSegue",
+            sender: nil)
+    }
+
+    func tapCell(cell: FriendsCell) {
+        openPhotoCollection(indexPath: tableView.indexPath(for: cell)!)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(
+            UINib(nibName: "FriendsSectionHeader", bundle: nil),
+            forHeaderFooterViewReuseIdentifier: "friendsSectionHeader")
 
         tableView.register(
             UINib(
                 nibName: "FriendsCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendsListCell")
+        tableView.backgroundColor = tableColor
     }
 
     // MARK: - Table view data source
 
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return groupKeys.count
+    }
+
     override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int
     {
-        friends.count
+        guard let count = groupedFriends[groupKeys[section]]?.count
+        else { return 0 }
+        return count
     }
 
     override func tableView(_ tableView: UITableView,
@@ -50,11 +79,10 @@ class FriendsViewController: UITableViewController {
     {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "friendsListCell",
-            for: indexPath) as? FriendsCell
+            for: indexPath) as? FriendsCell,
+            let user = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row]
         else { return UITableViewCell() }
-
-        cell.configure(user: friends[indexPath.row]!)
-
+        cell.configure(controller: self, user: user, color: tableColor)
         return cell
     }
 
@@ -65,16 +93,25 @@ class FriendsViewController: UITableViewController {
             at: indexPath,
             animated: true)
         }
-        friendID = indexPath.row
-        performSegue(
-            withIdentifier: "photoSegue",
-            sender: nil)
+        openPhotoCollection(indexPath: indexPath)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let friendVC = segue.destination
             as? FriendDetailsCollectionViewController else { return }
         friendVC.userID = friendID
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            viewForHeaderInSection section: Int) -> UIView?
+    {
+        guard let header = tableView
+            .dequeueReusableHeaderFooterView(withIdentifier: "friendsSectionHeader")
+            as? FriendsSectionHeader
+        else { return UITableViewHeaderFooterView() }
+        header.configure(text: String(groupKeys[section]),
+                         color: tableColor.withAlphaComponent(0.5))
+        return header
     }
 
     /*

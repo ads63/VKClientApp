@@ -5,57 +5,49 @@
 //  Created by Алексей Шинкарев on 29.08.2021.
 //
 
-import Foundation
 import UIKit
 
 struct Groups {
     static var groups = [
-        Group(image: UIImage(named: "MySQL"), groupName: "MySQL",
+        Group(id: 0, image: UIImage(named: "MySQL"), groupName: "MySQL",
               isMember: false),
-        Group(image: UIImage(named: "oracle"), groupName: "Oracle",
+        Group(id: 1, image: UIImage(named: "oracle"), groupName: "Oracle",
               isMember: true),
-        Group(image: UIImage(named: "postgresql"), groupName: "PostgreSQL",
+        Group(id: 2, image: UIImage(named: "postgresql"), groupName: "PostgreSQL",
               isMember: true),
-        Group(image: UIImage(named: "PostgresPro"), groupName: "PostgresPro",
+        Group(id: 3, image: UIImage(named: "PostgresPro"), groupName: "PostgresPro",
               isMember: false)
     ]
+    static var filterJoined = ""
+    static var filter2Join = ""
+
     static func resetGroups(newGroups: [Group]) {
         groups.removeAll()
         groups.append(contentsOf: newGroups)
     }
 
-    static func getGroups2Join() -> [Group] {
-        return groups.filter { !$0.isMember }
+    static func getGroups2Join(filter: String = filter2Join) -> [Group] {
+        return groups.filter { !$0.isMember && (filter.isEmpty || $0.groupName.lowercased().contains(filter.lowercased())) }
     }
 
-    static func getJoinedGroups() -> [Group] {
-        return groups.filter { $0.isMember }
+    static func getJoinedGroups(filter: String = filterJoined) -> [Group] {
+        return groups.filter { $0.isMember && (filter.isEmpty || $0.groupName.lowercased().contains(filter.lowercased())) }
     }
 
     static func joinGroup(index: Int) {
-        var counter = 0
         for i in 0 ..< groups.count {
-            if !groups[i].isMember {
-                if counter == index {
-                    groups[i].isMember = true
-                    return
-                } else {
-                    counter += 1
-                }
+            if getGroups2Join()[index] == groups[i] {
+                groups[i].isMember = true
+                return
             }
         }
     }
 
     static func leaveGroup(index: Int) {
-        var counter = 0
         for i in 0 ..< groups.count {
-            if groups[i].isMember {
-                if counter == index {
-                    groups[i].isMember = false
-                    return
-                } else {
-                    counter += 1
-                }
+            if getJoinedGroups()[index] == groups[i] {
+                groups[i].isMember = false
+                return
             }
         }
     }
