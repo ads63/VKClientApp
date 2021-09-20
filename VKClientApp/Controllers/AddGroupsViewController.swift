@@ -7,23 +7,7 @@
 
 import UIKit
 
-class AddGroupsViewController: UITableViewController {
-    @IBOutlet var searchBar: UISearchBar!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        searchBar.delegate = self
-        tableView.register(
-            UINib(
-                nibName: "GroupsViewCell",
-                bundle: nil),
-            forCellReuseIdentifier: "groupsListCell")
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-
+class AddGroupsViewController: GroupsViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchBar.text = Groups.filter2Join
@@ -32,15 +16,12 @@ class AddGroupsViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
     override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
+        Groups.joinGroups(indexes: selectedIndexes.map { $0.row })
+        selectedIndexes.removeAll()
         return Groups.getGroups2Join().count
     }
 
@@ -51,34 +32,19 @@ class AddGroupsViewController: UITableViewController {
             withIdentifier: "groupsListCell",
             for: indexPath) as? GroupsViewCell
         else { return UITableViewCell() }
-        cell.configure(group: Groups.getGroups2Join()[indexPath.row])
+        cell.configure(controller: self,
+                       cellColor: tableColor,
+                       selectColor: selectColor,
+                       group: Groups.getGroups2Join()[indexPath.row])
         return cell
     }
 
     override func tableView(_ tableView: UITableView,
-                            titleForHeaderInSection section: Int) -> String?
+                            willDisplayHeaderView view: UIView,
+                            forSection section: Int)
     {
-        return "Swipe left to join group"
-    }
-
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView,
-                            canEditRowAt indexPath: IndexPath) -> Bool
-    {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-
-//      Override to support editing the table view.
-    override func tableView(_ tableView: UITableView,
-                            commit editingStyle: UITableViewCell.EditingStyle,
-                            forRowAt indexPath: IndexPath)
-    {
-        if editingStyle == .delete {
-            Groups.joinGroup(index: indexPath.row)
-//              Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
+        let headerView = view as! UITableViewHeaderFooterView
+        setHeaderFooter(view: headerView, text: "swipe left to join the selected groups")
     }
 
     /*
@@ -105,10 +71,9 @@ class AddGroupsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
-}
-
-extension AddGroupsViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    override func searchBar(_ searchBar: UISearchBar,
+                            textDidChange searchText: String)
+    {
         Groups.filter2Join = searchText
         tableView.reloadData()
     }
