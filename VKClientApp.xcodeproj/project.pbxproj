@@ -21,6 +21,8 @@
 		165481B126D9606B002F8292 /* GroupsViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 165481AF26D9606B002F8292 /* GroupsViewCell.xib */; };
 		165481B326DBCB34002F8292 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165481B226DBCB34002F8292 /* Groups.swift */; };
 		165481B526DCE450002F8292 /* AddGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165481B426DCE450002F8292 /* AddGroupsViewController.swift */; };
+		16807BB526F9290000A232F0 /* NavigationControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16807BB426F9290000A232F0 /* NavigationControllerAnimation.swift */; };
+		16807BB726F9297100A232F0 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16807BB626F9297100A232F0 /* CustomNavigationController.swift */; };
 		16851D6A26F699B400BF3A55 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16851D6926F699B400BF3A55 /* Direction.swift */; };
 		16D5CE2126F274CA001EAFF2 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5CE2026F274CA001EAFF2 /* UserDetails.swift */; };
 		16D5CE2426F277D2001EAFF2 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5CE2326F277D2001EAFF2 /* Users.swift */; };
@@ -50,6 +52,8 @@
 		165481AF26D9606B002F8292 /* GroupsViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupsViewCell.xib; sourceTree = "<group>"; };
 		165481B226DBCB34002F8292 /* Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		165481B426DCE450002F8292 /* AddGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupsViewController.swift; sourceTree = "<group>"; };
+		16807BB426F9290000A232F0 /* NavigationControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerAnimation.swift; sourceTree = "<group>"; };
+		16807BB626F9297100A232F0 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		16851D6926F699B400BF3A55 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		16D5CE2026F274CA001EAFF2 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		16D5CE2326F277D2001EAFF2 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
@@ -114,6 +118,15 @@
 			path = CustomViews;
 			sourceTree = "<group>";
 		};
+		16807BB326F9280900A232F0 /* UIHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				16807BB426F9290000A232F0 /* NavigationControllerAnimation.swift */,
+				16807BB626F9297100A232F0 /* CustomNavigationController.swift */,
+			);
+			path = UIHelpers;
+			sourceTree = "<group>";
+		};
 		16DF759126CA7E2F00150AB2 = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +146,7 @@
 		16DF759C26CA7E3000150AB2 /* VKClientApp */ = {
 			isa = PBXGroup;
 			children = (
+				16807BB326F9280900A232F0 /* UIHelpers */,
 				16DF759D26CA7E3000150AB2 /* AppDelegate.swift */,
 				16DF759F26CA7E3000150AB2 /* SceneDelegate.swift */,
 				16DF75B126CA7E8600150AB2 /* Controllers */,
@@ -243,9 +257,11 @@
 			files = (
 				1641393F26D4134600287F22 /* FriendsViewController.swift in Sources */,
 				16D5CE2126F274CA001EAFF2 /* UserDetails.swift in Sources */,
+				16807BB526F9290000A232F0 /* NavigationControllerAnimation.swift in Sources */,
 				165481B526DCE450002F8292 /* AddGroupsViewController.swift in Sources */,
 				165481A626D95171002F8292 /* FriendCollectionViewCell.swift in Sources */,
 				16DF75A226CA7E3000150AB2 /* LoginViewController.swift in Sources */,
+				16807BB726F9297100A232F0 /* CustomNavigationController.swift in Sources */,
 				16D5CE2626F279B3001EAFF2 /* UserPhoto.swift in Sources */,
 				1654819726D6A365002F8292 /* User.swift in Sources */,
 				165481B026D9606B002F8292 /* GroupsViewCell.swift in Sources */,

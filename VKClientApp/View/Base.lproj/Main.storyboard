@@ -243,7 +243,7 @@
                     <navigationItem key="navigationItem" id="9se-Hy-Zj4">
                         <barButtonItem key="leftBarButtonItem" image="plus" catalog="system" id="95J-wv-u2e">
                             <connections>
-                                <segue destination="HbQ-74-bar" kind="show" identifier="searchSegue" id="j1E-Ny-Bq6"/>
+                                <segue destination="HbQ-74-bar" kind="show" identifier="searchSegue" id="uvD-Ra-zMn"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -297,7 +297,7 @@
         <!--Friends-->
         <scene sceneID="JGl-Bd-WJ6">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Mcc-AE-BUe" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="friendsID" automaticallyAdjustsScrollViewInsets="NO" id="Mcc-AE-BUe" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Friends" selectedImage="star.fill" catalog="system" id="D3C-t2-PCh"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Friends" id="hma-OL-iH9"/>
@@ -307,7 +307,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="vAA-uO-D12" kind="relationship" relationship="rootViewController" id="1FQ-RI-FkF"/>
+                        <segue destination="vAA-uO-D12" kind="relationship" relationship="rootViewController" id="rny-Mj-4qk"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5PC-cd-qmt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -317,7 +317,7 @@
         <!--Groups-->
         <scene sceneID="6to-NR-pfC">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dr3-2P-Wpy" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="groupsID" automaticallyAdjustsScrollViewInsets="NO" id="Dr3-2P-Wpy" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Groups" selectedImage="person.2.circle" catalog="system" id="x91-Pt-iad"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Groups" id="F0V-uV-WmM"/>
@@ -327,7 +327,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="N2W-Jv-lPk" kind="relationship" relationship="rootViewController" id="50F-BO-HsK"/>
+                        <segue destination="N2W-Jv-lPk" kind="relationship" relationship="rootViewController" id="qe0-27-Gx6"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Adg-59-b1d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -346,8 +346,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="Mcc-AE-BUe" kind="relationship" relationship="viewControllers" id="Vv1-hh-Q1l"/>
-                        <segue destination="Dr3-2P-Wpy" kind="relationship" relationship="viewControllers" id="NNc-ty-tQV"/>
+                        <segue destination="Mcc-AE-BUe" kind="relationship" relationship="viewControllers" destinationCreationSelector="friendsSelector" id="Vv1-hh-Q1l"/>
+                        <segue destination="Dr3-2P-Wpy" kind="relationship" relationship="viewControllers" destinationCreationSelector="groupSelector" id="NNc-ty-tQV"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Qz-j7-5DN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

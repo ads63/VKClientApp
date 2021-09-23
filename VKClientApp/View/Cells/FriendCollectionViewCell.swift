@@ -21,7 +21,6 @@ class FriendCollectionViewCell: UICollectionViewCell {
         let swipeLeftGestureRecognizer =
             UISwipeGestureRecognizer(target: self,
                                      action: #selector(swipeLeft(sender:)))
-        swipeRightGestureRecognizer.direction = .right
         swipeLeftGestureRecognizer.direction = .left
         addGestureRecognizer(swipeRightGestureRecognizer)
         addGestureRecognizer(swipeLeftGestureRecognizer)

@@ -90,17 +90,3 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
     }
 }
 
-//extension FriendDetailsCollectionViewController {
-//    // simulate get photo by userID from backend
-//    func getPhoto(userID: Int?) -> [UIImage?] {
-//        let pictures = [-1: [UIImage(named: "unknown")],
-//                        0: [UIImage(named: "batman")],
-//                        1: [UIImage(named: "egghead")],
-//                        2: [UIImage(named: "deadhead")],
-//                        3: [UIImage(named: "guy")]]
-//        guard let image = pictures[userID ?? -1] else {
-//            return pictures[-1]!
-//        }
-//        return image
-//    }
-//}

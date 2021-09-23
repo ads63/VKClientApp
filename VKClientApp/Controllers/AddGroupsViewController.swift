@@ -7,8 +7,29 @@
 
 import UIKit
 
-class AddGroupsViewController: GroupsViewController {
-    override func viewWillAppear(_ animated: Bool) {
+class AddGroupsViewController: GroupsViewController
+{
+
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        searchBar.delegate = self
+        tableView.register(
+            UINib(
+                nibName: "GroupsViewCell",
+                bundle: nil),
+            forCellReuseIdentifier: "groupsListCell")
+        tableView.backgroundColor = tableColor
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+
+ 
+    override func viewWillAppear(_ animated: Bool)
+    {
         super.viewWillAppear(animated)
         searchBar.text = Groups.filter2Join
         tableView.reloadData()
@@ -44,7 +65,8 @@ class AddGroupsViewController: GroupsViewController {
                             forSection section: Int)
     {
         let headerView = view as! UITableViewHeaderFooterView
-        setHeaderFooter(view: headerView, text: "swipe left to join the selected groups")
+        setHeaderFooter(view: headerView,
+                        text: "swipe left to join the selected groups")
     }
 
     /*
@@ -71,10 +93,14 @@ class AddGroupsViewController: GroupsViewController {
          // Pass the selected object to the new view controller.
      }
      */
+}
+
+extension AddGroupsViewController {
     override func searchBar(_ searchBar: UISearchBar,
-                            textDidChange searchText: String)
+                   textDidChange searchText: String)
     {
         Groups.filter2Join = searchText
         tableView.reloadData()
     }
 }
+

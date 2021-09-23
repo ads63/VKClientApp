@@ -13,14 +13,6 @@ class GroupsViewController: UITableViewController {
     var selectedIndexes = Set<IndexPath>()
     @IBOutlet var searchBar: UISearchBar!
 
-    func tapCell(cell: GroupsViewCell) {
-        if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
-            selectedIndexes.insert(tableView.indexPath(for: cell)!)
-        } else {
-            selectedIndexes.remove(tableView.indexPath(for: cell)!)
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
@@ -67,7 +59,8 @@ class GroupsViewController: UITableViewController {
                             forSection section: Int)
     {
         let headerView = view as! UITableViewHeaderFooterView
-        setHeaderFooter(view: headerView, text: "swipe left to leave the selected groups")
+        setHeaderFooter(view: headerView,
+                        text: "swipe left to leave the selected groups")
     }
 
     override func tableView(_ tableView: UITableView,
@@ -75,7 +68,8 @@ class GroupsViewController: UITableViewController {
                             forSection section: Int)
     {
         let headerView = view as! UITableViewHeaderFooterView
-        setHeaderFooter(view: headerView, text: "tap for group selection or deselection")
+        setHeaderFooter(view: headerView,
+                        text: "tap for group selection or deselection")
     }
 
     override func tableView(_ tableView: UITableView,
@@ -168,6 +162,13 @@ class GroupsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
+    func tapCell(cell: GroupsViewCell) {
+        if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
+            selectedIndexes.insert(tableView.indexPath(for: cell)!)
+        } else {
+            selectedIndexes.remove(tableView.indexPath(for: cell)!)
+        }
+    }
 }
 
 extension GroupsViewController: UISearchBarDelegate {
