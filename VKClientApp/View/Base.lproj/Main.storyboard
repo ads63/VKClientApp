@@ -51,7 +51,7 @@
                                         </state>
                                         <connections>
                                             <action selector="loginButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1HR-jX-KZQ"/>
-                                            <segue destination="wUE-KI-542" kind="show" identifier="loginSegue" id="ixg-th-tHo"/>
+                                            <segue destination="ZL6-dG-mwP" kind="show" identifier="loginSegue" id="GhE-hF-Vd3"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="user" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k3D-rX-dJe" userLabel="LoginTextField">
@@ -208,6 +208,42 @@
             </objects>
             <point key="canvasLocation" x="-4255.1999999999998" y="-6217.2413793103451"/>
         </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="17T-eo-4LE">
+            <objects>
+                <tabBarController id="ZL6-dG-mwP" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="jsa-82-qxw"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vbn-vF-fE9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="qQw-ZM-Gcu" kind="relationship" relationship="viewControllers" id="UPh-qH-Sma"/>
+                        <segue destination="Tre-mL-A5n" kind="relationship" relationship="viewControllers" id="TrI-yB-PZl"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v1a-u4-zUB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7162" y="-6217"/>
+        </scene>
+        <!--Groups-->
+        <scene sceneID="YNO-9U-FcK">
+            <objects>
+                <navigationController id="Tre-mL-A5n" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Groups" image="person.3.fill" catalog="system" selectedImage="person.3.fill" id="SyD-DO-ZRM"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QA0-o7-5w0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="N2W-Jv-lPk" kind="relationship" relationship="rootViewController" id="V23-Hd-YG5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PJQ-xD-7B6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6282" y="-5435"/>
+        </scene>
         <!--Groups View Controller-->
         <scene sceneID="ajR-v9-G4G">
             <objects>
@@ -261,6 +297,23 @@
             <point key="canvasLocation" x="-5216.8000000000002" y="-5435.467980295567"/>
         </scene>
         <!--Friends-->
+        <scene sceneID="rsA-rM-JAw">
+            <objects>
+                <navigationController title="Friends" id="qQw-ZM-Gcu" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Friends" image="person.fill" catalog="system" selectedImage="person.fill" id="1Uu-W6-BBE"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7sJ-Cc-XGi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vAA-uO-D12" kind="relationship" relationship="rootViewController" id="cZq-0w-PQv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a0l-Ih-nTW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-6281" y="-6217"/>
+        </scene>
+        <!--Friends-->
         <scene sceneID="wW9-go-774">
             <objects>
                 <tableViewController title="Friends" id="vAA-uO-D12" customClass="FriendsViewController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -294,73 +347,13 @@
             </objects>
             <point key="canvasLocation" x="-5311.1999999999998" y="-6217.2413793103451"/>
         </scene>
-        <!--Friends-->
-        <scene sceneID="JGl-Bd-WJ6">
-            <objects>
-                <navigationController storyboardIdentifier="friendsID" automaticallyAdjustsScrollViewInsets="NO" id="Mcc-AE-BUe" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Friends" selectedImage="star.fill" catalog="system" id="D3C-t2-PCh"/>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Friends" id="hma-OL-iH9"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="H5q-KW-Lhv">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="vAA-uO-D12" kind="relationship" relationship="rootViewController" id="rny-Mj-4qk"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5PC-cd-qmt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6253.6000000000004" y="-6217.2413793103451"/>
-        </scene>
-        <!--Groups-->
-        <scene sceneID="6to-NR-pfC">
-            <objects>
-                <navigationController storyboardIdentifier="groupsID" automaticallyAdjustsScrollViewInsets="NO" id="Dr3-2P-Wpy" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Groups" selectedImage="person.2.circle" catalog="system" id="x91-Pt-iad"/>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Groups" id="F0V-uV-WmM"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="S50-Cn-hUd">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="N2W-Jv-lPk" kind="relationship" relationship="rootViewController" id="qe0-27-Gx6"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Adg-59-b1d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-6253.6000000000004" y="-5435.467980295567"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="b5J-4b-1JL">
-            <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="wUE-KI-542" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="wfy-kq-U6e"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="c77-xj-hLm">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="Mcc-AE-BUe" kind="relationship" relationship="viewControllers" destinationCreationSelector="friendsSelector" id="Vv1-hh-Q1l"/>
-                        <segue destination="Dr3-2P-Wpy" kind="relationship" relationship="viewControllers" destinationCreationSelector="groupSelector" id="NNc-ty-tQV"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2Qz-j7-5DN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-7196" y="-6217.2413793103451"/>
-        </scene>
     </scenes>
     <resources>
         <image name="background" width="2232" height="3150"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
-        <image name="person.2.circle" catalog="system" width="128" height="121"/>
+        <image name="person.3.fill" catalog="system" width="128" height="61"/>
+        <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="plus" catalog="system" width="128" height="113"/>
-        <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
