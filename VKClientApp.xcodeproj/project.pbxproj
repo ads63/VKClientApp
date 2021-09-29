@@ -27,6 +27,7 @@
 		16D5CE2126F274CA001EAFF2 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5CE2026F274CA001EAFF2 /* UserDetails.swift */; };
 		16D5CE2426F277D2001EAFF2 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5CE2326F277D2001EAFF2 /* Users.swift */; };
 		16D5CE2626F279B3001EAFF2 /* UserPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D5CE2526F279B3001EAFF2 /* UserPhoto.swift */; };
+		16D77D62270327E0001973DF /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D77D61270327E0001973DF /* Session.swift */; };
 		16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */; };
 		16D89AE726E7C936000031AC /* FriendsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */; };
 		16DF759E26CA7E3000150AB2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DF759D26CA7E3000150AB2 /* AppDelegate.swift */; };
@@ -58,6 +59,7 @@
 		16D5CE2026F274CA001EAFF2 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		16D5CE2326F277D2001EAFF2 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		16D5CE2526F279B3001EAFF2 /* UserPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhoto.swift; sourceTree = "<group>"; };
+		16D77D61270327E0001973DF /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSectionHeader.swift; sourceTree = "<group>"; };
 		16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendsSectionHeader.xib; sourceTree = "<group>"; };
 		16DF759A26CA7E3000150AB2 /* VKClientApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKClientApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +129,14 @@
 			path = UIHelpers;
 			sourceTree = "<group>";
 		};
+		16D77D60270327BB001973DF /* Singletons */ = {
+			isa = PBXGroup;
+			children = (
+				16D77D61270327E0001973DF /* Session.swift */,
+			);
+			path = Singletons;
+			sourceTree = "<group>";
+		};
 		16DF759126CA7E2F00150AB2 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +156,7 @@
 		16DF759C26CA7E3000150AB2 /* VKClientApp */ = {
 			isa = PBXGroup;
 			children = (
+				16D77D60270327BB001973DF /* Singletons */,
 				16807BB326F9280900A232F0 /* UIHelpers */,
 				16DF759D26CA7E3000150AB2 /* AppDelegate.swift */,
 				16DF759F26CA7E3000150AB2 /* SceneDelegate.swift */,
@@ -273,6 +284,7 @@
 				16851D6A26F699B400BF3A55 /* Direction.swift in Sources */,
 				16DF759E26CA7E3000150AB2 /* AppDelegate.swift in Sources */,
 				16DF75A026CA7E3000150AB2 /* SceneDelegate.swift in Sources */,
+				16D77D62270327E0001973DF /* Session.swift in Sources */,
 				1654819D26D7A65C002F8292 /* FriendsCell.swift in Sources */,
 				16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */,
 				165481B326DBCB34002F8292 /* Groups.swift in Sources */,
