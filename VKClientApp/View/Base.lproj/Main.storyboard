@@ -300,7 +300,7 @@
         <scene sceneID="rsA-rM-JAw">
             <objects>
                 <navigationController title="Friends" id="qQw-ZM-Gcu" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Friends" image="person.fill" catalog="system" selectedImage="person.fill" id="1Uu-W6-BBE"/>
+                    <tabBarItem key="tabBarItem" title="Friends" image="person.2.fill" catalog="system" selectedImage="person.2.fill" id="1Uu-W6-BBE"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7sJ-Cc-XGi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -351,8 +351,8 @@
     <resources>
         <image name="background" width="2232" height="3150"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
+        <image name="person.2.fill" catalog="system" width="128" height="80"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
-        <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

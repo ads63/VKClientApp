@@ -7,8 +7,10 @@
 
 import UIKit
 
-class AddGroupsViewController: GroupsViewController
+class AddGroupsViewController: UITableViewController
 {
+    var selectedIndexes = Set<IndexPath>()
+    @IBOutlet var searchBar: UISearchBar!
 
     override func viewDidLoad()
     {
@@ -19,7 +21,7 @@ class AddGroupsViewController: GroupsViewController
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
-        tableView.backgroundColor = tableColor
+        tableView.backgroundColor = UISettings.instance.tableColor
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -36,13 +38,37 @@ class AddGroupsViewController: GroupsViewController
     }
 
     // MARK: - Table view data source
+    //----------------------------
+
+        override func numberOfSections(in tableView: UITableView) -> Int {
+            // #warning Incomplete implementation, return the number of sections
+            return 1
+        }
+
+        override func tableView(_ tableView: UITableView,
+                                heightForHeaderInSection section: Int) -> CGFloat
+        {
+            25.0
+        }
+
+
+
+        /*
+          Override to support conditional editing of the table view.
+         */
+        override func tableView(_ tableView: UITableView,
+                                canEditRowAt indexPath: IndexPath) -> Bool
+        {
+    //          Return false if you do not want the specified item to be editable.
+            return false
+        }
 
     override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-        Groups.joinGroups(indexes: selectedIndexes.map { $0.row })
-        selectedIndexes.removeAll()
+//        Groups.joinGroups(indexes: selectedIndexes.map { $0.row })
+//        selectedIndexes.removeAll()
         return Groups.getGroups2Join().count
     }
 
@@ -54,8 +80,8 @@ class AddGroupsViewController: GroupsViewController
             for: indexPath) as? GroupsViewCell
         else { return UITableViewCell() }
         cell.configure(controller: self,
-                       cellColor: tableColor,
-                       selectColor: selectColor,
+                       cellColor: UISettings.instance.tableColor,
+                       selectColor: UISettings.instance.selectColor,
                        group: Groups.getGroups2Join()[indexPath.row])
         return cell
     }
@@ -66,7 +92,7 @@ class AddGroupsViewController: GroupsViewController
     {
         let headerView = view as! UITableViewHeaderFooterView
         setHeaderFooter(view: headerView,
-                        text: "swipe left to join the selected groups")
+                        text: "tap a new group to join")
     }
 
     /*
@@ -95,12 +121,43 @@ class AddGroupsViewController: GroupsViewController
      */
 }
 
-extension AddGroupsViewController {
-    override func searchBar(_ searchBar: UISearchBar,
+extension AddGroupsViewController: UISearchBarDelegate {
+     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String)
     {
         Groups.filter2Join = searchText
         tableView.reloadData()
+    }
+}
+extension AddGroupsViewController: CroupsViewControllerProtocol {
+    func tapCell(cell: GroupsViewCell) {
+        let indexPath = tableView.indexPath(for: cell)!
+        Groups.joinGroup(index: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+//        if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
+//            selectedIndexes.insert(tableView.indexPath(for: cell)!)
+//        } else {
+//            selectedIndexes.remove(tableView.indexPath(for: cell)!)
+//        }
+    }
+    
+    func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
+        let borderTop = UIView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: tableView.bounds.size.width,
+                                             height: 1.0))
+        let borderBottom = UIView(frame: CGRect(x: 0,
+                                                y: view.bounds.height,
+                                                width: tableView.bounds.size.width,
+                                                height: 1.0))
+        borderTop.backgroundColor = UIColor.separator
+        borderBottom.backgroundColor = UIColor.separator
+        view.addSubview(borderTop)
+        view.addSubview(borderBottom)
+        view.tintColor = UISettings.instance.tableColor
+        view.textLabel?.adjustsFontSizeToFitWidth = true
+        view.textLabel?.textAlignment = .center
+        view.textLabel?.text = text
     }
 }
 

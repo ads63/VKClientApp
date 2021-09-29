@@ -8,8 +8,6 @@
 import UIKit
 
 class GroupsViewController: UITableViewController {
-    let tableColor = UIColor.systemTeal
-    let selectColor = UIColor.systemGray
     var selectedIndexes = Set<IndexPath>()
     @IBOutlet var searchBar: UISearchBar!
 
@@ -21,7 +19,7 @@ class GroupsViewController: UITableViewController {
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
-        tableView.backgroundColor = tableColor
+        tableView.backgroundColor = UISettings.instance.tableColor
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -90,8 +88,8 @@ class GroupsViewController: UITableViewController {
         else { return UITableViewCell() }
 
         cell.configure(controller: self,
-                       cellColor: tableColor,
-                       selectColor: selectColor,
+                       cellColor: UISettings.instance.tableColor,
+                       selectColor: UISettings.instance.selectColor,
                        group: Groups.getJoinedGroups()[indexPath.row])
         return cell
     }
@@ -119,24 +117,7 @@ class GroupsViewController: UITableViewController {
         }
     }
 
-    func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
-        let borderTop = UIView(frame: CGRect(x: 0,
-                                             y: 0,
-                                             width: tableView.bounds.size.width,
-                                             height: 1.0))
-        let borderBottom = UIView(frame: CGRect(x: 0,
-                                                y: view.bounds.height,
-                                                width: tableView.bounds.size.width,
-                                                height: 1.0))
-        borderTop.backgroundColor = UIColor.separator
-        borderBottom.backgroundColor = UIColor.separator
-        view.addSubview(borderTop)
-        view.addSubview(borderBottom)
-        view.tintColor = tableColor
-        view.textLabel?.adjustsFontSizeToFitWidth = true
-        view.textLabel?.textAlignment = .center
-        view.textLabel?.text = text
-    }
+
 
     /*
      // Override to support rearranging the table view.
@@ -162,6 +143,15 @@ class GroupsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
+}
+
+extension GroupsViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        Groups.filterJoined = searchText
+        tableView.reloadData()
+    }
+}
+extension GroupsViewController: CroupsViewControllerProtocol {
     func tapCell(cell: GroupsViewCell) {
         if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
             selectedIndexes.insert(tableView.indexPath(for: cell)!)
@@ -169,11 +159,23 @@ class GroupsViewController: UITableViewController {
             selectedIndexes.remove(tableView.indexPath(for: cell)!)
         }
     }
-}
-
-extension GroupsViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        Groups.filterJoined = searchText
-        tableView.reloadData()
+    
+    func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
+        let borderTop = UIView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: tableView.bounds.size.width,
+                                             height: 1.0))
+        let borderBottom = UIView(frame: CGRect(x: 0,
+                                                y: view.bounds.height,
+                                                width: tableView.bounds.size.width,
+                                                height: 1.0))
+        borderTop.backgroundColor = UIColor.separator
+        borderBottom.backgroundColor = UIColor.separator
+        view.addSubview(borderTop)
+        view.addSubview(borderBottom)
+        view.tintColor = UISettings.instance.tableColor
+        view.textLabel?.adjustsFontSizeToFitWidth = true
+        view.textLabel?.textAlignment = .center
+        view.textLabel?.text = text
     }
 }

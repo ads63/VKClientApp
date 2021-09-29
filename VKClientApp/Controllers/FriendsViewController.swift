@@ -8,7 +8,8 @@
 import UIKit
 
 class FriendsViewController: UITableViewController {
-    private let tableColor = UIColor.systemTeal
+
+    
     private var friends: [User] = [User(id: 0, avatar: UIImage(named: "batman"),
                                         userName: "batman"),
                                    User(id: 1, avatar: UIImage(named: "egghead"),
@@ -56,7 +57,7 @@ class FriendsViewController: UITableViewController {
                 nibName: "FriendsCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendsListCell")
-        tableView.backgroundColor = tableColor
+        tableView.backgroundColor = UISettings.instance.tableColor
     }
 
     // MARK: - Table view data source
@@ -82,7 +83,7 @@ class FriendsViewController: UITableViewController {
             for: indexPath) as? FriendsCell,
             let user = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row]
         else { return UITableViewCell() }
-        cell.configure(controller: self, user: user, color: tableColor)
+        cell.configure(controller: self, user: user, color: UISettings.instance.tableColor)
         return cell
     }
 
@@ -110,7 +111,7 @@ class FriendsViewController: UITableViewController {
             as? FriendsSectionHeader
         else { return UITableViewHeaderFooterView() }
         header.configure(text: String(groupKeys[section]),
-                         color: tableColor.withAlphaComponent(0.5))
+                         color: UISettings.instance.tableColor.withAlphaComponent(0.5))
         return header
     }
 
