@@ -6,9 +6,12 @@
 //
 
 import Foundation
-class Session {
-    static let instance = Session()
+
+class SessionSettings {
+    static let instance = SessionSettings()
     private init() {}
     var token = ""
     var userId = 0
+    var app_Id = "7965015"
+    let api_version = "5.131"
 }

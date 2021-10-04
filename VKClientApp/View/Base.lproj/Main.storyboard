@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0jG-T5-zEE">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -8,6 +8,41 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Web Login Controller-->
+        <scene sceneID="JXR-QT-gzt">
+            <objects>
+                <viewController id="0jG-T5-zEE" customClass="VKWebLoginController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oof-7B-FWX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HNB-Xb-BBa">
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Jhv-2J-99a"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Jhv-2J-99a" firstAttribute="trailing" secondItem="HNB-Xb-BBa" secondAttribute="trailing" id="bcO-J7-AMr"/>
+                            <constraint firstItem="HNB-Xb-BBa" firstAttribute="leading" secondItem="Jhv-2J-99a" secondAttribute="leading" id="sNb-Aw-tzN"/>
+                            <constraint firstItem="Jhv-2J-99a" firstAttribute="bottom" secondItem="HNB-Xb-BBa" secondAttribute="bottom" id="uAt-b4-h7k"/>
+                            <constraint firstItem="HNB-Xb-BBa" firstAttribute="top" secondItem="Jhv-2J-99a" secondAttribute="top" id="xdy-zx-P56"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="HNB-Xb-BBa" id="YwZ-uK-mPx"/>
+                        <segue destination="ZL6-dG-mwP" kind="show" identifier="loginSegue" id="33y-BC-GBJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BPY-Fm-nSf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7942" y="-6217"/>
+        </scene>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -51,7 +86,6 @@
                                         </state>
                                         <connections>
                                             <action selector="loginButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1HR-jX-KZQ"/>
-                                            <segue destination="ZL6-dG-mwP" kind="show" identifier="loginSegue" id="GhE-hF-Vd3"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="user" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="k3D-rX-dJe" userLabel="LoginTextField">
@@ -131,7 +165,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-8095.1999999999998" y="-6217.2413793103451"/>
+            <point key="canvasLocation" x="-9130" y="-6219"/>
         </scene>
         <!--Add Groups View Controller-->
         <scene sceneID="hLa-eW-9nm">
@@ -182,21 +216,18 @@
         <scene sceneID="Qsa-vf-dku">
             <objects>
                 <collectionViewController title="Photo" id="JvB-iO-rYN" customClass="FriendDetailsCollectionViewController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="ezt-xi-d7I">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" dataMode="prototypes" id="ezt-xi-d7I">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="m4o-pH-59P">
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="m4o-pH-59P">
                             <size key="itemSize" width="312" height="248"/>
-                            <size key="headerReferenceSize" width="50" height="50"/>
+                            <size key="estimatedItemSize" width="312" height="248"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells/>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="KDI-s4-jAg">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="JvB-iO-rYN" id="12S-y7-IdE"/>
                             <outlet property="delegate" destination="JvB-iO-rYN" id="r2Q-6e-7Vx"/>

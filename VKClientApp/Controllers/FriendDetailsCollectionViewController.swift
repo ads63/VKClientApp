@@ -9,7 +9,7 @@ import UIKit
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
     var userID: Int?
-
+    var imageSize: [CGSize] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         if let flowLayout = collectionView?.collectionViewLayout
@@ -24,12 +24,20 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
             forCellWithReuseIdentifier: "friendDetailsCell")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        imageSize.removeAll()
+        for image in Users.getPhoto(userID: userID) {
+            imageSize.append(collectionView.sizeThatFits(image.photoImage!.size))
+        }
+    }
+
     // MARK: UICollectionViewDataSource
 
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int
     {
-        1
+        Users.getPhoto(userID: userID).count
     }
 
     override func collectionView(_ collectionView: UICollectionView,
@@ -44,7 +52,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
             return UICollectionViewCell()
         }
 
-        cell.configure(userImages: Users.getPhoto(userID: userID))
+        cell.configure(userImages: Users.getPhoto(userID: userID), index: indexPath.row)
 
         return cell
     }
@@ -86,7 +94,8 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize
     {
-        CGSize(width: 170.0, height: 170.0)
+//        collectionView.sizeThatFits(<#T##size: CGSize##CGSize#>)
+        collectionView.bounds.size
+//        CGSize(width: 170.0, height: 170.0)
     }
 }
-

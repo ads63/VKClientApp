@@ -13,7 +13,7 @@ class FriendCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet var photoImage: UIImageView!
 
-    func configure(userImages: [UserPhoto]) {
+    func configure(userImages: [UserPhoto], index: Int) {
         let swipeRightGestureRecognizer =
             UISwipeGestureRecognizer(target: self,
                                      action: #selector(swipeRight(sender:)))
@@ -25,7 +25,7 @@ class FriendCollectionViewCell: UICollectionViewCell {
         addGestureRecognizer(swipeRightGestureRecognizer)
         addGestureRecognizer(swipeLeftGestureRecognizer)
         userPhotos = userImages
-        photoImage.image = userPhotos[imageIndex].photoImage?
+        photoImage.image = userPhotos[index].photoImage?
             .scalePreservingAspectRatio(targetSize: photoImage.bounds.size)
     }
 
