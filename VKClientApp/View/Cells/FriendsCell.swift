@@ -45,7 +45,8 @@ class FriendsCell: UITableViewCell {
         avatarImage.image = user.avatar
         friendNameLabel.text = user.userName
         backgroundConfiguration?.backgroundColor = color
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapCell(sender:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                          action: #selector(tapCell(sender:)))
         avatarImage.isUserInteractionEnabled = true
         avatarImage.addGestureRecognizer(tapGestureRecognizer)
     }

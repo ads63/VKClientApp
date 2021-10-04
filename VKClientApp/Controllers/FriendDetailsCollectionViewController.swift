@@ -12,6 +12,11 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let flowLayout = collectionView?.collectionViewLayout
+            as? UICollectionViewFlowLayout
+        {
+            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
         collectionView.register(
             UINib(
                 nibName: "FriendCollectionViewCell",
@@ -39,7 +44,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
             return UICollectionViewCell()
         }
 
-        cell.configure(userImage: getPhoto(userID: userID))
+        cell.configure(userImages: Users.getPhoto(userID: userID))
 
         return cell
     }
@@ -81,21 +86,7 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize
     {
-        CGSize(width: 150.0, height: 150.0)
+        CGSize(width: 170.0, height: 170.0)
     }
 }
 
-extension FriendDetailsCollectionViewController {
-    // simulate get photo by userID from backend
-    func getPhoto(userID: Int?) -> UIImage {
-        let pictures = [-1: UIImage(named: "unknown"),
-                        0: UIImage(named: "batman"),
-                        1: UIImage(named: "egghead"),
-                        2: UIImage(named: "deadhead"),
-                        3: UIImage(named: "guy")]
-        guard let image = pictures[userID ?? -1] else {
-            return pictures[-1]!!
-        }
-        return image!
-    }
-}

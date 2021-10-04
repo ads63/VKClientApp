@@ -8,6 +8,10 @@
 import UIKit
 
 class GroupsViewCell: UITableViewCell {
+    var parentTableViewController: GroupsViewController?
+    var cellColor: UIColor?
+    var selectedColor: UIColor?
+    var background_alpha: CGFloat = 1.0
     @IBOutlet var groupImage: UIImageView!
     @IBOutlet var groupLabel: UILabel!
 
@@ -22,12 +26,30 @@ class GroupsViewCell: UITableViewCell {
 //        // Configure the view for the selected state
 //    }
 //
-    func configure(group: Group) {
+    func configure(controller: GroupsViewController,
+                   cellColor: UIColor, selectColor: UIColor,
+                   group: Group)
+    {
+        parentTableViewController = controller
         groupImage.image = group.image
         groupLabel.text = group.groupName
+        let tapGestureRecognizer =
+            UITapGestureRecognizer(target: self,
+                                   action: #selector(tapCell(sender:)))
+        addGestureRecognizer(tapGestureRecognizer)
+        self.cellColor = cellColor
+        selectedColor = selectColor
+        backgroundConfiguration?.backgroundColor = cellColor
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
+    }
+
+    @objc func tapCell(sender: UITapGestureRecognizer) {
+        backgroundConfiguration?.backgroundColor =
+            backgroundConfiguration?.backgroundColor == cellColor ?
+            selectedColor : cellColor
+        parentTableViewController?.tapCell(cell: self)
     }
 }

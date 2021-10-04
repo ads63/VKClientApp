@@ -8,6 +8,9 @@
 import UIKit
 
 class GroupsViewController: UITableViewController {
+    let tableColor = UIColor.systemTeal
+    let selectColor = UIColor.systemGray
+    var selectedIndexes = Set<IndexPath>()
     @IBOutlet var searchBar: UISearchBar!
 
     override func viewDidLoad() {
@@ -18,6 +21,7 @@ class GroupsViewController: UITableViewController {
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
+        tableView.backgroundColor = tableColor
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -39,9 +43,41 @@ class GroupsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView,
+                            heightForHeaderInSection section: Int) -> CGFloat
+    {
+        25.0
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            heightForFooterInSection section: Int) -> CGFloat
+    {
+        25.0
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            willDisplayHeaderView view: UIView,
+                            forSection section: Int)
+    {
+        let headerView = view as! UITableViewHeaderFooterView
+        setHeaderFooter(view: headerView,
+                        text: "swipe left to leave the selected groups")
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            willDisplayFooterView view: UIView,
+                            forSection section: Int)
+    {
+        let headerView = view as! UITableViewHeaderFooterView
+        setHeaderFooter(view: headerView,
+                        text: "tap for group selection or deselection")
+    }
+
+    override func tableView(_ tableView: UITableView,
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
+        Groups.leaveGroups(indexes: selectedIndexes.map { $0.row })
+        selectedIndexes.removeAll()
         return Groups.getJoinedGroups().count
     }
 
@@ -53,15 +89,11 @@ class GroupsViewController: UITableViewController {
             for: indexPath) as? GroupsViewCell
         else { return UITableViewCell() }
 
-        cell.configure(group: Groups.getJoinedGroups()[indexPath.row])
-
+        cell.configure(controller: self,
+                       cellColor: tableColor,
+                       selectColor: selectColor,
+                       group: Groups.getJoinedGroups()[indexPath.row])
         return cell
-    }
-
-    override func tableView(_ tableView: UITableView,
-                            titleForHeaderInSection section: Int) -> String?
-    {
-        return "Swipe left to exit group"
     }
 
     /*
@@ -82,10 +114,28 @@ class GroupsViewController: UITableViewController {
                             forRowAt indexPath: IndexPath)
     {
         if editingStyle == .delete {
-            Groups.leaveGroup(index: indexPath.row)
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.deleteRows(at: selectedIndexes.map { $0 }, with: .fade)
         }
+    }
+
+    func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
+        let borderTop = UIView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: tableView.bounds.size.width,
+                                             height: 1.0))
+        let borderBottom = UIView(frame: CGRect(x: 0,
+                                                y: view.bounds.height,
+                                                width: tableView.bounds.size.width,
+                                                height: 1.0))
+        borderTop.backgroundColor = UIColor.separator
+        borderBottom.backgroundColor = UIColor.separator
+        view.addSubview(borderTop)
+        view.addSubview(borderBottom)
+        view.tintColor = tableColor
+        view.textLabel?.adjustsFontSizeToFitWidth = true
+        view.textLabel?.textAlignment = .center
+        view.textLabel?.text = text
     }
 
     /*
@@ -112,6 +162,13 @@ class GroupsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
+    func tapCell(cell: GroupsViewCell) {
+        if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
+            selectedIndexes.insert(tableView.indexPath(for: cell)!)
+        } else {
+            selectedIndexes.remove(tableView.indexPath(for: cell)!)
+        }
+    }
 }
 
 extension GroupsViewController: UISearchBarDelegate {

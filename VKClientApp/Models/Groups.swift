@@ -35,19 +35,45 @@ struct Groups {
     }
 
     static func joinGroup(index: Int) {
+        let currentGroups = getGroups2Join()
         for i in 0 ..< groups.count {
-            if getGroups2Join()[index] == groups[i] {
+            if currentGroups[index] == groups[i] {
                 groups[i].isMember = true
                 return
             }
         }
     }
 
+    static func joinGroups(indexes: [Int]) {
+        let currentGroups = getGroups2Join()
+        for index in indexes {
+            for i in 0 ..< groups.count {
+                if currentGroups[index] == groups[i] {
+                    groups[i].isMember = true
+                    break
+                }
+            }
+        }
+    }
+
     static func leaveGroup(index: Int) {
+        let currentGroups = getJoinedGroups()
         for i in 0 ..< groups.count {
-            if getJoinedGroups()[index] == groups[i] {
+            if currentGroups[index] == groups[i] {
                 groups[i].isMember = false
                 return
+            }
+        }
+    }
+
+    static func leaveGroups(indexes: [Int]) {
+        let currentGroups = getJoinedGroups()
+        for index in indexes {
+            for i in 0 ..< groups.count {
+                if currentGroups[index] == groups[i] {
+                    groups[i].isMember = false
+                    break
+                }
             }
         }
     }
