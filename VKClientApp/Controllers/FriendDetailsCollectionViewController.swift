@@ -8,27 +8,36 @@
 import UIKit
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
+    private let appSettins = AppSettings.instance
     var userID: Int?
-    var imageSize: [CGSize] = []
+    var photos = [Photo]()
+    var cellSize: CGSize?
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let flowLayout = collectionView?.collectionViewLayout
-            as? UICollectionViewFlowLayout
-        {
-            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        }
+//        if let flowLayout = collectionView?.collectionViewLayout
+//            as? UICollectionViewFlowLayout
+//        {
+//            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+//        }
         collectionView.register(
             UINib(
                 nibName: "FriendCollectionViewCell",
                 bundle: nil),
             forCellWithReuseIdentifier: "friendDetailsCell")
+        cellSize = calcCellSize(viewSize: collectionView.bounds.size)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        imageSize.removeAll()
-        for image in Users.getPhoto(userID: userID) {
-            imageSize.append(collectionView.sizeThatFits(image.photoImage!.size))
+//        if let flowLayout = collectionView?.collectionViewLayout
+//            as? UICollectionViewFlowLayout
+//        {
+//            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+//        }
+        appSettins.apiService.getUserPhotos(userID: userID!) {
+            [weak self] photoArray in
+            self?.photos = photoArray
+            self?.collectionView?.reloadData()
         }
     }
 
@@ -37,7 +46,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int
     {
-        Users.getPhoto(userID: userID).count
+        photos.count
     }
 
     override func collectionView(_ collectionView: UICollectionView,
@@ -52,7 +61,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
             return UICollectionViewCell()
         }
 
-        cell.configure(userImages: Users.getPhoto(userID: userID), index: indexPath.row)
+        cell.configure(userImages: photos, index: indexPath.row, cellSize: cellSize!)
 
         return cell
     }
@@ -94,8 +103,14 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize
     {
-//        collectionView.sizeThatFits(<#T##size: CGSize##CGSize#>)
-        collectionView.bounds.size
-//        CGSize(width: 170.0, height: 170.0)
+        return cellSize!
+    }
+}
+
+extension FriendDetailsCollectionViewController {
+    private func calcCellSize(viewSize: CGSize) -> CGSize {
+        let imageSize = min(min(100.0, viewSize.width), min(100.0, viewSize.height))
+
+        return CGSize(width: imageSize, height: imageSize)
     }
 }

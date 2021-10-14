@@ -9,6 +9,7 @@ import UIKit
 import WebKit
 
 final class VKWebLoginController: UIViewController {
+    let data = Data.instance
     @IBOutlet var webView: WKWebView! {
         didSet {
             webView.navigationDelegate = self
@@ -40,6 +41,8 @@ final class VKWebLoginController: UIViewController {
 }
 
 extension VKWebLoginController: WKNavigationDelegate {
+
+    
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse,
@@ -69,10 +72,6 @@ extension VKWebLoginController: WKNavigationDelegate {
             
         SessionSettings.instance.token = token
         SessionSettings.instance.userId = userID
-//        APIService().getFriends(fieldList: [])
-//        APIService().searchGroups(searchString: "cinema")
-//        APIService().getUserPhotos(userID: 677506695)
-//        APIService().getUserGroups(fieldList: [], extended: 1)
         performSegue(
             withIdentifier: "loginSegue",
             sender: nil)

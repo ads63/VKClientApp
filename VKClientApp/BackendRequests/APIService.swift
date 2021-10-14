@@ -12,34 +12,52 @@ final class APIService {
     private let session = SessionSettings.instance
     private let host = "https://api.vk.com"
 
-    func getFriends(fieldList: [String], offset: Int = 0) {
-        let path = EndPoint.GET_USER_FRIENDS.rawValue
+    func getFriends(fieldList: [String] = [],
+                    offset: Int = 0,
+                    completion: @escaping ([User]) -> Void)
+    {
+        let path = EndPoint.getUserFriends.rawValue
+        var fields = Set<String>(["photo_50"]) // set mandatory fields
+        fields.formUnion(fieldList) // add user defined fields
         let parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
             "offset": String(offset),
-            "fields": fieldList.joined(separator: ",")
+            "fields": fields.joined(separator: ",")
         ]
 
         AF.request(
             host + path,
             method: .get,
             parameters: parameters)
+            .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseJSON {
+            .responseData {
                 response in
                 switch response.result {
-                case .success(let value):
-                    print("success \(value)")
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let friends = try JSONDecoder().decode(Response<User>.self,
+                                                               from: data).list
+                        DispatchQueue.main.async {
+                            completion(friends)
+                        }
+                    } catch {
+                        print("error \(error)")
+                    }
                 case .failure(let error):
-                    print(error)
+                    print("error \(error)")
                 }
             }
     }
 
-    func getUserPhotos(userID: Int, offset: Int = 0) {
-        let path = EndPoint.GET_PHOTOS_BY_USER.rawValue
+    func getUserPhotos(userID: Int,
+                       offset: Int = 0,
+                       completion: @escaping ([Photo]) -> Void)
+    {
+        let path = EndPoint.getPhotosByUser.rawValue
         let parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
@@ -51,69 +69,184 @@ final class APIService {
             host + path,
             method: .get,
             parameters: parameters)
+            .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseJSON {
+            .responseData {
                 response in
                 switch response.result {
-                case .success(let value):
-                    print("success \(value)")
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let photos = try JSONDecoder().decode(Response<Photo>.self,
+                                                              from: data).list
+                        DispatchQueue.main.async {
+                            completion(photos)
+                        }
+                    } catch {
+                        print("error \(error)")
+                    }
                 case .failure(let error):
                     print("error \(error)")
                 }
             }
+
     }
 
-    func getUserGroups(fieldList: [String],
-                       extended: Int = 0,
-                       offset: Int = 0)
+    func getUserGroups(fieldList: [String] = [],
+                       extended: Int = 1,
+                       offset: Int = 0,
+                       completion: @escaping ([Group]) -> Void)
     {
-        let path = EndPoint.GET_USER_GROUPS.rawValue
+        var fields = Set<String>(["photo_50"]) // set mandatory fields
+        fields.formUnion(fieldList) // add user defined fields
+        let path = EndPoint.getUserGroups.rawValue
         let parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
             "offset": String(offset),
             "extended": String(extended),
-            "fields": fieldList.joined(separator: ",")
+            "fields": fields.joined(separator: ",")
         ]
 
         AF.request(
             host + path,
             method: .get,
             parameters: parameters)
+            .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseJSON {
+            .responseData {
                 response in
                 switch response.result {
-                case .success(let value):
-                    print("success \(value)")
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let groups = try JSONDecoder().decode(Response<Group>.self,
+                                                              from: data).list
+                        DispatchQueue.main.async {
+                            completion(groups)
+                        }
+                    } catch {
+                        print("error \(error)")
+                    }
+                case .failure(let error):
+                    print("error \(error)")
+                }
+            }
+  
+    }
+
+    func searchGroups(searchString: String = "",
+                      type: String = "group",
+                      offset: Int = 0,
+                      completion: @escaping ([Group]) -> Void)
+    {
+        let path = EndPoint.searchGroups.rawValue
+        let parameters: Parameters = [
+            "access_token": session.token,
+            "v": session.api_version,
+            "type": type,
+            "q": "\"" + searchString + "\"",
+            "offset": String(offset)
+        ]
+
+        AF.request(
+            host + path,
+            method: .get,
+            parameters: parameters)
+            .resume()
+            .validate(statusCode: 200..<201)
+            .validate(contentType: ["application/json"])
+            .responseData {
+                response in
+                switch response.result {
+                case .success:
+                    guard let data = response.value else { return }
+                    print(data)
+                    do {
+                        let groups = try JSONDecoder().decode(Response<Group>.self,
+                                                              from: data).list
+                        DispatchQueue.main.async {
+                            completion(groups)
+                        }
+                    } catch {
+                        print("error \(error)")
+                    }
                 case .failure(let error):
                     print("error \(error)")
                 }
             }
     }
 
-    func searchGroups(searchString: String, offset: Int = 0) {
-        let path = EndPoint.SEARCH_GROUPS.rawValue
+    func joinGroup(id: Int,
+                   completion: @escaping (Bool) -> Void)
+    {
+        let path = EndPoint.joinGroup.rawValue
         let parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
-            "offset": String(offset),
-            "q": searchString
+            "group_id": String(id)
         ]
 
         AF.request(
             host + path,
             method: .get,
             parameters: parameters)
+            .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseJSON {
+            .responseData {
                 response in
                 switch response.result {
-                case .success(let value):
-                    print("success \(value)")
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let result = try JSONDecoder().decode(ResponseCode.self,
+                                                              from: data).result
+                        DispatchQueue.main.async {
+                            completion(result == 1)
+                        }
+                    } catch {
+                        print("error \(error)")
+                    }
+                case .failure(let error):
+                    print("error \(error)")
+                }
+            }
+    }
+
+    func leaveGroup(id: Int,
+                    completion: @escaping (Bool) -> Void)
+    {
+        let path = EndPoint.leaveGroup.rawValue
+        let parameters: Parameters = [
+            "access_token": session.token,
+            "v": session.api_version,
+            "group_id": String(id)
+        ]
+
+        AF.request(
+            host + path,
+            method: .get,
+            parameters: parameters)
+            .resume()
+            .validate(statusCode: 200..<201)
+            .validate(contentType: ["application/json"])
+            .responseData {
+                response in
+                switch response.result {
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let result = try JSONDecoder().decode(ResponseCode.self,
+                                                              from: data).result
+                        DispatchQueue.main.async {
+                            completion(result == 1)
+                        }
+                    } catch {
+                        print("error \(error)")
+                    }
                 case .failure(let error):
                     print("error \(error)")
                 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Nuke
 
 class GroupsViewCell: UITableViewCell {
     var parentTableViewController: CroupsViewControllerProtocol?
@@ -31,7 +32,6 @@ class GroupsViewCell: UITableViewCell {
                    group: Group)
     {
         parentTableViewController = controller
-        groupImage.image = group.image
         groupLabel.text = group.groupName
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
@@ -40,6 +40,12 @@ class GroupsViewCell: UITableViewCell {
         self.cellColor = cellColor
         selectedColor = selectColor
         backgroundConfiguration?.backgroundColor = cellColor
+        guard let url = URL(string: group.avatarURL!) else {return}
+        Nuke.loadImage(with: url, into: groupImage)
+//        let imageSize = CGSize(width: groupImage.bounds.size.width * 0.6,
+//                               height: groupImage.bounds.size.height * 0.6)
+//        groupImage.image?.scalePreservingAspectRatio(targetSize: imageSize)
+
     }
 
     override func prepareForReuse() {

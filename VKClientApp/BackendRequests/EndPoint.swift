@@ -7,9 +7,11 @@
 
 import Foundation
 enum EndPoint : String {
-    case GET_USER_FRIENDS = "/method/friends.get"
-    case GET_PHOTOS_BY_USER = "/method/photos.getAll"
-    case GET_USER_GROUPS = "/method/groups.get"
-    case SEARCH_GROUPS = "/method/groups.search"
+    case getUserFriends = "/method/friends.get"
+    case getPhotosByUser = "/method/photos.getAll"
+    case getUserGroups = "/method/groups.get"
+    case searchGroups = "/method/groups.search"
+    case leaveGroup = "/method/groups.leave"
+    case joinGroup = "/method/groups.join"
     
 }

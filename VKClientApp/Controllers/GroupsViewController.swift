@@ -8,18 +8,34 @@
 import UIKit
 
 class GroupsViewController: UITableViewController {
-    var selectedIndexes = Set<IndexPath>()
     @IBOutlet var searchBar: UISearchBar!
+    
+    var selectedIndexes = Set<IndexPath>()
+    let appSettings = AppSettings.instance
+    var filterJoined = ""
+    var groups = [Group]()
+    var displayedGroups: [Group] {
+        return groups.filter { self.filterJoined.isEmpty ||
+            $0.groupName!.lowercased().contains(self.filterJoined.lowercased())}
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//        searchBar.showsScopeBar = true
         searchBar.delegate = self
         tableView.register(
             UINib(
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
-        tableView.backgroundColor = UISettings.instance.tableColor
+        tableView.backgroundColor = appSettings.tableColor
+
+//        APIService().getUserGroups(){
+//            [weak self] dataArray in
+//            self?.data.groups = dataArray
+//            self?.tableView.reloadData()
+//        }
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -29,8 +45,8 @@ class GroupsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBar.text = Groups.filterJoined
-        tableView.reloadData()
+        searchBar.text = filterJoined
+        loadJoinedGroups()
     }
 
     // MARK: - Table view data source
@@ -74,9 +90,9 @@ class GroupsViewController: UITableViewController {
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-        Groups.leaveGroups(indexes: selectedIndexes.map { $0.row })
+        leaveGroups(indexes: selectedIndexes.map { $0.row })
         selectedIndexes.removeAll()
-        return Groups.getJoinedGroups().count
+        return displayedGroups.count
     }
 
     override func tableView(_ tableView: UITableView,
@@ -88,9 +104,9 @@ class GroupsViewController: UITableViewController {
         else { return UITableViewCell() }
 
         cell.configure(controller: self,
-                       cellColor: UISettings.instance.tableColor,
-                       selectColor: UISettings.instance.selectColor,
-                       group: Groups.getJoinedGroups()[indexPath.row])
+                       cellColor: appSettings.tableColor,
+                       selectColor: appSettings.selectColor,
+                       group: displayedGroups[indexPath.row])
         return cell
     }
 
@@ -116,8 +132,6 @@ class GroupsViewController: UITableViewController {
             tableView.deleteRows(at: selectedIndexes.map { $0 }, with: .fade)
         }
     }
-
-
 
     /*
      // Override to support rearranging the table view.
@@ -146,11 +160,17 @@ class GroupsViewController: UITableViewController {
 }
 
 extension GroupsViewController: UISearchBarDelegate {
+//    internal func  searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        filterJoined = searchBar.searchTextField.text ?? ""
+//        loadJoinedGroups()
+//    }
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        Groups.filterJoined = searchText
-        tableView.reloadData()
+            filterJoined = searchText
+            tableView.reloadData()
     }
 }
+
 extension GroupsViewController: CroupsViewControllerProtocol {
     func tapCell(cell: GroupsViewCell) {
         if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
@@ -159,7 +179,7 @@ extension GroupsViewController: CroupsViewControllerProtocol {
             selectedIndexes.remove(tableView.indexPath(for: cell)!)
         }
     }
-    
+
     func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
         let borderTop = UIView(frame: CGRect(x: 0,
                                              y: 0,
@@ -173,9 +193,45 @@ extension GroupsViewController: CroupsViewControllerProtocol {
         borderBottom.backgroundColor = UIColor.separator
         view.addSubview(borderTop)
         view.addSubview(borderBottom)
-        view.tintColor = UISettings.instance.tableColor
+        view.tintColor = appSettings.tableColor
         view.textLabel?.adjustsFontSizeToFitWidth = true
         view.textLabel?.textAlignment = .center
         view.textLabel?.text = text
     }
 }
+
+extension GroupsViewController {
+
+    func loadJoinedGroups() {
+        appSettings.apiService.getUserGroups {
+            [weak self] groupsArray in
+            self?.groups = groupsArray
+            self?.tableView.reloadData()
+        }
+    }
+
+    func leaveGroup(index: Int) {
+        var apiResult = true
+        let id = displayedGroups[index].id
+        appSettings.apiService.leaveGroup(id: id) {
+            result in
+
+            apiResult = result
+        }
+        if apiResult {
+            for i in 0 ..< groups.count {
+                if displayedGroups[index] == groups[i] {
+                    groups.remove(at: i)
+                    return
+                }
+            }
+        }
+    }
+
+    func leaveGroups(indexes: [Int]) {
+        for index in indexes {
+            leaveGroup(index: index)
+        }
+    }
+}
+

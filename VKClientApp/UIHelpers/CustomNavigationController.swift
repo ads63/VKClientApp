@@ -50,9 +50,10 @@ final class CustomNavigationController: UINavigationController,
                 
         case .ended:
             interactiveTransition.isStarted = false
-            interactiveTransition.shouldFinish ?
-                interactiveTransition.finish() :
-                interactiveTransition.cancel()
+            interactiveTransition.finish()
+//            interactiveTransition.shouldFinish ?
+//                interactiveTransition.finish() :
+//                interactiveTransition.cancel()
                 
         case
             .failed,
