@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Nuke
 
 class FriendsCell: UITableViewCell {
     var parentTableViewController: FriendsViewController?
@@ -42,13 +43,14 @@ class FriendsCell: UITableViewCell {
 
     func configure(controller: FriendsViewController, user: User, color: UIColor) {
         parentTableViewController = controller
-        avatarImage.image = user.avatar
         friendNameLabel.text = user.userName
         backgroundConfiguration?.backgroundColor = color
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                           action: #selector(tapCell(sender:)))
         avatarImage.isUserInteractionEnabled = true
         avatarImage.addGestureRecognizer(tapGestureRecognizer)
+        guard let url = URL(string: user.avatarURL!) else {return}
+        Nuke.loadImage(with: url, into: avatarImage)
     }
 
     override func awakeFromNib() {
@@ -63,7 +65,7 @@ class FriendsCell: UITableViewCell {
         shadowView.layer.shadowRadius = shadowRadius
         shadowView.layer.shadowOpacity = shadowOpacity
 
-        avatarImage.layer.cornerRadius = cornerRadius
+        avatarImage.layer.cornerRadius = cornerRadius / 2.5
         avatarImage.layer.masksToBounds = true
     }
 
