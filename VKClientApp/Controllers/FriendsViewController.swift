@@ -8,17 +8,27 @@
 import UIKit
 
 class FriendsViewController: UITableViewController {
-
-    @IBOutlet var tableHeader: FriendsTableHeader!
-    
-    private var friends = [User]()
-    private let appSettings = AppSettings.instance
-    private var groupedFriends: [Character: [User]] {
-        return  Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
-    }
-    private var groupKeys: [Character] {
-        return groupedFriends.keys.sorted(by: { $0 < $1 })
-    }
+    private let tableColor = UIColor.systemTeal
+    private var friends: [User] = [User(id: 0, avatar: UIImage(named: "batman"),
+                                        userName: "batman"),
+                                   User(id: 1, avatar: UIImage(named: "egghead"),
+                                        userName: "egghead"),
+                                   User(id: 2, avatar: UIImage(named: "deadhead"),
+                                        userName: "deadhead"),
+                                   User(id: 3, avatar: UIImage(named: "guy"),
+                                        userName: "guy"),
+                                   User(id: 4, avatar: UIImage(named: "batman"),
+                                        userName: "batman2"),
+                                   User(id: 5, avatar: UIImage(named: "egghead"),
+                                        userName: "egghead2"),
+                                   User(id: 6, avatar: UIImage(named: "deadhead"),
+                                        userName: "deadhead2"),
+                                   User(id: 7, avatar: UIImage(named: "guy"),
+                                        userName: "guy2")]
+    private lazy var groupedFriends: [Character: [User]] =
+        Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
+    private lazy var groupKeys: [Character] = groupedFriends.keys
+        .sorted(by: { $0 < $1 })
     private var friendID: Int?
 
     func openPhotoCollection(indexPath: IndexPath) {
@@ -37,7 +47,6 @@ class FriendsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableView.register(
             UINib(nibName: "FriendsSectionHeader", bundle: nil),
             forHeaderFooterViewReuseIdentifier: "friendsSectionHeader")
@@ -47,22 +56,9 @@ class FriendsViewController: UITableViewController {
                 nibName: "FriendsCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendsListCell")
-        tableView.backgroundColor = appSettings.tableColor
-        tableHeader.backgroundColor = appSettings.tableColor
-        tableHeader.headerLabel.text = "My friends"
-//        APIService().getFriends() {
-//            [weak self] data in
-//            self?.friends = data
-//            self?.tableView.reloadData()
-//        }
-//        data.loadFriends(view: self)
-//        friends = data.getFriends()
+        tableView.backgroundColor = tableColor
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        getFriends()
-        super.viewWillAppear(animated)
-    }
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -86,7 +82,7 @@ class FriendsViewController: UITableViewController {
             for: indexPath) as? FriendsCell,
             let user = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row]
         else { return UITableViewCell() }
-        cell.configure(controller: self, user: user, color: appSettings.tableColor)
+        cell.configure(controller: self, user: user, color: tableColor)
         return cell
     }
 
@@ -114,7 +110,7 @@ class FriendsViewController: UITableViewController {
             as? FriendsSectionHeader
         else { return UITableViewHeaderFooterView() }
         header.configure(text: String(groupKeys[section]),
-                         color: appSettings.tableColor.withAlphaComponent(0.5))
+                         color: tableColor.withAlphaComponent(0.5))
         return header
     }
 
@@ -162,13 +158,4 @@ class FriendsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
-}
-extension FriendsViewController {
-    func getFriends() {
-        appSettings.apiService.getFriends(completion: {
-            [weak self] dataArray in
-            self?.friends = dataArray
-            self?.tableView.reloadData()
-        })
-    }
 }

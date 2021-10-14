@@ -15,9 +15,6 @@ class LoginViewController: UIViewController {
     @IBOutlet var centerDotImage: UIImageView!
     @IBOutlet var leftDotImage: UIImageView!
 
-    var session = SessionSettings.instance
-    var data = Data.instance
-
     @IBAction func loginButtonPressed(_ sender: Any) {
         if isValid() {
             // valid login, do something
