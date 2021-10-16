@@ -90,7 +90,6 @@ final class APIService {
                     print("error \(error)")
                 }
             }
-
     }
 
     func getUserGroups(fieldList: [String] = [],
@@ -122,8 +121,8 @@ final class APIService {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let groups = try JSONDecoder().decode(Response<Group>.self,
-                                                              from: data).list
+                        let groups = try JSONDecoder()
+                            .decode(Response<Group>.self, from: data).list
                         DispatchQueue.main.async {
                             completion(groups)
                         }
@@ -134,7 +133,6 @@ final class APIService {
                     print("error \(error)")
                 }
             }
-  
     }
 
     func searchGroups(searchString: String = "",
@@ -163,10 +161,9 @@ final class APIService {
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
-                    print(data)
                     do {
-                        let groups = try JSONDecoder().decode(Response<Group>.self,
-                                                              from: data).list
+                        let groups = try JSONDecoder()
+                            .decode(Response<Group>.self, from: data).list
                         DispatchQueue.main.async {
                             completion(groups)
                         }
@@ -202,8 +199,8 @@ final class APIService {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let result = try JSONDecoder().decode(ResponseCode.self,
-                                                              from: data).result
+                        let result = try JSONDecoder()
+                            .decode(ResponseCode.self, from: data).result
                         DispatchQueue.main.async {
                             completion(result == 1)
                         }
@@ -239,8 +236,8 @@ final class APIService {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let result = try JSONDecoder().decode(ResponseCode.self,
-                                                              from: data).result
+                        let result = try JSONDecoder()
+                            .decode(ResponseCode.self, from: data).result
                         DispatchQueue.main.async {
                             completion(result == 1)
                         }

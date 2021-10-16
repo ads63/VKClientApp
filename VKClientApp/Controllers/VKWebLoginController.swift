@@ -9,7 +9,6 @@ import UIKit
 import WebKit
 
 final class VKWebLoginController: UIViewController {
-    let data = Data.instance
     @IBOutlet var webView: WKWebView! {
         didSet {
             webView.navigationDelegate = self
@@ -31,9 +30,9 @@ final class VKWebLoginController: UIViewController {
         ]
         return urlComp
     }()
-    
+
     private lazy var request = URLRequest(url: urlComponents.url!)
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.load(request)
@@ -41,8 +40,6 @@ final class VKWebLoginController: UIViewController {
 }
 
 extension VKWebLoginController: WKNavigationDelegate {
-
-    
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse,
@@ -53,7 +50,7 @@ extension VKWebLoginController: WKNavigationDelegate {
             url.path == "/blank.html",
             let fragment = url.fragment
         else { return decisionHandler(.allow) }
-            
+
         let parameters = fragment
             .components(separatedBy: "&")
             .map { $0.components(separatedBy: "=") }
@@ -69,13 +66,13 @@ extension VKWebLoginController: WKNavigationDelegate {
             let userIDString = parameters["user_id"],
             let userID = Int(userIDString)
         else { return decisionHandler(.allow) }
-            
+
         SessionSettings.instance.token = token
         SessionSettings.instance.userId = userID
         performSegue(
             withIdentifier: "loginSegue",
             sender: nil)
-            
+
         decisionHandler(.cancel)
     }
 }

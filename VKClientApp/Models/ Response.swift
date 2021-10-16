@@ -12,7 +12,9 @@ class Response<T: Decodable>: Decodable {
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let responseContainer = try container.nestedContainer(keyedBy: CodingKeys.ResponseKeys.self, forKey: .response)
+        let responseContainer = try container
+            .nestedContainer(keyedBy: CodingKeys.ResponseKeys.self,
+                             forKey: .response)
         self.list = try responseContainer.decode([T].self, forKey: .list)
     }
 

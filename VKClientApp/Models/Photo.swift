@@ -5,18 +5,23 @@
 //  Created by Алексей Шинкарев on 10.10.2021.
 //
 
-import UIKit
 import Nuke
+import UIKit
 
-final class Photo {
-    var id : Int = 0
+final class Photo: Equatable {
+    var id: Int = 0
     var images: [Image] = []
+    static func == (lhs: Photo, rhs: Photo) -> Bool {
+        lhs.id == rhs.id
+    }
 }
+
 extension Photo: Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case sizes
     }
+
     convenience init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)

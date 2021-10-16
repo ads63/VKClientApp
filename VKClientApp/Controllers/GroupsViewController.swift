@@ -9,19 +9,20 @@ import UIKit
 
 class GroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
-    
+
     var selectedIndexes = Set<IndexPath>()
     let appSettings = AppSettings.instance
-    var filterJoined = ""
+    let sessionSettings = SessionSettings.instance
     var groups = [Group]()
     var displayedGroups: [Group] {
-        return groups.filter { self.filterJoined.isEmpty ||
-            $0.groupName!.lowercased().contains(self.filterJoined.lowercased())}
+        return groups.filter { sessionSettings.filterJoined.isEmpty ||
+            $0.groupName!.lowercased()
+            .contains(sessionSettings.filterJoined.lowercased())
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        searchBar.showsScopeBar = true
         searchBar.delegate = self
         tableView.register(
             UINib(
@@ -29,12 +30,6 @@ class GroupsViewController: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
         tableView.backgroundColor = appSettings.tableColor
-
-//        APIService().getUserGroups(){
-//            [weak self] dataArray in
-//            self?.data.groups = dataArray
-//            self?.tableView.reloadData()
-//        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -45,8 +40,13 @@ class GroupsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBar.text = filterJoined
+        searchBar.text = sessionSettings.filterJoined
         loadJoinedGroups()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        sessionSettings.filterJoined = searchBar.text ?? ""
     }
 
     // MARK: - Table view data source
@@ -160,14 +160,9 @@ class GroupsViewController: UITableViewController {
 }
 
 extension GroupsViewController: UISearchBarDelegate {
-//    internal func  searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        filterJoined = searchBar.searchTextField.text ?? ""
-//        loadJoinedGroups()
-//    }
-
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            filterJoined = searchText
-            tableView.reloadData()
+        sessionSettings.filterJoined = searchText
+        tableView.reloadData()
     }
 }
 
@@ -201,7 +196,6 @@ extension GroupsViewController: CroupsViewControllerProtocol {
 }
 
 extension GroupsViewController {
-
     func loadJoinedGroups() {
         appSettings.apiService.getUserGroups {
             [weak self] groupsArray in
@@ -212,19 +206,14 @@ extension GroupsViewController {
 
     func leaveGroup(index: Int) {
         var apiResult = true
-        let id = displayedGroups[index].id
-        appSettings.apiService.leaveGroup(id: id) {
+        let currentGroups = displayedGroups
+        appSettings.apiService.leaveGroup(id: currentGroups[index].id) {
             result in
-
             apiResult = result
         }
         if apiResult {
-            for i in 0 ..< groups.count {
-                if displayedGroups[index] == groups[i] {
-                    groups.remove(at: i)
-                    return
-                }
-            }
+            groups
+                .removeAll(where: { $0 == currentGroups[index] })
         }
     }
 
@@ -234,4 +223,3 @@ extension GroupsViewController {
         }
     }
 }
-

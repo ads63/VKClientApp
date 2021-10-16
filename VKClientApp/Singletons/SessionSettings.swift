@@ -14,4 +14,7 @@ class SessionSettings {
     var userId = 0
     var app_Id = "7965015"
     let api_version = "5.131"
+    let enabledPhotoType = ["s", "m", "x", "y", "z", "w"]
+    var filter2Join = ""
+    var filterJoined = ""
 }

@@ -8,17 +8,18 @@
 import UIKit
 
 class FriendsViewController: UITableViewController {
-
     @IBOutlet var tableHeader: FriendsTableHeader!
-    
+
     private var friends = [User]()
     private let appSettings = AppSettings.instance
     private var groupedFriends: [Character: [User]] {
-        return  Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
+        return Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
     }
+
     private var groupKeys: [Character] {
         return groupedFriends.keys.sorted(by: { $0 < $1 })
     }
+
     private var friendID: Int?
 
     func openPhotoCollection(indexPath: IndexPath) {
@@ -50,19 +51,13 @@ class FriendsViewController: UITableViewController {
         tableView.backgroundColor = appSettings.tableColor
         tableHeader.backgroundColor = appSettings.tableColor
         tableHeader.headerLabel.text = "My friends"
-//        APIService().getFriends() {
-//            [weak self] data in
-//            self?.friends = data
-//            self?.tableView.reloadData()
-//        }
-//        data.loadFriends(view: self)
-//        friends = data.getFriends()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         getFriends()
         super.viewWillAppear(animated)
     }
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -98,12 +93,6 @@ class FriendsViewController: UITableViewController {
             animated: true)
         }
         openPhotoCollection(indexPath: indexPath)
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let friendVC = segue.destination
-            as? FriendDetailsCollectionViewController else { return }
-        friendVC.userID = friendID
     }
 
     override func tableView(_ tableView: UITableView,
@@ -153,16 +142,15 @@ class FriendsViewController: UITableViewController {
      }
      */
 
-    /*
-     // MARK: - Navigation
+    // MARK: - Navigation
 
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let friendVC = segue.destination
+            as? FriendDetailsCollectionViewController else { return }
+        friendVC.userID = friendID
+    }
 }
+
 extension FriendsViewController {
     func getFriends() {
         appSettings.apiService.getFriends(completion: {

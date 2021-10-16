@@ -6,12 +6,11 @@
 //
 
 import Foundation
-enum EndPoint : String {
+enum EndPoint: String {
     case getUserFriends = "/method/friends.get"
     case getPhotosByUser = "/method/photos.getAll"
     case getUserGroups = "/method/groups.get"
     case searchGroups = "/method/groups.search"
     case leaveGroup = "/method/groups.leave"
     case joinGroup = "/method/groups.join"
-    
 }

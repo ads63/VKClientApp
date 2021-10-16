@@ -12,8 +12,8 @@ final class Image {
     var width: Int = 0
     var type: String?
     var imageUrl: String?
-    
 }
+
 extension Image: Decodable {
     enum CodingKeys: String, CodingKey {
         case height
@@ -21,6 +21,7 @@ extension Image: Decodable {
         case type
         case imageUrl = "url"
     }
+
     convenience init(from decoder: Decoder) throws {
         self.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -38,4 +39,3 @@ extension Image: Decodable {
             forKey: .imageUrl)
     }
 }
-

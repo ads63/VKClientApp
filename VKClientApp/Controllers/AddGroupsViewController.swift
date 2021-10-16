@@ -11,12 +11,13 @@ class AddGroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
 
     let appSettings = AppSettings.instance
+    let sessionSettings = SessionSettings.instance
     var selectedIndexes = Set<IndexPath>()
-    var filter2Join = ""
+//    var filter2Join = ""
     var groups = [Group]()
     var displayedGroups: [Group] {
-        return groups.filter { (self.filter2Join.isEmpty ||
-            $0.groupName!.lowercased().contains(self.filter2Join.lowercased())) &&
+        return groups.filter { (sessionSettings.filter2Join.isEmpty ||
+                $0.groupName!.lowercased().contains(sessionSettings.filter2Join.lowercased())) &&
             $0.isJoinCandidate
         }
     }
@@ -39,10 +40,13 @@ class AddGroupsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBar.text = filter2Join
-        loadGroups2Join()
+        searchBar.text = sessionSettings.filter2Join
+        loadGroups2Join(filter: sessionSettings.filter2Join)
     }
-
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        sessionSettings.filter2Join = searchBar.text ??  ""
+    }
     // MARK: - Table view data source
 
     // ----------------------------
@@ -128,14 +132,14 @@ class AddGroupsViewController: UITableViewController {
 
 extension AddGroupsViewController: UISearchBarDelegate {
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.filter2Join = searchBar.text ?? ""
-        loadGroups2Join(filter: self.filter2Join)
+        sessionSettings.filter2Join = searchBar.text ?? ""
+        loadGroups2Join(filter: sessionSettings.filter2Join)
     }
 
     func searchBar(_ searchBar: UISearchBar,
                    textDidChange searchText: String)
     {
-        filter2Join = searchText
+        sessionSettings.filter2Join = searchText
         tableView.reloadData()
     }
 }
@@ -144,7 +148,6 @@ extension AddGroupsViewController: CroupsViewControllerProtocol {
     func tapCell(cell: GroupsViewCell) {
         let indexPath = tableView.indexPath(for: cell)!
         joinGroup(index: indexPath.row)
-        
         tableView.deleteRows(at: [indexPath], with: .fade)
     }
 
@@ -179,18 +182,14 @@ extension AddGroupsViewController {
 
     func joinGroup(index: Int) {
         var apiResult = true
-        let id = displayedGroups[index].id
-        appSettings.apiService.joinGroup(id: id) {
+        let currentGroups = displayedGroups
+        appSettings.apiService.joinGroup(id: currentGroups[index].id) {
             result in
             apiResult = result
         }
         if apiResult {
-            for i in 0 ..< groups.count {
-                if displayedGroups[index] == groups[i] {
-                    groups.remove(at: i)
-                    return
-                }
-            }
+            groups
+                .removeAll(where: { $0 == currentGroups[index] })
         }
     }
 
