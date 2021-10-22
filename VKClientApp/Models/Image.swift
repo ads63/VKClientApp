@@ -5,13 +5,15 @@
 //  Created by Алексей Шинкарев on 10.10.2021.
 //
 
-import UIKit
+import RealmSwift
 
-final class Image {
-    var height: Int = 0
-    var width: Int = 0
-    var type: String?
-    var imageUrl: String?
+final class Image: Object {
+    @objc dynamic var height = 0
+    @objc dynamic var width = 0
+    @objc dynamic var type: String?
+    @objc dynamic var imageUrl: String?
+
+    let photo = LinkingObjects(fromType: Photo.self, property: "images")
 }
 
 extension Image: Decodable {

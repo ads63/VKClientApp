@@ -10,11 +10,12 @@ import UIKit
 class GroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
 
-    var selectedIndexes = Set<IndexPath>()
-    let appSettings = AppSettings.instance
-    let sessionSettings = SessionSettings.instance
-    var groups = [Group]()
-    var displayedGroups: [Group] {
+    private var selectedIndexes = Set<IndexPath>()
+    private let appSettings = AppSettings.instance
+    private let sessionSettings = SessionSettings.instance
+    private let realmService = SessionSettings.instance.realmService
+    private var groups = [Group]()
+    private var displayedGroups: [Group] {
         return groups.filter { sessionSettings.filterJoined.isEmpty ||
             $0.groupName!.lowercased()
             .contains(sessionSettings.filterJoined.lowercased())
@@ -198,28 +199,33 @@ extension GroupsViewController: CroupsViewControllerProtocol {
 extension GroupsViewController {
     func loadJoinedGroups() {
         appSettings.apiService.getUserGroups {
-            [weak self] groupsArray in
-            self?.groups = groupsArray
+            [weak self] in
+            self?.groups = (self?.realmService.selectMyGroups())!
             self?.tableView.reloadData()
         }
     }
 
-    func leaveGroup(index: Int) {
-        var apiResult = true
-        let currentGroups = displayedGroups
-        appSettings.apiService.leaveGroup(id: currentGroups[index].id) {
-            result in
-            apiResult = result
-        }
-        if apiResult {
-            groups
-                .removeAll(where: { $0 == currentGroups[index] })
+    func loadJoinedGroupsWithoutReload() {
+        appSettings.apiService.getUserGroups {
+            [weak self] in
+            self?.groups = (self?.realmService.selectMyGroups())!
+//            self?.tableView.reloadData()
         }
     }
 
+    func leaveGroup(index: Int) {
+        let currentGroups = displayedGroups
+        appSettings.apiService.leaveGroup(id: currentGroups[index].id) {}
+        realmService.deleteGroup(groupID: currentGroups[index].id)
+        groups = realmService.selectMyGroups()
+    }
+
     func leaveGroups(indexes: [Int]) {
+        let currentGroups = displayedGroups
         for index in indexes {
-            leaveGroup(index: index)
+            appSettings.apiService.leaveGroup(id: currentGroups[index].id) {}
+            realmService.deleteGroup(groupID: currentGroups[index].id)
         }
+        groups = realmService.selectMyGroups()
     }
 }

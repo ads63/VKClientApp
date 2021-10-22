@@ -5,12 +5,16 @@
 //  Created by Алексей Шинкарев on 10.10.2021.
 //
 
-import Nuke
-import UIKit
+import RealmSwift
 
-final class Photo: Equatable {
-    var id: Int = 0
-    var images: [Image] = []
+final class Photo: Object {
+    @objc dynamic var id = 0
+    var images = List<Image>()
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+
     static func == (lhs: Photo, rhs: Photo) -> Bool {
         lhs.id == rhs.id
     }
@@ -28,6 +32,6 @@ extension Photo: Decodable {
         self.id = try container.decode(
             Int.self,
             forKey: .id)
-        self.images = try container.decode([Image].self, forKey: .sizes)
+        self.images = try container.decode(List<Image>.self, forKey: .sizes)
     }
 }

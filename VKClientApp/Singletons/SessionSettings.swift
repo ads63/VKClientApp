@@ -17,4 +17,5 @@ class SessionSettings {
     let enabledPhotoType = ["s", "m", "x", "y", "z", "w"]
     var filter2Join = ""
     var filterJoined = ""
+    let realmService = RealmService()
 }

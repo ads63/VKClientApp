@@ -10,6 +10,7 @@ import UIKit
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
     private let appSettins = AppSettings.instance
+    private let realmService = SessionSettings.instance.realmService
     var userID: Int?
     var photos = [Photo]()
     var photoID: Int?
@@ -170,8 +171,8 @@ extension FriendDetailsCollectionViewController {
 
     private func loadUserPhoto(userID: Int) {
         appSettins.apiService.getUserPhotos(userID: userID) {
-            [weak self] photoArray in
-            self?.photos = photoArray
+            [weak self] in
+            self?.photos = (self?.realmService.selectPhotos())!
             self?.collectionView?.reloadData()
         }
     }

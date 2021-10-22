@@ -10,14 +10,16 @@ import UIKit
 class AddGroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
 
-    let appSettings = AppSettings.instance
-    let sessionSettings = SessionSettings.instance
+    private let appSettings = AppSettings.instance
+    private let sessionSettings = SessionSettings.instance
+    private let realmService = SessionSettings.instance.realmService
     var selectedIndexes = Set<IndexPath>()
 //    var filter2Join = ""
     var groups = [Group]()
     var displayedGroups: [Group] {
         return groups.filter { (sessionSettings.filter2Join.isEmpty ||
-                $0.groupName!.lowercased().contains(sessionSettings.filter2Join.lowercased())) &&
+                $0.groupName!.lowercased()
+                .contains(sessionSettings.filter2Join.lowercased())) &&
             $0.isJoinCandidate
         }
     }
@@ -43,10 +45,12 @@ class AddGroupsViewController: UITableViewController {
         searchBar.text = sessionSettings.filter2Join
         loadGroups2Join(filter: sessionSettings.filter2Join)
     }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        sessionSettings.filter2Join = searchBar.text ??  ""
+        sessionSettings.filter2Join = searchBar.text ?? ""
     }
+
     // MARK: - Table view data source
 
     // ----------------------------
@@ -76,8 +80,6 @@ class AddGroupsViewController: UITableViewController {
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-//        joinGroups(indexes: selectedIndexes.map { $0.row })
-//        selectedIndexes.removeAll()
         return displayedGroups.count
     }
 
@@ -174,28 +176,16 @@ extension AddGroupsViewController: CroupsViewControllerProtocol {
 extension AddGroupsViewController {
     func loadGroups2Join(filter: String = "") {
         appSettings.apiService.searchGroups(searchString: filter) {
-            [weak self] groupsArray in
-            self?.groups = groupsArray
+            [weak self] in
+            self?.groups = (self?.realmService.selectNotMineGroups())!
             self?.tableView.reloadData()
         }
     }
 
     func joinGroup(index: Int) {
-        var apiResult = true
         let currentGroups = displayedGroups
-        appSettings.apiService.joinGroup(id: currentGroups[index].id) {
-            result in
-            apiResult = result
-        }
-        if apiResult {
-            groups
-                .removeAll(where: { $0 == currentGroups[index] })
-        }
-    }
-
-    func joinGroups(indexes: [Int]) {
-        for index in indexes {
-            joinGroup(index: index)
-        }
+        appSettings.apiService.joinGroup(id: currentGroups[index].id) {}
+        realmService.deleteGroup(groupID: currentGroups[index].id)
+        groups = realmService.selectNotMineGroups()
     }
 }

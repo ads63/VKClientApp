@@ -5,7 +5,7 @@
 //  Created by Алексей Шинкарев on 11.10.2021.
 //
 
-import Foundation
+// import Foundation
 class ResponseCode: Decodable {
     var result: Int
 

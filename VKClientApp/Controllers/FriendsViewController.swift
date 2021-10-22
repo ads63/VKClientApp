@@ -12,6 +12,7 @@ class FriendsViewController: UITableViewController {
 
     private var friends = [User]()
     private let appSettings = AppSettings.instance
+    private let realmService = SessionSettings.instance.realmService
     private var groupedFriends: [Character: [User]] {
         return Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
     }
@@ -154,8 +155,8 @@ class FriendsViewController: UITableViewController {
 extension FriendsViewController {
     func getFriends() {
         appSettings.apiService.getFriends(completion: {
-            [weak self] dataArray in
-            self?.friends = dataArray
+            [weak self] in
+            self?.friends = (self?.realmService.selectUsers())!
             self?.tableView.reloadData()
         })
     }
