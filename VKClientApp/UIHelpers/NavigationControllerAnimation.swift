@@ -80,7 +80,8 @@ final class PopAnimation: NSObject, UIViewControllerAnimatedTransitioning {
             withDuration: animateTime,
             delay: 0.0,
             options: .calculationModeLinear) {
-                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
+                UIView.addKeyframe(withRelativeStartTime: 0.0,
+                                   relativeDuration: 1.0) {
                     source.view.transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
                 }
         } completion: { isCompleted in

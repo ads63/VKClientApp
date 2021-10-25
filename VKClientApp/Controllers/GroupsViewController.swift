@@ -8,10 +8,18 @@
 import UIKit
 
 class GroupsViewController: UITableViewController {
-    let tableColor = UIColor.systemTeal
-    let selectColor = UIColor.systemGray
-    var selectedIndexes = Set<IndexPath>()
     @IBOutlet var searchBar: UISearchBar!
+
+    var selectedIndexes = Set<IndexPath>()
+    let appSettings = AppSettings.instance
+    let sessionSettings = SessionSettings.instance
+    var groups = [Group]()
+    var displayedGroups: [Group] {
+        return groups.filter { sessionSettings.filterJoined.isEmpty ||
+            $0.groupName!.lowercased()
+            .contains(sessionSettings.filterJoined.lowercased())
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +29,8 @@ class GroupsViewController: UITableViewController {
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
-        tableView.backgroundColor = tableColor
+        tableView.backgroundColor = appSettings.tableColor
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -31,8 +40,13 @@ class GroupsViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchBar.text = Groups.filterJoined
-        tableView.reloadData()
+        searchBar.text = sessionSettings.filterJoined
+        loadJoinedGroups()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        sessionSettings.filterJoined = searchBar.text ?? ""
     }
 
     // MARK: - Table view data source
@@ -76,9 +90,9 @@ class GroupsViewController: UITableViewController {
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-        Groups.leaveGroups(indexes: selectedIndexes.map { $0.row })
+        leaveGroups(indexes: selectedIndexes.map { $0.row })
         selectedIndexes.removeAll()
-        return Groups.getJoinedGroups().count
+        return displayedGroups.count
     }
 
     override func tableView(_ tableView: UITableView,
@@ -90,9 +104,9 @@ class GroupsViewController: UITableViewController {
         else { return UITableViewCell() }
 
         cell.configure(controller: self,
-                       cellColor: tableColor,
-                       selectColor: selectColor,
-                       group: Groups.getJoinedGroups()[indexPath.row])
+                       cellColor: appSettings.tableColor,
+                       selectColor: appSettings.selectColor,
+                       group: displayedGroups[indexPath.row])
         return cell
     }
 
@@ -119,25 +133,6 @@ class GroupsViewController: UITableViewController {
         }
     }
 
-    func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
-        let borderTop = UIView(frame: CGRect(x: 0,
-                                             y: 0,
-                                             width: tableView.bounds.size.width,
-                                             height: 1.0))
-        let borderBottom = UIView(frame: CGRect(x: 0,
-                                                y: view.bounds.height,
-                                                width: tableView.bounds.size.width,
-                                                height: 1.0))
-        borderTop.backgroundColor = UIColor.separator
-        borderBottom.backgroundColor = UIColor.separator
-        view.addSubview(borderTop)
-        view.addSubview(borderBottom)
-        view.tintColor = tableColor
-        view.textLabel?.adjustsFontSizeToFitWidth = true
-        view.textLabel?.textAlignment = .center
-        view.textLabel?.text = text
-    }
-
     /*
      // Override to support rearranging the table view.
      override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
@@ -162,6 +157,16 @@ class GroupsViewController: UITableViewController {
          // Pass the selected object to the new view controller.
      }
      */
+}
+
+extension GroupsViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        sessionSettings.filterJoined = searchText
+        tableView.reloadData()
+    }
+}
+
+extension GroupsViewController: CroupsViewControllerProtocol {
     func tapCell(cell: GroupsViewCell) {
         if !selectedIndexes.contains(tableView.indexPath(for: cell)!) {
             selectedIndexes.insert(tableView.indexPath(for: cell)!)
@@ -169,11 +174,52 @@ class GroupsViewController: UITableViewController {
             selectedIndexes.remove(tableView.indexPath(for: cell)!)
         }
     }
+
+    func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
+        let borderTop = UIView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: tableView.bounds.size.width,
+                                             height: 1.0))
+        let borderBottom = UIView(frame: CGRect(x: 0,
+                                                y: view.bounds.height,
+                                                width: tableView.bounds.size.width,
+                                                height: 1.0))
+        borderTop.backgroundColor = UIColor.separator
+        borderBottom.backgroundColor = UIColor.separator
+        view.addSubview(borderTop)
+        view.addSubview(borderBottom)
+        view.tintColor = appSettings.tableColor
+        view.textLabel?.adjustsFontSizeToFitWidth = true
+        view.textLabel?.textAlignment = .center
+        view.textLabel?.text = text
+    }
 }
 
-extension GroupsViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        Groups.filterJoined = searchText
-        tableView.reloadData()
+extension GroupsViewController {
+    func loadJoinedGroups() {
+        appSettings.apiService.getUserGroups {
+            [weak self] groupsArray in
+            self?.groups = groupsArray
+            self?.tableView.reloadData()
+        }
+    }
+
+    func leaveGroup(index: Int) {
+        var apiResult = true
+        let currentGroups = displayedGroups
+        appSettings.apiService.leaveGroup(id: currentGroups[index].id) {
+            result in
+            apiResult = result
+        }
+        if apiResult {
+            groups
+                .removeAll(where: { $0 == currentGroups[index] })
+        }
+    }
+
+    func leaveGroups(indexes: [Int]) {
+        for index in indexes {
+            leaveGroup(index: index)
+        }
     }
 }

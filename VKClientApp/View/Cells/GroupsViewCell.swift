@@ -5,10 +5,11 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
+import Nuke
 import UIKit
 
 class GroupsViewCell: UITableViewCell {
-    var parentTableViewController: GroupsViewController?
+    var parentTableViewController: CroupsViewControllerProtocol?
     var cellColor: UIColor?
     var selectedColor: UIColor?
     var background_alpha: CGFloat = 1.0
@@ -26,12 +27,11 @@ class GroupsViewCell: UITableViewCell {
 //        // Configure the view for the selected state
 //    }
 //
-    func configure(controller: GroupsViewController,
+    func configure(controller: CroupsViewControllerProtocol?,
                    cellColor: UIColor, selectColor: UIColor,
                    group: Group)
     {
         parentTableViewController = controller
-        groupImage.image = group.image
         groupLabel.text = group.groupName
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
@@ -40,6 +40,8 @@ class GroupsViewCell: UITableViewCell {
         self.cellColor = cellColor
         selectedColor = selectColor
         backgroundConfiguration?.backgroundColor = cellColor
+        guard let url = URL(string: group.avatarURL!) else { return }
+        Nuke.loadImage(with: url, into: groupImage)
     }
 
     override func prepareForReuse() {

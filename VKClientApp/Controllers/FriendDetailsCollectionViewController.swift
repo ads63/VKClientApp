@@ -5,23 +5,52 @@
 //  Created by Алексей Шинкарев on 26.08.2021.
 //
 
+import Nuke
 import UIKit
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
+    private let appSettins = AppSettings.instance
     var userID: Int?
+    var photos = [Photo]()
+    var photoID: Int?
+    let cellSpacing: CGFloat = 1
+    let columns: CGFloat = 3
+    var cellSize: CGFloat = 100
+
+    var pixelSize: CGFloat {
+        return cellSize * UIScreen.main.scale
+    }
+
+    var resizedImageProcessors: [ImageProcessing] {
+        let imageSize = CGSize(width: pixelSize, height: pixelSize)
+        return [ImageProcessors.Resize(size: imageSize, contentMode: .aspectFill)]
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let flowLayout = collectionView?.collectionViewLayout
-            as? UICollectionViewFlowLayout
-        {
-            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        }
+//        if let flowLayout = collectionView?.collectionViewLayout
+//            as? UICollectionViewFlowLayout
+//        {
+//            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+//        }
         collectionView.register(
             UINib(
                 nibName: "FriendCollectionViewCell",
-                bundle: nil),
-            forCellWithReuseIdentifier: "friendDetailsCell")
+                bundle: nil
+            ),
+            forCellWithReuseIdentifier: "friendDetailsCell"
+        )
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        if let flowLayout = collectionView?.collectionViewLayout
+//            as? UICollectionViewFlowLayout
+//        {
+//            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+//        }
+        calcCellSize()
+        loadUserPhoto(userID: userID!)
     }
 
     // MARK: UICollectionViewDataSource
@@ -29,7 +58,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int
     {
-        1
+        photos.count
     }
 
     override func collectionView(_ collectionView: UICollectionView,
@@ -39,13 +68,23 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
         guard
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "friendDetailsCell",
-                for: indexPath) as? FriendCollectionViewCell
+                for: indexPath
+            ) as? FriendCollectionViewCell
         else {
             return UICollectionViewCell()
         }
 
-        cell.configure(userImages: Users.getPhoto(userID: userID))
-
+        guard let url = getUrl(index: indexPath.row,
+                               width: cell.bounds.width,
+                               height: cell.bounds.height) else { return cell }
+        let options = ImageLoadingOptions(placeholder: UIImage(named: "unknown"),
+                                          transition: .fadeIn(duration: 0.5),
+                                          failureImage: UIImage(named: "unknown"),
+                                          failureImageTransition: .fadeIn(duration: 0.5))
+        let request = ImageRequest(url: url,
+                                   processors: resizedImageProcessors)
+        Nuke.loadImage(with: request, options: options, into: cell.photoImage)
+        cell.configure(parentViewController: self)
         return cell
     }
 
@@ -79,14 +118,83 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
      }
      */
-}
 
-extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        CGSize(width: 170.0, height: 170.0)
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let photoVC = segue.destination
+            as? PhotoViewController else { return }
+        photoVC.photoID = photoID
+        photoVC.photos = photos
     }
 }
 
+// MARK: Collection View Delegate Flow Layout Methods
+
+extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        calcCellSize()
+        return CGSize(width: cellSize, height: cellSize)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return cellSpacing
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return cellSpacing
+    }
+}
+
+extension FriendDetailsCollectionViewController {
+    private func calcCellSize() {
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            let emptySpace = layout.sectionInset.left
+                + layout.sectionInset.right + (columns - 1) * cellSpacing
+            cellSize = (view.frame.size.width - emptySpace) / columns
+        }
+    }
+
+    private func loadUserPhoto(userID: Int) {
+        appSettins.apiService.getUserPhotos(userID: userID) {
+            [weak self] photoArray in
+            self?.photos = photoArray
+            self?.collectionView?.reloadData()
+        }
+    }
+
+    func tapCell(cell: FriendCollectionViewCell) {
+        openPhotoCollection(indexPath: collectionView.indexPath(for: cell)!)
+    }
+
+    private func openPhotoCollection(indexPath: IndexPath) {
+        photoID = photos[indexPath.row].id
+        performSegue(
+            withIdentifier: "photoViewSegue",
+            sender: nil
+        )
+    }
+
+    private func getUrl(index: Int, width: CGFloat, height: CGFloat) -> URL? {
+        let fullImageList = photos[index].images.sorted(by: { $0.width > $1.width })
+        var filteredImageList = fullImageList
+            .filter { CGFloat($0.width) >= width || CGFloat($0.height) >= height }
+        if filteredImageList.isEmpty { filteredImageList = fullImageList }
+        guard let url = URL(string: filteredImageList.first!.imageUrl!)
+        else { return nil }
+        return url
+    }
+}

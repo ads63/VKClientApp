@@ -16,7 +16,8 @@ class ShadowView: UIView {
 
     private func setupShadowPath() {
         let presetCornerRadius: CGFloat = self.bounds.height / 2.0
-        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds,
-                                             cornerRadius: presetCornerRadius).cgPath
+        self.layer.shadowPath =
+            UIBezierPath(roundedRect: self.bounds,
+                         cornerRadius: presetCornerRadius).cgPath
     }
 }
