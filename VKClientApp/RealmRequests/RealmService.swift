@@ -12,7 +12,7 @@ final class RealmService {
     static let config = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
     func dropDB() {
         do {
-            let realm = try Realm()
+            let realm = try Realm(configuration: RealmService.config)
             print(realm.configuration.fileURL)
             realm.beginWrite()
             realm.deleteAll()
@@ -22,11 +22,11 @@ final class RealmService {
         }
     }
 
-    func selectUsers() -> [User] {
-        var data = [User]()
+    func selectUsers() -> Results<User>? {
+        var data: Results<User>?
         do {
             let realm = try Realm(configuration: RealmService.config)
-            data = [User](realm.objects(User.self))
+            data = realm.objects(User.self)
         } catch {
             print(error)
         }
@@ -67,33 +67,24 @@ final class RealmService {
         }
     }
 
-    func selectMyGroups() -> [Group] {
-        var data = [Group]()
+    func selectMyGroups() -> Results<Group>? {
+        var data: Results<Group>?
         do {
             let realm = try Realm(configuration: RealmService.config)
-            data = [Group](realm.objects(Group.self).filter("memberValue == 1 OR adminValue == 1"))
+            data = realm.objects(Group.self)
+                .filter("memberValue == 1 OR adminValue == 1")
         } catch {
             print(error)
         }
         return data
     }
 
-//    func selectGroup(groupID: Int) -> Group? {
-//        var data: Group?
-//        do {
-//            let realm = try Realm(configuration: RealmService.config)
-//            data = realm.objects(Group.self).filter("id == %@",groupID).first
-//        } catch {
-//            print(error)
-//        }
-//        return data
-//    }
-
-    func selectNotMineGroups() -> [Group] {
-        var data = [Group]()
+    func selectNotMineGroups() -> Results<Group>? {
+        var data: Results<Group>?
         do {
             let realm = try Realm(configuration: RealmService.config)
-            data = [Group](realm.objects(Group.self).filter("memberValue == 0 AND adminValue == 0"))
+            data = realm.objects(Group.self)
+                .filter("memberValue == 0 AND adminValue == 0")
         } catch {
             print(error)
         }
@@ -133,20 +124,11 @@ final class RealmService {
         }
     }
 
-//    func deleteGroupsAll() {
-//        do {
-//            let realm = try Realm(configuration: RealmService.config)
-//            deleteGroups(groups: [Group](realm.objects(Group.self)))
-//        } catch {
-//            print(error)
-//        }
-//    }
-
-    func selectPhotos() -> [Photo] {
-        var photos = [Photo]()
+    func selectPhotos() -> Results<Photo>? {
+        var photos: Results<Photo>?
         do {
             let realm = try Realm(configuration: RealmService.config)
-            photos = [Photo](realm.objects(Photo.self))
+            photos = realm.objects(Photo.self)
         } catch {
             print(error)
         }

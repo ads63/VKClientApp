@@ -9,13 +9,11 @@ import Alamofire
 import Foundation
 
 final class APIService {
-    private let realm = RealmService()
     private let session = SessionSettings.instance
     private let host = "https://api.vk.com"
 
     func getFriends(fieldList: [String] = [],
-                    offset: Int = 0,
-                    completion: @escaping () -> Void)
+                    offset: Int = 0)
     {
         let path = EndPoint.getUserFriends.rawValue
         var fields = Set<String>(["photo_50"]) // set mandatory fields
@@ -42,8 +40,7 @@ final class APIService {
                     do {
                         let friends = try JSONDecoder().decode(Response<User>.self,
                                                                from: data).list
-                        self?.realm.insertUsers(users: friends)
-                        completion()
+                        self?.session.realmService.insertUsers(users: friends)
                     } catch {
                         print("error \(error)")
                     }
@@ -54,8 +51,7 @@ final class APIService {
     }
 
     func getUserPhotos(userID: Int,
-                       offset: Int = 0,
-                       completion: @escaping () -> Void)
+                       offset: Int = 0)
     {
         let path = EndPoint.getPhotosByUser.rawValue
         let parameters: Parameters = [
@@ -80,8 +76,7 @@ final class APIService {
                     do {
                         let photos = try JSONDecoder().decode(Response<Photo>.self,
                                                               from: data).list
-                        self?.realm.insertPhotos(photos: photos)
-                        completion()
+                        self?.session.realmService.insertPhotos(photos: photos)
                     } catch {
                         print("error \(error)")
                     }
@@ -93,8 +88,7 @@ final class APIService {
 
     func getUserGroups(fieldList: [String] = [],
                        extended: Int = 1,
-                       offset: Int = 0,
-                       completion: @escaping () -> Void)
+                       offset: Int = 0)
     {
         var fields = Set<String>(["photo_50"]) // set mandatory fields
         fields.formUnion(fieldList) // add user defined fields
@@ -122,8 +116,7 @@ final class APIService {
                     do {
                         let groups = try JSONDecoder()
                             .decode(Response<Group>.self, from: data).list
-                        self?.realm.insertGroups(groups: groups)
-                        completion()
+                        self?.session.realmService.insertGroups(groups: groups)
                     } catch {
                         print("error \(error)")
                     }
@@ -135,8 +128,7 @@ final class APIService {
 
     func searchGroups(searchString: String = "",
                       type: String = "group",
-                      offset: Int = 0,
-                      completion: @escaping () -> Void)
+                      offset: Int = 0)
     {
         let path = EndPoint.searchGroups.rawValue
         let parameters: Parameters = [
@@ -162,10 +154,9 @@ final class APIService {
                     do {
                         let groups = try JSONDecoder()
                             .decode(Response<Group>.self, from: data).list
-                        self?.realm.deleteGroups(groups:
-                            (self?.realm.selectNotMineGroups())!)
-                        self?.realm.insertGroups(groups: groups)
-                        completion()
+                        self?.session.realmService.deleteGroups(groups:
+                            [Group]((self?.session.realmService.selectNotMineGroups())!))
+                        self?.session.realmService.insertGroups(groups: groups)
                     } catch {
                         print("error \(error)")
                     }
@@ -175,9 +166,7 @@ final class APIService {
             }
     }
 
-    func joinGroup(id: Int,
-                   completion: @escaping () -> Void)
-    {
+    func joinGroup(id: Int) {
         let path = EndPoint.joinGroup.rawValue
         let parameters: Parameters = [
             "access_token": session.token,
@@ -199,7 +188,6 @@ final class APIService {
                     do {
                         _ = try JSONDecoder()
                             .decode(ResponseCode.self, from: data).result
-                        completion()
                     } catch {
                         print("error \(error)")
                     }
@@ -209,9 +197,7 @@ final class APIService {
             }
     }
 
-    func leaveGroup(id: Int,
-                    completion: @escaping () -> Void)
-    {
+    func leaveGroup(id: Int) {
         let path = EndPoint.leaveGroup.rawValue
         let parameters: Parameters = [
             "group_id": String(id),
@@ -233,7 +219,6 @@ final class APIService {
                     do {
                         _ = try JSONDecoder()
                             .decode(ResponseCode.self, from: data).result
-                        completion()
                     } catch {
                         print("error \(error)")
                     }

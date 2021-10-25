@@ -5,18 +5,20 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
+import RealmSwift
 import UIKit
 
 class GroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
 
+    private var token: NotificationToken?
     private var selectedIndexes = Set<IndexPath>()
     private let appSettings = AppSettings.instance
     private let sessionSettings = SessionSettings.instance
     private let realmService = SessionSettings.instance.realmService
-    private var groups = [Group]()
+    private var groups: Results<Group>?
     private var displayedGroups: [Group] {
-        return groups.filter { sessionSettings.filterJoined.isEmpty ||
+        return [Group](realmService.selectMyGroups()!).filter { sessionSettings.filterJoined.isEmpty ||
             $0.groupName!.lowercased()
             .contains(sessionSettings.filterJoined.lowercased())
         }
@@ -31,7 +33,8 @@ class GroupsViewController: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
         tableView.backgroundColor = appSettings.tableColor
-
+        groups = realmService.selectMyGroups()
+        observeGroups()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -42,7 +45,7 @@ class GroupsViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchBar.text = sessionSettings.filterJoined
-        loadJoinedGroups()
+        loadJoinedGroups() // from REST API
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -198,34 +201,38 @@ extension GroupsViewController: CroupsViewControllerProtocol {
 
 extension GroupsViewController {
     func loadJoinedGroups() {
-        appSettings.apiService.getUserGroups {
-            [weak self] in
-            self?.groups = (self?.realmService.selectMyGroups())!
-            self?.tableView.reloadData()
-        }
-    }
-
-    func loadJoinedGroupsWithoutReload() {
-        appSettings.apiService.getUserGroups {
-            [weak self] in
-            self?.groups = (self?.realmService.selectMyGroups())!
-//            self?.tableView.reloadData()
-        }
+        appSettings.apiService.getUserGroups()
     }
 
     func leaveGroup(index: Int) {
         let currentGroups = displayedGroups
-        appSettings.apiService.leaveGroup(id: currentGroups[index].id) {}
+        appSettings.apiService.leaveGroup(id: currentGroups[index].id)
         realmService.deleteGroup(groupID: currentGroups[index].id)
-        groups = realmService.selectMyGroups()
     }
 
     func leaveGroups(indexes: [Int]) {
         let currentGroups = displayedGroups
         for index in indexes {
-            appSettings.apiService.leaveGroup(id: currentGroups[index].id) {}
+            appSettings.apiService.leaveGroup(id: currentGroups[index].id)
             realmService.deleteGroup(groupID: currentGroups[index].id)
         }
-        groups = realmService.selectMyGroups()
+    }
+
+    func observeGroups() {
+        token = realmService.selectMyGroups()!
+            .observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                tableView.reloadData()
+            case .update(_, _, _, _):
+//            case let .update(result, deletions, insertions, modifications):
+//                tableView.beginUpdates()
+                tableView.reloadData()
+//                tableView.endUpdates()
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        }
     }
 }

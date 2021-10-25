@@ -7,6 +7,7 @@
 
 import Foundation
 import Nuke
+import RealmSwift
 import UIKit
 
 class PhotoViewController: UIViewController {
@@ -14,7 +15,7 @@ class PhotoViewController: UIViewController {
     let sessionSettings = SessionSettings.instance
     var index = 0
     var photoID: Int?
-    var photos = [Photo]()
+    var photos: Results<Photo>?
     var pixelSize: CGSize {
         return CGSize(width: imageView.bounds.width * UIScreen.main.scale,
                       height: imageView.bounds.height * UIScreen.main.scale)
@@ -43,26 +44,27 @@ class PhotoViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        index = photos.firstIndex { $0.id == photoID }!
+        index = photos!.firstIndex { $0.id == photoID }!
         loadPhoto()
     }
 }
 
 extension PhotoViewController {
     private func getUrl() -> URL? {
-        let fullImageList = photos[index].images.sorted(by: { $0.width > $1.width })
+        let fullImageList = photos![index].images.sorted(by: { $0.width > $1.width })
         var filteredImageList = fullImageList.filter {
             sessionSettings.enabledPhotoType.contains($0.type!) &&
                 (CGFloat($0.width) >= imageView.bounds.width ||
                     CGFloat($0.height) >= imageView.bounds.height)
         }
         if filteredImageList.isEmpty { filteredImageList = fullImageList }
-        guard let url = URL(string: filteredImageList.first!.imageUrl!) else { return nil }
+        guard let url = URL(string: filteredImageList.first!.imageUrl!)
+        else { return nil }
         return url
     }
 
     @objc func swipeRight(sender: UISwipeGestureRecognizer) {
-        if !photos.isEmpty, index > photos.startIndex {
+        if !photos!.isEmpty, index > photos!.startIndex {
             var toImage: UIImage?
             index -= 1
             guard let url = getUrl() else { return }
@@ -83,7 +85,7 @@ extension PhotoViewController {
     }
 
     @objc func swipeLeft(sender: UISwipeGestureRecognizer) {
-        if !photos.isEmpty, index < photos.endIndex - 1 {
+        if !photos!.isEmpty, index < photos!.endIndex - 1 {
             var toImage: UIImage?
             index += 1
             guard let url = getUrl() else { return }
