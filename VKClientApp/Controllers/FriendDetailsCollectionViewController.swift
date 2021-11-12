@@ -7,11 +7,14 @@
 
 import Nuke
 import UIKit
+import RealmSwift
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
     private let appSettins = AppSettings.instance
+    private let realmService = SessionSettings.instance.realmService
+    private var token: NotificationToken?
     var userID: Int?
-    var photos = [Photo]()
+    var photos: Results<Photo>?
     var photoID: Int?
     let cellSpacing: CGFloat = 1
     let columns: CGFloat = 3
@@ -40,6 +43,8 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
             ),
             forCellWithReuseIdentifier: "friendDetailsCell"
         )
+        photos = realmService.selectPhotos()
+        observePhotos()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +63,8 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int
     {
-        photos.count
+        guard let count = photos?.count else {return 0}
+        return count
     }
 
     override func collectionView(_ collectionView: UICollectionView,
@@ -169,11 +175,8 @@ extension FriendDetailsCollectionViewController {
     }
 
     private func loadUserPhoto(userID: Int) {
-        appSettins.apiService.getUserPhotos(userID: userID) {
-            [weak self] photoArray in
-            self?.photos = photoArray
-            self?.collectionView?.reloadData()
-        }
+        appSettins.apiService.getUserPhotos(userID: userID)
+//        photos = realmService.selectPhotos()
     }
 
     func tapCell(cell: FriendCollectionViewCell) {
@@ -181,7 +184,7 @@ extension FriendDetailsCollectionViewController {
     }
 
     private func openPhotoCollection(indexPath: IndexPath) {
-        photoID = photos[indexPath.row].id
+        photoID = photos![indexPath.row].id
         performSegue(
             withIdentifier: "photoViewSegue",
             sender: nil
@@ -189,12 +192,26 @@ extension FriendDetailsCollectionViewController {
     }
 
     private func getUrl(index: Int, width: CGFloat, height: CGFloat) -> URL? {
-        let fullImageList = photos[index].images.sorted(by: { $0.width > $1.width })
+        let fullImageList = photos![index].images.sorted(by: { $0.width > $1.width })
         var filteredImageList = fullImageList
             .filter { CGFloat($0.width) >= width || CGFloat($0.height) >= height }
         if filteredImageList.isEmpty { filteredImageList = fullImageList }
         guard let url = URL(string: filteredImageList.first!.imageUrl!)
         else { return nil }
         return url
+    }
+    func observePhotos() {
+        token = realmService.selectPhotos()!.observe {
+            [weak self] (changes: RealmCollectionChange) in
+            guard let collectionView = self?.collectionView else {return}
+            switch changes {
+            case .initial:
+                collectionView.reloadData()
+            case .update(_, _, _, _):
+                collectionView.reloadData()
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        }
     }
 }

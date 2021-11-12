@@ -69,6 +69,7 @@ extension VKWebLoginController: WKNavigationDelegate {
 
         SessionSettings.instance.token = token
         SessionSettings.instance.userId = userID
+        SessionSettings.instance.realmService.dropDB()
         performSegue(
             withIdentifier: "loginSegue",
             sender: nil)

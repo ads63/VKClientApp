@@ -13,8 +13,7 @@ final class APIService {
     private let host = "https://api.vk.com"
 
     func getFriends(fieldList: [String] = [],
-                    offset: Int = 0,
-                    completion: @escaping ([User]) -> Void)
+                    offset: Int = 0)
     {
         let path = EndPoint.getUserFriends.rawValue
         var fields = Set<String>(["photo_50"]) // set mandatory fields
@@ -34,16 +33,14 @@ final class APIService {
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
             .responseData {
-                response in
+                [weak self] response in
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
                     do {
                         let friends = try JSONDecoder().decode(Response<User>.self,
                                                                from: data).list
-                        DispatchQueue.main.async {
-                            completion(friends)
-                        }
+                        self?.session.realmService.insertUsers(users: friends)
                     } catch {
                         print("error \(error)")
                     }
@@ -54,8 +51,7 @@ final class APIService {
     }
 
     func getUserPhotos(userID: Int,
-                       offset: Int = 0,
-                       completion: @escaping ([Photo]) -> Void)
+                       offset: Int = 0)
     {
         let path = EndPoint.getPhotosByUser.rawValue
         let parameters: Parameters = [
@@ -73,16 +69,14 @@ final class APIService {
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
             .responseData {
-                response in
+                [weak self] response in
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
                     do {
                         let photos = try JSONDecoder().decode(Response<Photo>.self,
                                                               from: data).list
-                        DispatchQueue.main.async {
-                            completion(photos)
-                        }
+                        self?.session.realmService.insertPhotos(photos: photos)
                     } catch {
                         print("error \(error)")
                     }
@@ -94,8 +88,7 @@ final class APIService {
 
     func getUserGroups(fieldList: [String] = [],
                        extended: Int = 1,
-                       offset: Int = 0,
-                       completion: @escaping ([Group]) -> Void)
+                       offset: Int = 0)
     {
         var fields = Set<String>(["photo_50"]) // set mandatory fields
         fields.formUnion(fieldList) // add user defined fields
@@ -116,16 +109,14 @@ final class APIService {
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
             .responseData {
-                response in
+                [weak self] response in
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
                     do {
                         let groups = try JSONDecoder()
                             .decode(Response<Group>.self, from: data).list
-                        DispatchQueue.main.async {
-                            completion(groups)
-                        }
+                        self?.session.realmService.insertGroups(groups: groups)
                     } catch {
                         print("error \(error)")
                     }
@@ -137,8 +128,7 @@ final class APIService {
 
     func searchGroups(searchString: String = "",
                       type: String = "group",
-                      offset: Int = 0,
-                      completion: @escaping ([Group]) -> Void)
+                      offset: Int = 0)
     {
         let path = EndPoint.searchGroups.rawValue
         let parameters: Parameters = [
@@ -157,16 +147,16 @@ final class APIService {
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
             .responseData {
-                response in
+                [weak self] response in
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
                     do {
                         let groups = try JSONDecoder()
                             .decode(Response<Group>.self, from: data).list
-                        DispatchQueue.main.async {
-                            completion(groups)
-                        }
+                        self?.session.realmService.deleteGroups(groups:
+                            [Group]((self?.session.realmService.selectNotMineGroups())!))
+                        self?.session.realmService.insertGroups(groups: groups)
                     } catch {
                         print("error \(error)")
                     }
@@ -176,16 +166,13 @@ final class APIService {
             }
     }
 
-    func joinGroup(id: Int,
-                   completion: @escaping (Bool) -> Void)
-    {
+    func joinGroup(id: Int) {
         let path = EndPoint.joinGroup.rawValue
         let parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
             "group_id": String(id)
         ]
-
         AF.request(
             host + path,
             method: .get,
@@ -199,11 +186,8 @@ final class APIService {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let result = try JSONDecoder()
+                        _ = try JSONDecoder()
                             .decode(ResponseCode.self, from: data).result
-                        DispatchQueue.main.async {
-                            completion(result == 1)
-                        }
                     } catch {
                         print("error \(error)")
                     }
@@ -213,16 +197,13 @@ final class APIService {
             }
     }
 
-    func leaveGroup(id: Int,
-                    completion: @escaping (Bool) -> Void)
-    {
+    func leaveGroup(id: Int) {
         let path = EndPoint.leaveGroup.rawValue
         let parameters: Parameters = [
-            "access_token": session.token,
+            "group_id": String(id),
             "v": session.api_version,
-            "group_id": String(id)
+            "access_token": session.token
         ]
-
         AF.request(
             host + path,
             method: .get,
@@ -231,16 +212,13 @@ final class APIService {
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
             .responseData {
-                response in
+                [weak self] response in
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let result = try JSONDecoder()
+                        _ = try JSONDecoder()
                             .decode(ResponseCode.self, from: data).result
-                        DispatchQueue.main.async {
-                            completion(result == 1)
-                        }
                     } catch {
                         print("error \(error)")
                     }

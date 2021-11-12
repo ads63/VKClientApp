@@ -5,18 +5,25 @@
 //  Created by Алексей Шинкарев on 25.08.2021.
 //
 
-import UIKit
 
-final class User: Equatable {
-    var id: Int = 0
-    var firstName: String?
-    var lastName: String?
-    var avatarURL: String?
-    var userName: String {
-        ((firstName ?? "") + " " + (lastName ?? ""))
+import RealmSwift
+
+final class User: Object {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var firstName: String?
+    @objc dynamic var lastName: String?
+    @objc dynamic var avatarURL: String?
+    @objc dynamic var userName: String {
+        return ((firstName ?? "") + " " + (lastName ?? ""))
             .trimmingCharacters(in: .whitespaces)
     }
-
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    override static func ignoredProperties() -> [String] {
+        return ["userName"]
+    }
     static func == (lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id
     }

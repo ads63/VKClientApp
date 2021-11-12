@@ -5,15 +5,17 @@
 //  Created by Алексей Шинкарев on 23.08.2021.
 //
 
+import RealmSwift
 import UIKit
-
 class FriendsViewController: UITableViewController {
     @IBOutlet var tableHeader: FriendsTableHeader!
 
-    private var friends = [User]()
+    private var token: NotificationToken?
     private let appSettings = AppSettings.instance
+    private let realmService = SessionSettings.instance.realmService
     private var groupedFriends: [Character: [User]] {
-        return Dictionary(grouping: friends, by: { $0.userName.uppercased().first! })
+        return Dictionary(grouping: [User](realmService.selectUsers()!),
+                          by: { $0.userName.uppercased().first! })
     }
 
     private var groupKeys: [Character] {
@@ -38,7 +40,6 @@ class FriendsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableView.register(
             UINib(nibName: "FriendsSectionHeader", bundle: nil),
             forHeaderFooterViewReuseIdentifier: "friendsSectionHeader")
@@ -51,6 +52,7 @@ class FriendsViewController: UITableViewController {
         tableView.backgroundColor = appSettings.tableColor
         tableHeader.backgroundColor = appSettings.tableColor
         tableHeader.headerLabel.text = "My friends"
+        observeFriends()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -153,10 +155,21 @@ class FriendsViewController: UITableViewController {
 
 extension FriendsViewController {
     func getFriends() {
-        appSettings.apiService.getFriends(completion: {
-            [weak self] dataArray in
-            self?.friends = dataArray
-            self?.tableView.reloadData()
-        })
+        appSettings.apiService.getFriends()
+    }
+
+    func observeFriends() {
+        token = realmService.selectUsers()!
+            .observe { [weak self] (changes: RealmCollectionChange) in
+                guard let tableView = self?.tableView else { return }
+                switch changes {
+                case .initial:
+                    tableView.reloadData()
+                case .update:
+                    tableView.reloadData()
+                case .error(let error):
+                    fatalError("\(error)")
+                }
+            }
     }
 }

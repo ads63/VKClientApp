@@ -5,17 +5,20 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
+import RealmSwift
 import UIKit
 
 class GroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
 
-    var selectedIndexes = Set<IndexPath>()
-    let appSettings = AppSettings.instance
-    let sessionSettings = SessionSettings.instance
-    var groups = [Group]()
-    var displayedGroups: [Group] {
-        return groups.filter { sessionSettings.filterJoined.isEmpty ||
+    private var token: NotificationToken?
+    private var selectedIndexes = Set<IndexPath>()
+    private let appSettings = AppSettings.instance
+    private let sessionSettings = SessionSettings.instance
+    private let realmService = SessionSettings.instance.realmService
+    private var groups: Results<Group>?
+    private var displayedGroups: [Group] {
+        return [Group](realmService.selectMyGroups()!).filter { sessionSettings.filterJoined.isEmpty ||
             $0.groupName!.lowercased()
             .contains(sessionSettings.filterJoined.lowercased())
         }
@@ -30,7 +33,8 @@ class GroupsViewController: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
         tableView.backgroundColor = appSettings.tableColor
-
+        groups = realmService.selectMyGroups()
+        observeGroups()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -41,7 +45,7 @@ class GroupsViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchBar.text = sessionSettings.filterJoined
-        loadJoinedGroups()
+        loadJoinedGroups() // from REST API
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -197,29 +201,38 @@ extension GroupsViewController: CroupsViewControllerProtocol {
 
 extension GroupsViewController {
     func loadJoinedGroups() {
-        appSettings.apiService.getUserGroups {
-            [weak self] groupsArray in
-            self?.groups = groupsArray
-            self?.tableView.reloadData()
-        }
+        appSettings.apiService.getUserGroups()
     }
 
     func leaveGroup(index: Int) {
-        var apiResult = true
         let currentGroups = displayedGroups
-        appSettings.apiService.leaveGroup(id: currentGroups[index].id) {
-            result in
-            apiResult = result
-        }
-        if apiResult {
-            groups
-                .removeAll(where: { $0 == currentGroups[index] })
-        }
+        appSettings.apiService.leaveGroup(id: currentGroups[index].id)
+        realmService.deleteGroup(groupID: currentGroups[index].id)
     }
 
     func leaveGroups(indexes: [Int]) {
+        let currentGroups = displayedGroups
         for index in indexes {
-            leaveGroup(index: index)
+            appSettings.apiService.leaveGroup(id: currentGroups[index].id)
+            realmService.deleteGroup(groupID: currentGroups[index].id)
+        }
+    }
+
+    func observeGroups() {
+        token = realmService.selectMyGroups()!
+            .observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                tableView.reloadData()
+            case .update(_, _, _, _):
+//            case let .update(result, deletions, insertions, modifications):
+//                tableView.beginUpdates()
+                tableView.reloadData()
+//                tableView.endUpdates()
+            case .error(let error):
+                fatalError("\(error)")
+            }
         }
     }
 }

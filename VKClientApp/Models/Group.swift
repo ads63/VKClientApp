@@ -5,16 +5,22 @@
 //  Created by Алексей Шинкарев on 25.08.2021.
 //
 
-import UIKit
+import RealmSwift
 
-final class Group: Equatable {
-    var id: Int = 0
-    var avatarURL: String?
-    var groupName: String?
-    var adminValue: Int = 0
-    var memberValue: Int = 0
-    var isJoinCandidate: Bool { return adminValue == 0 && memberValue == 0 }
-
+final class Group: Object {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var avatarURL: String?
+    @objc dynamic var groupName: String?
+    @objc dynamic var adminValue: Int = 0
+    @objc dynamic var memberValue: Int = 0
+    @objc dynamic var isJoinCandidate: Bool { return adminValue == 0 && memberValue == 0 }
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    override static func ignoredProperties() -> [String] {
+        return ["isJoinCandidate"]
+    }
     static func == (lhs: Group, rhs: Group) -> Bool {
         lhs.id == rhs.id
     }
