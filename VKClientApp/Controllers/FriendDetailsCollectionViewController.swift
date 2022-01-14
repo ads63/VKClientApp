@@ -90,7 +90,8 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
         let request = ImageRequest(url: url,
                                    processors: resizedImageProcessors)
         Nuke.loadImage(with: request, options: options, into: cell.photoImage)
-        cell.configure(parentViewController: self)
+        cell.parentViewController = self
+        cell.configure()
         return cell
     }
 

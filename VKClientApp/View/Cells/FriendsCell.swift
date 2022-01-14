@@ -41,8 +41,7 @@ class FriendsCell: UITableViewCell {
                                                                      right: 0))
     }
 
-    func configure(controller: FriendsViewController, user: User, color: UIColor) {
-        parentTableViewController = controller
+    func configure(user: User, color: UIColor) {
         friendNameLabel.text = user.userName
         backgroundConfiguration?.backgroundColor = color
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,

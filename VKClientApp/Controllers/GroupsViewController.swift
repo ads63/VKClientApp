@@ -106,9 +106,8 @@ class GroupsViewController: UITableViewController {
             withIdentifier: "groupsListCell",
             for: indexPath) as? GroupsViewCell
         else { return UITableViewCell() }
-
-        cell.configure(controller: self,
-                       cellColor: appSettings.tableColor,
+        cell.parentTableViewController = self
+        cell.configure(cellColor: appSettings.tableColor,
                        selectColor: appSettings.selectColor,
                        group: displayedGroups[indexPath.row])
         return cell
@@ -221,18 +220,18 @@ extension GroupsViewController {
     func observeGroups() {
         token = realmService.selectMyGroups()!
             .observe { [weak self] (changes: RealmCollectionChange) in
-            guard let tableView = self?.tableView else { return }
-            switch changes {
-            case .initial:
-                tableView.reloadData()
-            case .update(_, _, _, _):
+                guard let tableView = self?.tableView else { return }
+                switch changes {
+                case .initial:
+                    tableView.reloadData()
+                case .update:
 //            case let .update(result, deletions, insertions, modifications):
 //                tableView.beginUpdates()
-                tableView.reloadData()
+                    tableView.reloadData()
 //                tableView.endUpdates()
-            case .error(let error):
-                fatalError("\(error)")
+                case .error(let error):
+                    fatalError("\(error)")
+                }
             }
-        }
     }
 }

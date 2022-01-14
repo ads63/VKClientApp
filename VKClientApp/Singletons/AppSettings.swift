@@ -13,4 +13,5 @@ class AppSettings {
     let tableColor = UIColor.systemTeal
     let selectColor = UIColor.systemGray
     let apiService = APIService()
+    let newsDispatchGroup = DispatchGroup()
 }

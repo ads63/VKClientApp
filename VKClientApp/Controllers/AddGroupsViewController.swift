@@ -93,8 +93,8 @@ class AddGroupsViewController: UITableViewController {
             withIdentifier: "groupsListCell",
             for: indexPath) as? GroupsViewCell
         else { return UITableViewCell() }
-        cell.configure(controller: self,
-                       cellColor: appSettings.tableColor,
+        cell.parentTableViewController = self
+        cell.configure(cellColor: appSettings.tableColor,
                        selectColor: appSettings.selectColor,
                        group: displayedGroups[indexPath.row])
         return cell
