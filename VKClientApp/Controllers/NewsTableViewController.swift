@@ -166,14 +166,12 @@ extension NewsTableViewController {
     private func getNews() {
         appSettings.apiService.getPostNews(completion: {
             [weak self] dataPost in
-            self?.news.append(contentsOf: dataPost.items
-                .filter { !$0.text.isEmpty || $0.attachments.count > 0 })
-            self?.users.append(contentsOf: dataPost.profiles)
-            self?.groups.append(contentsOf: dataPost.groups)
             self?.appSettings.apiService.getPhotoNews(completion: {
                 [weak self] dataPhoto in
-                self?.news.append(contentsOf: dataPhoto.items
-                    .filter { $0.photos.count > 0 })
+                self?.news.append(contentsOf: dataPost.items)
+                self?.users.append(contentsOf: dataPost.profiles)
+                self?.groups.append(contentsOf: dataPost.groups)
+                self?.news.append(contentsOf: dataPhoto.items)
                 self?.users.append(contentsOf: dataPhoto.profiles)
                 self?.groups.append(contentsOf: dataPhoto.groups)
 

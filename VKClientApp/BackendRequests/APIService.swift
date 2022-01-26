@@ -12,7 +12,9 @@ final class APIService {
     private let session = SessionSettings.instance
     private let host = "https://api.vk.com"
 //
-    func getPostNews(startTime: Int = 0, startFrom: String? = nil, completion: @escaping (ResponseNews<PostNews>) -> Void) {
+    func getPostNews(startTime: Int = 0, startFrom: String? = nil,
+                     completion: @escaping (ResponseNews<PostNews>) -> Void)
+    {
         let path = EndPoint.getNews.rawValue
         var parameters: Parameters = [
             "access_token": session.token,
@@ -37,8 +39,8 @@ final class APIService {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let newsData = try JSONDecoder().decode(ResponseNews<PostNews>.self,
-                                                                from: data)
+                        let newsData = try JSONDecoder()
+                            .decode(ResponseNews<PostNews>.self, from: data)
                         DispatchQueue.main.async {
                             completion(newsData)
                         }
@@ -52,7 +54,9 @@ final class APIService {
             }
     }
 
-    func getPhotoNews(startTime: Int = 0, startFrom: String? = nil, completion: @escaping (ResponseNews<PhotoNews>) -> Void) {
+    func getPhotoNews(startTime: Int = 0, startFrom: String? = nil,
+                      completion: @escaping (ResponseNews<PhotoNews>) -> Void)
+    {
         let path = EndPoint.getNews.rawValue
         var parameters: Parameters = [
             "access_token": session.token,
@@ -77,8 +81,8 @@ final class APIService {
                 case .success:
                     guard let data = response.value else { return }
                     do {
-                        let newsData = try JSONDecoder().decode(ResponseNews<PhotoNews>.self,
-                                                                from: data)
+                        let newsData = try JSONDecoder()
+                            .decode(ResponseNews<PhotoNews>.self, from: data)
                         DispatchQueue.main.async {
                             completion(newsData)
                         }
