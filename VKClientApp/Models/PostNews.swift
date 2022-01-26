@@ -14,13 +14,17 @@ class PostNews: NewsProtocol, Decodable {
         df.dateFormat = "dd.MM.yyyy HH.mm"
         return df
     }()
+
     var type: String? = nil
     var date = 0
     var sourceID = 0
     var text: String = ""
     var attachments = [NewsAttachment]()
     var flags = NewsFlags()
-    var photos: [Photo] { return self.attachments.filter { $0.type == "photo" }.map { $0.photos! }}
+    var photos: [Photo] { return self.attachments
+        .filter { $0.type == "photo" }.map { $0.photos! }
+    }
+
     var formattedDate: String {
         let date = Date(timeIntervalSince1970: Double(date))
         return PostNews.dateFormatter.string(from: date)
@@ -44,15 +48,23 @@ class PostNews: NewsProtocol, Decodable {
             forKey: .date)
         self.sourceID = try container.decode(Int.self, forKey: .id)
         self.text = try container.decode(String.self, forKey: .text)
-        self.attachments = (try? container.decode([NewsAttachment].self, forKey: .attachments)) ?? [NewsAttachment]()
-        let comments = try container.nestedContainer(keyedBy: CodingKeys.CommentsKeys.self, forKey: .comments)
+        self.attachments = (try? container.decode(
+            [NewsAttachment].self,
+            forKey: .attachments)) ?? [NewsAttachment]()
+        let comments = try container.nestedContainer(
+            keyedBy: CodingKeys.CommentsKeys.self,
+            forKey: .comments)
         self.flags.canComment = try comments.decode(Int.self, forKey: .canComment)
         self.flags.commentsCount = try comments.decode(Int.self, forKey: .count)
-        let likes = try container.nestedContainer(keyedBy: CodingKeys.LikesKeys.self, forKey: .likes)
+        let likes = try container.nestedContainer(
+            keyedBy: CodingKeys.LikesKeys.self,
+            forKey: .likes)
         self.flags.isLiked = try likes.decode(Int.self, forKey: .isLiked)
         self.flags.canLike = try likes.decode(Int.self, forKey: .canLike)
         self.flags.likesCount = try likes.decode(Int.self, forKey: .count)
-        let reposts = try container.nestedContainer(keyedBy: CodingKeys.RepostsKeys.self, forKey: .reposts)
+        let reposts = try container.nestedContainer(
+            keyedBy: CodingKeys.RepostsKeys.self,
+            forKey: .reposts)
         self.flags.isReposted = try reposts.decode(Int.self, forKey: .isReposted)
         self.flags.repostsCount = try reposts.decode(Int.self, forKey: .count)
     }
@@ -83,23 +95,4 @@ class PostNews: NewsProtocol, Decodable {
         }
     }
 
-//    func getPhoto(row: Int) -> String {
-//        return ""
-//    }
-//
-//    func getText(row: Int) -> String {
-//        return ""
-//    }
-//
-//    func getLikes(row: Int) -> (likesCount: Int, isLiked: Int,
-//                                repostsCount: Int, isReposted: Int,
-//                                commentsCount: Int, isCommented: Int,
-//                                canComment: Int, canRepost: Int)
-//    {
-//        return (0, 0, 0, 0, 0, 0, 0, 0)
-//    }
-//
-//    func getSource() -> (url: String, name: String) {
-//        return ("", "")
-//    }
 }

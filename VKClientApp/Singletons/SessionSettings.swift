@@ -9,7 +9,6 @@ import Foundation
 
 class SessionSettings {
     static let instance = SessionSettings()
-    private init() {}
     var token = ""
     var userId = 0
     var app_Id = "7965015"

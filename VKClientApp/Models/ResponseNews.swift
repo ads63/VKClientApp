@@ -8,7 +8,6 @@
 import Foundation
 
 class ResponseNews<T: Decodable>: Decodable {
-
     var items: [T] = []
     var profiles: [User] = []
     var groups: [Group] = []
@@ -19,14 +18,17 @@ class ResponseNews<T: Decodable>: Decodable {
         let responseContainer = try container
             .nestedContainer(keyedBy: CodingKeys.ResponseKeys.self,
                              forKey: .response)
-        self.items = try responseContainer.decode([T].self, forKey: .items)
-        self.profiles = try responseContainer.decode([User].self, forKey: .profiles)
-        self.groups = try responseContainer.decode([Group].self, forKey: .groups)
+        self.items = try responseContainer.decode([T].self,
+                                                  forKey: .items)
+        self.profiles = try responseContainer.decode([User].self,
+                                                     forKey: .profiles)
+        self.groups = try responseContainer.decode([Group].self,
+                                                   forKey: .groups)
         do {
-            self.nextPointer = try responseContainer.decode(String.self, forKey: .next_from)
+            self.nextPointer = try responseContainer.decode(String.self,
+                                                            forKey: .next_from)
         } catch {
             self.nextPointer = ""
-            
         }
     }
 

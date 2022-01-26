@@ -62,7 +62,7 @@ final class APIService {
             "access_token": session.token,
             "v": session.api_version,
             "start_time": String(startTime),
-            "filters": "photo,wall_photo"
+            "filters": "photo"
         ]
         if startFrom != nil {
             parameters["start_from"] = startFrom

@@ -13,6 +13,7 @@ final class PhotoNews: NewsProtocol, Decodable {
         df.dateFormat = "dd.MM.yyyy HH.mm"
         return df
     }()
+
     var type: String?
     var date = 0
     var sourceID = 0
@@ -41,19 +42,21 @@ final class PhotoNews: NewsProtocol, Decodable {
     }
 
     required init(from decoder: Decoder) throws {
-                let container = try decoder.container(keyedBy: CodingKeys.self)
-                self.type = try container.decode(
-                    String.self,
-                    forKey: .type)
-                self.date = try container.decode(
-                    Int.self,
-                    forKey: .date)
-                self.sourceID = try container.decode(
-                    Int.self,
-                    forKey: .source_id)
-                let photosContainer = try container
-                    .nestedContainer(keyedBy: CodingKeys.PhotosKeys.self,
-                                     forKey: .photos)
-                self.photos = try photosContainer.decode([NewsPhoto].self, forKey: .items)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.type = try container.decode(
+            String.self,
+            forKey: .type)
+        self.date = try container.decode(
+            Int.self,
+            forKey: .date)
+        self.sourceID = try container.decode(
+            Int.self,
+            forKey: .source_id)
+        let photosContainer = try container
+            .nestedContainer(keyedBy: CodingKeys.PhotosKeys.self,
+                             forKey: .photos)
+        self.photos = try photosContainer.decode(
+            [NewsPhoto].self,
+            forKey: .items)
     }
 }

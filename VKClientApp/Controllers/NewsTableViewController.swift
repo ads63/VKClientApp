@@ -47,7 +47,6 @@ class NewsTableViewController: UITableViewController {
             forCellReuseIdentifier: CellType.likes.rawValue)
         tableView.backgroundColor = appSettings.tableColor
         tableView.delegate = self
-        //        self.tableView.dataSource = self
         tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableView.automaticDimension
         // Uncomment the following line to preserve selection between presentations
@@ -58,10 +57,6 @@ class NewsTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
-//    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return UITableView.automaticDimension
-//    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -168,10 +163,13 @@ extension NewsTableViewController {
             [weak self] dataPost in
             self?.appSettings.apiService.getPhotoNews(completion: {
                 [weak self] dataPhoto in
-                self?.news.append(contentsOf: dataPost.items)
+                self?.news
+                    .append(contentsOf: dataPost.items
+                                    .filter{!($0.text.isEmpty && $0.photos.isEmpty)})
                 self?.users.append(contentsOf: dataPost.profiles)
                 self?.groups.append(contentsOf: dataPost.groups)
-                self?.news.append(contentsOf: dataPhoto.items)
+                self?.news
+                    .append(contentsOf: dataPhoto.items.filter{!$0.photos.isEmpty})
                 self?.users.append(contentsOf: dataPhoto.profiles)
                 self?.groups.append(contentsOf: dataPhoto.groups)
 

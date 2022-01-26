@@ -225,10 +225,7 @@ extension GroupsViewController {
                 case .initial:
                     tableView.reloadData()
                 case .update:
-//            case let .update(result, deletions, insertions, modifications):
-//                tableView.beginUpdates()
                     tableView.reloadData()
-//                tableView.endUpdates()
                 case .error(let error):
                     fatalError("\(error)")
                 }

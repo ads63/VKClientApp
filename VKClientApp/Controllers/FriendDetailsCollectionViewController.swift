@@ -6,8 +6,8 @@
 //
 
 import Nuke
-import UIKit
 import RealmSwift
+import UIKit
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
     private let appSettins = AppSettings.instance
@@ -31,11 +31,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if let flowLayout = collectionView?.collectionViewLayout
-//            as? UICollectionViewFlowLayout
-//        {
-//            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-//        }
+
         collectionView.register(
             UINib(
                 nibName: "FriendCollectionViewCell",
@@ -49,11 +45,6 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        if let flowLayout = collectionView?.collectionViewLayout
-//            as? UICollectionViewFlowLayout
-//        {
-//            flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-//        }
         calcCellSize()
         loadUserPhoto(userID: userID!)
     }
@@ -63,7 +54,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int
     {
-        guard let count = photos?.count else {return 0}
+        guard let count = photos?.count else { return 0 }
         return count
     }
 
@@ -201,14 +192,15 @@ extension FriendDetailsCollectionViewController {
         else { return nil }
         return url
     }
+
     func observePhotos() {
         token = realmService.selectPhotos()!.observe {
             [weak self] (changes: RealmCollectionChange) in
-            guard let collectionView = self?.collectionView else {return}
+            guard let collectionView = self?.collectionView else { return }
             switch changes {
             case .initial:
                 collectionView.reloadData()
-            case .update(_, _, _, _):
+            case .update:
                 collectionView.reloadData()
             case .error(let error):
                 fatalError("\(error)")
