@@ -13,4 +13,5 @@ enum EndPoint: String {
     case searchGroups = "/method/groups.search"
     case leaveGroup = "/method/groups.leave"
     case joinGroup = "/method/groups.join"
+    case getNews = "/method/newsfeed.get"
 }

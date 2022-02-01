@@ -16,8 +16,7 @@ class FriendCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
     }
 
-    func configure(parentViewController: FriendDetailsCollectionViewController) {
-        self.parentViewController = parentViewController
+    func configure() {
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
                                    action: #selector(tapCell(sender:)))

@@ -11,6 +11,90 @@ import Foundation
 final class APIService {
     private let session = SessionSettings.instance
     private let host = "https://api.vk.com"
+//
+    func getPostNews(startTime: Int = 0, startFrom: String? = nil,
+                     completion: @escaping (ResponseNews<PostNews>) -> Void)
+    {
+        let path = EndPoint.getNews.rawValue
+        var parameters: Parameters = [
+            "access_token": session.token,
+            "v": session.api_version,
+            "start_time": String(startTime),
+            "filters": "post"
+        ]
+        if startFrom != nil {
+            parameters["start_from"] = startFrom
+        }
+
+        AF.request(
+            host + path,
+            method: .get,
+            parameters: parameters)
+            .resume()
+            .validate(statusCode: 200..<201)
+            .validate(contentType: ["application/json"])
+            .responseData {
+                [weak self] response in
+                switch response.result {
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let newsData = try JSONDecoder()
+                            .decode(ResponseNews<PostNews>.self, from: data)
+                        DispatchQueue.main.async {
+                            completion(newsData)
+                        }
+
+                    } catch {
+                        print("error \(error)")
+                    }
+                case .failure(let error):
+                    print("error \(error)")
+                }
+            }
+    }
+
+    func getPhotoNews(startTime: Int = 0, startFrom: String? = nil,
+                      completion: @escaping (ResponseNews<PhotoNews>) -> Void)
+    {
+        let path = EndPoint.getNews.rawValue
+        var parameters: Parameters = [
+            "access_token": session.token,
+            "v": session.api_version,
+            "start_time": String(startTime),
+            "filters": "photo"
+        ]
+        if startFrom != nil {
+            parameters["start_from"] = startFrom
+        }
+
+        AF.request(
+            host + path,
+            method: .get,
+            parameters: parameters)
+            .resume()
+            .validate(statusCode: 200..<201)
+            .validate(contentType: ["application/json"])
+            .responseData {
+                [weak self] response in
+                switch response.result {
+                case .success:
+                    guard let data = response.value else { return }
+                    do {
+                        let newsData = try JSONDecoder()
+                            .decode(ResponseNews<PhotoNews>.self, from: data)
+                        DispatchQueue.main.async {
+                            completion(newsData)
+                        }
+
+                    } catch {
+                        print("error \(error)")
+                    }
+                case .failure(let error):
+                    print("error \(error)")
+                }
+            }
+    }
 
     func getFriends(fieldList: [String] = [],
                     offset: Int = 0)

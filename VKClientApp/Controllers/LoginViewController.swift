@@ -147,7 +147,6 @@ class LoginViewController: UIViewController {
 
     func isValid() -> Bool {
         loginTextField.text != "" && passwordTextField.text != ""
-//        true
     }
 
     override func viewDidLoad() {

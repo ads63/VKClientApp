@@ -13,7 +13,7 @@ final class RealmService {
     func dropDB() {
         do {
             let realm = try Realm(configuration: RealmService.config)
-            print(realm.configuration.fileURL)
+//            print(realm.configuration.fileURL)
             realm.beginWrite()
             realm.deleteAll()
             try realm.commitWrite()

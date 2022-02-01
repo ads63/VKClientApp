@@ -83,7 +83,8 @@ class FriendsViewController: UITableViewController {
             for: indexPath) as? FriendsCell,
             let user = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row]
         else { return UITableViewCell() }
-        cell.configure(controller: self, user: user, color: appSettings.tableColor)
+        cell.parentTableViewController = self
+        cell.configure(user: user, color: appSettings.tableColor)
         return cell
     }
 

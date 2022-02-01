@@ -26,13 +26,13 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="Jhv-2J-99a"/>
+                        <viewLayoutGuide key="safeArea" id="4Wc-VD-wh6"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Jhv-2J-99a" firstAttribute="trailing" secondItem="HNB-Xb-BBa" secondAttribute="trailing" id="bcO-J7-AMr"/>
-                            <constraint firstItem="HNB-Xb-BBa" firstAttribute="leading" secondItem="Jhv-2J-99a" secondAttribute="leading" id="sNb-Aw-tzN"/>
-                            <constraint firstItem="Jhv-2J-99a" firstAttribute="bottom" secondItem="HNB-Xb-BBa" secondAttribute="bottom" id="uAt-b4-h7k"/>
-                            <constraint firstItem="HNB-Xb-BBa" firstAttribute="top" secondItem="Jhv-2J-99a" secondAttribute="top" id="xdy-zx-P56"/>
+                            <constraint firstItem="4Wc-VD-wh6" firstAttribute="trailing" secondItem="HNB-Xb-BBa" secondAttribute="trailing" id="bcO-J7-AMr"/>
+                            <constraint firstItem="HNB-Xb-BBa" firstAttribute="leading" secondItem="4Wc-VD-wh6" secondAttribute="leading" id="sNb-Aw-tzN"/>
+                            <constraint firstItem="4Wc-VD-wh6" firstAttribute="bottom" secondItem="HNB-Xb-BBa" secondAttribute="bottom" id="uAt-b4-h7k"/>
+                            <constraint firstItem="HNB-Xb-BBa" firstAttribute="top" secondItem="4Wc-VD-wh6" secondAttribute="top" id="xdy-zx-P56"/>
                         </constraints>
                     </view>
                     <connections>
@@ -142,17 +142,17 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="VnY-pz-1WS"/>
                             </scrollView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="TW5-Pp-vFR"/>
+                        <viewLayoutGuide key="safeArea" id="oJY-uh-0qY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="idc-sn-mgU" firstAttribute="bottom" secondItem="ekn-Xk-Yhl" secondAttribute="bottom" id="70k-2r-FD7"/>
-                            <constraint firstItem="TW5-Pp-vFR" firstAttribute="bottom" secondItem="ZjQ-FT-GIQ" secondAttribute="bottom" id="A5u-VY-eNu"/>
-                            <constraint firstItem="TW5-Pp-vFR" firstAttribute="top" secondItem="ZjQ-FT-GIQ" secondAttribute="top" id="Auf-Pl-egz"/>
+                            <constraint firstItem="oJY-uh-0qY" firstAttribute="bottom" secondItem="ZjQ-FT-GIQ" secondAttribute="bottom" id="A5u-VY-eNu"/>
+                            <constraint firstItem="oJY-uh-0qY" firstAttribute="top" secondItem="ZjQ-FT-GIQ" secondAttribute="top" id="Auf-Pl-egz"/>
                             <constraint firstItem="idc-sn-mgU" firstAttribute="top" secondItem="ekn-Xk-Yhl" secondAttribute="top" id="Ebr-Za-iiX"/>
-                            <constraint firstItem="idc-sn-mgU" firstAttribute="trailing" secondItem="ekn-Xk-Yhl" secondAttribute="trailing" id="Qi4-Kz-Mul"/>
-                            <constraint firstItem="idc-sn-mgU" firstAttribute="leading" secondItem="ekn-Xk-Yhl" secondAttribute="leading" id="WSY-l4-feK"/>
-                            <constraint firstItem="TW5-Pp-vFR" firstAttribute="leading" secondItem="ZjQ-FT-GIQ" secondAttribute="leading" id="o7x-Dr-iXd"/>
-                            <constraint firstItem="TW5-Pp-vFR" firstAttribute="trailing" secondItem="ZjQ-FT-GIQ" secondAttribute="trailing" id="q1e-9F-dFe"/>
+                            <constraint firstItem="idc-sn-mgU" firstAttribute="trailing" secondItem="oJY-uh-0qY" secondAttribute="trailing" id="Qi4-Kz-Mul"/>
+                            <constraint firstItem="idc-sn-mgU" firstAttribute="leading" secondItem="oJY-uh-0qY" secondAttribute="leading" id="WSY-l4-feK"/>
+                            <constraint firstItem="oJY-uh-0qY" firstAttribute="leading" secondItem="ZjQ-FT-GIQ" secondAttribute="leading" id="o7x-Dr-iXd"/>
+                            <constraint firstItem="oJY-uh-0qY" firstAttribute="trailing" secondItem="ZjQ-FT-GIQ" secondAttribute="trailing" id="q1e-9F-dFe"/>
                         </constraints>
                     </view>
                     <connections>
@@ -168,12 +168,58 @@
             </objects>
             <point key="canvasLocation" x="-9130" y="-6219"/>
         </scene>
+        <!--Newsfeed-->
+        <scene sceneID="mhG-4u-FN5">
+            <objects>
+                <tableViewController autoresizesArchivedViewToFullSize="NO" id="vBJ-AJ-agO" customClass="NewsTableViewController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Nl3-ko-NbG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="RsB-D7-8N5">
+                                <rect key="frame" x="0.0" y="44.666666030883789" width="375" height="43.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="RsB-D7-8N5" id="OMJ-AR-UmY">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="vBJ-AJ-agO" id="PjN-Ww-wV8"/>
+                            <outlet property="delegate" destination="vBJ-AJ-agO" id="CEG-Ac-g40"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Newsfeed" id="2WI-O8-hLv"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J8Y-Ga-lTo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7162" y="-5435"/>
+        </scene>
+        <!--NewsFeed-->
+        <scene sceneID="U3k-1e-97I">
+            <objects>
+                <navigationController title="NewsFeed" id="ZDV-7E-Cv9" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="News" image="newspaper" catalog="system" id="0eD-ns-lFY"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KuB-jr-Hon">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vBJ-AJ-agO" kind="relationship" relationship="rootViewController" id="nlm-2A-sDP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rQa-Dt-GGg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-7943" y="-5435"/>
+        </scene>
         <!--Add Groups View Controller-->
         <scene sceneID="hLa-eW-9nm">
             <objects>
                 <tableViewController id="HbQ-74-bar" customClass="AddGroupsViewController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="enI-Q8-LyQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="type the search text here" id="CcU-do-J3e">
@@ -256,6 +302,7 @@
                     <connections>
                         <segue destination="qQw-ZM-Gcu" kind="relationship" relationship="viewControllers" id="UPh-qH-Sma"/>
                         <segue destination="Tre-mL-A5n" kind="relationship" relationship="viewControllers" id="TrI-yB-PZl"/>
+                        <segue destination="ZDV-7E-Cv9" kind="relationship" relationship="viewControllers" id="fzZ-Ms-lOD"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v1a-u4-zUB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -267,8 +314,9 @@
             <objects>
                 <navigationController id="Tre-mL-A5n" customClass="CustomNavigationController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Groups" image="person.3.fill" catalog="system" selectedImage="person.3.fill" id="SyD-DO-ZRM"/>
+                    <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QA0-o7-5w0">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -284,7 +332,7 @@
             <objects>
                 <tableViewController id="N2W-Jv-lPk" customClass="GroupsViewController" customModule="VKClientApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="kqZ-Io-FDE">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="type the search text here" id="y0z-aU-bwt">
@@ -426,13 +474,13 @@
                                 <rect key="frame" x="0.0" y="56" width="375" height="673"/>
                             </imageView>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="QXt-ak-owD"/>
+                        <viewLayoutGuide key="safeArea" id="LJr-Ps-zug"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="hSp-bS-lBt" firstAttribute="leading" secondItem="QXt-ak-owD" secondAttribute="leading" id="1tQ-p0-PD3"/>
-                            <constraint firstItem="hSp-bS-lBt" firstAttribute="top" secondItem="QXt-ak-owD" secondAttribute="top" id="Bxe-d1-SGs"/>
-                            <constraint firstItem="QXt-ak-owD" firstAttribute="bottom" secondItem="hSp-bS-lBt" secondAttribute="bottom" id="ltw-Ef-WuN"/>
-                            <constraint firstItem="hSp-bS-lBt" firstAttribute="trailing" secondItem="QXt-ak-owD" secondAttribute="trailing" id="sSL-xA-oJP"/>
+                            <constraint firstItem="hSp-bS-lBt" firstAttribute="leading" secondItem="LJr-Ps-zug" secondAttribute="leading" id="1tQ-p0-PD3"/>
+                            <constraint firstItem="hSp-bS-lBt" firstAttribute="top" secondItem="LJr-Ps-zug" secondAttribute="top" id="Bxe-d1-SGs"/>
+                            <constraint firstItem="LJr-Ps-zug" firstAttribute="bottom" secondItem="hSp-bS-lBt" secondAttribute="bottom" id="ltw-Ef-WuN"/>
+                            <constraint firstItem="hSp-bS-lBt" firstAttribute="trailing" secondItem="LJr-Ps-zug" secondAttribute="trailing" id="sSL-xA-oJP"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="RIO-Qb-dGg"/>
@@ -448,6 +496,7 @@
     <resources>
         <image name="background" width="2232" height="3150"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
+        <image name="newspaper" catalog="system" width="128" height="111"/>
         <image name="person.2.fill" catalog="system" width="128" height="80"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="plus" catalog="system" width="128" height="113"/>

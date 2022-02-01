@@ -27,11 +27,9 @@ class GroupsViewCell: UITableViewCell {
 //        // Configure the view for the selected state
 //    }
 //
-    func configure(controller: CroupsViewControllerProtocol?,
-                   cellColor: UIColor, selectColor: UIColor,
+    func configure(cellColor: UIColor, selectColor: UIColor,
                    group: Group)
     {
-        parentTableViewController = controller
         groupLabel.text = group.groupName
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
