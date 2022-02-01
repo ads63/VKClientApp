@@ -159,25 +159,34 @@ extension NewsTableViewController {
     }
 
     private func getNews() {
-        appSettings.apiService.getPostNews(completion: {
-            [weak self] dataPost in
-            self?.appSettings.apiService.getPhotoNews(completion: {
-                [weak self] dataPhoto in
-                self?.news
-                    .append(contentsOf: dataPost.items
-                                    .filter{!($0.text.isEmpty && $0.photos.isEmpty)})
-                self?.users.append(contentsOf: dataPost.profiles)
-                self?.groups.append(contentsOf: dataPost.groups)
-                self?.news
-                    .append(contentsOf: dataPhoto.items.filter{!$0.photos.isEmpty})
-                self?.users.append(contentsOf: dataPhoto.profiles)
-                self?.groups.append(contentsOf: dataPhoto.groups)
-
-                self?.news.sort { $0.getDate() > $1.getDate() }
-                self?.setRows()
-                self?.tableView.reloadData()
-            })
-        })
+        appSettings
+            .apiService
+            .getNewsFeed(ofType: PostNews.self,
+                         filters: "post",
+                         completion: {
+                             [weak self] dataPost in
+                             guard let dataPost = dataPost else { return }
+                             self?.news
+                                 .append(contentsOf: dataPost.items
+                                     .filter { !($0.text.isEmpty && $0.photos.isEmpty) })
+                             self?.users.append(contentsOf: dataPost.profiles)
+                             self?.groups.append(contentsOf: dataPost.groups)
+                             self?.appSettings
+                                 .apiService
+                                 .getNewsFeed(ofType: PhotoNews.self,
+                                              filters: "photo",
+                                              completion: {
+                                                  [weak self] dataPhoto in
+                                                  guard let dataPhoto = dataPhoto else { return }
+                                                  self?.news
+                                                      .append(contentsOf: dataPhoto.items.filter { !$0.photos.isEmpty })
+                                                  self?.users.append(contentsOf: dataPhoto.profiles)
+                                                  self?.groups.append(contentsOf: dataPhoto.groups)
+                                              })
+                             self?.news.sort { $0.getDate() > $1.getDate() }
+                             self?.setRows()
+                             self?.tableView.reloadData()
+                         })
     }
 
     private func setRows() {

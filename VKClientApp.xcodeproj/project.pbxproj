@@ -191,8 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */,
-				1654819B26D7A65C002F8292 /* FriendsCell.swift */,
 				1654819C26D7A65C002F8292 /* FriendsCell.xib */,
+				1654819B26D7A65C002F8292 /* FriendsCell.swift */,
 				165481A426D95171002F8292 /* FriendCollectionViewCell.swift */,
 				165481A526D95171002F8292 /* FriendCollectionViewCell.xib */,
 				165481AE26D9606B002F8292 /* GroupsViewCell.swift */,
