@@ -39,7 +39,7 @@ final class APIService {
             .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseData {
+            .responseData(queue: DispatchQueue.global()) {
                 [weak self] response in
                 switch response.result {
                 case .success:
@@ -65,7 +65,6 @@ final class APIService {
                                 items.append(item)
                             } catch (let error) {
                                 print("Decode items error \(error) at index \(index)")
-                            
                             }
                         }
                     }
