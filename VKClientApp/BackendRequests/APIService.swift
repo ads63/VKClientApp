@@ -7,23 +7,29 @@
 
 import Alamofire
 import Foundation
+import SwiftyJSON
 
 final class APIService {
     private let session = SessionSettings.instance
     private let host = "https://api.vk.com"
-//
-    func getPostNews(startTime: Int = 0, startFrom: String? = nil,
-                     completion: @escaping (ResponseNews<PostNews>) -> Void)
+
+    func getNewsFeed<T: Decodable>(ofType: T.Type,
+                                   filters: String?,
+                                   startTime: Int = 0,
+                                   startFrom: String? = nil,
+                                   completion: @escaping (ResponseNews<T>?) -> Void)
     {
         let path = EndPoint.getNews.rawValue
         var parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
-            "start_time": String(startTime),
-            "filters": "post"
+            "start_time": String(startTime)
         ]
         if startFrom != nil {
             parameters["start_from"] = startFrom
+        }
+        if filters != nil {
+            parameters["filters"] = filters
         }
 
         AF.request(
@@ -33,62 +39,63 @@ final class APIService {
             .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseData {
+            .responseData(queue: DispatchQueue.global()) {
                 [weak self] response in
                 switch response.result {
                 case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        let newsData = try JSONDecoder()
-                            .decode(ResponseNews<PostNews>.self, from: data)
-                        DispatchQueue.main.async {
-                            completion(newsData)
-                        }
+                    guard let data = response.data else { return }
+                    let decoder = JSONDecoder()
+                    let json = JSON(data)
+                    let dispatchGroup = DispatchGroup()
 
-                    } catch {
-                        print("error \(error)")
+                    let itemsJSONArray = json["response"]["items"].arrayValue
+                    let profilesJSONArray = json["response"]["profiles"].arrayValue
+                    let groupsJSONArray = json["response"]["groups"].arrayValue
+
+                    var items = [T]()
+                    var profiles = [User]()
+                    var groups = [Group]()
+                    let nextPointer = json["next_from"].stringValue
+
+                    DispatchQueue.global().async(group: dispatchGroup) {
+                        for (index, value) in itemsJSONArray.enumerated() {
+                            do {
+                                let item = try decoder
+                                    .decode(T.self, from: value.rawData())
+                                items.append(item)
+                            } catch (let error) {
+                                print("Decode items error \(error) at index \(index)")
+                            }
+                        }
                     }
-                case .failure(let error):
-                    print("error \(error)")
-                }
-            }
-    }
-
-    func getPhotoNews(startTime: Int = 0, startFrom: String? = nil,
-                      completion: @escaping (ResponseNews<PhotoNews>) -> Void)
-    {
-        let path = EndPoint.getNews.rawValue
-        var parameters: Parameters = [
-            "access_token": session.token,
-            "v": session.api_version,
-            "start_time": String(startTime),
-            "filters": "photo"
-        ]
-        if startFrom != nil {
-            parameters["start_from"] = startFrom
-        }
-
-        AF.request(
-            host + path,
-            method: .get,
-            parameters: parameters)
-            .resume()
-            .validate(statusCode: 200..<201)
-            .validate(contentType: ["application/json"])
-            .responseData {
-                [weak self] response in
-                switch response.result {
-                case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        let newsData = try JSONDecoder()
-                            .decode(ResponseNews<PhotoNews>.self, from: data)
-                        DispatchQueue.main.async {
-                            completion(newsData)
+                    DispatchQueue.global().async(group: dispatchGroup) {
+                        for (index, value) in profilesJSONArray.enumerated() {
+                            do {
+                                let item = try decoder
+                                    .decode(User.self, from: value.rawData())
+                                profiles.append(item)
+                            } catch (let error) {
+                                print("Decode profiles error \(error) at index \(index)")
+                            }
                         }
-
-                    } catch {
-                        print("error \(error)")
+                    }
+                    DispatchQueue.global().async(group: dispatchGroup) {
+                        for (index, value) in groupsJSONArray.enumerated() {
+                            do {
+                                let item = try decoder
+                                    .decode(Group.self, from: value.rawData())
+                                groups.append(item)
+                            } catch (let error) {
+                                print("Decode groups error \(error) at index \(index)")
+                            }
+                        }
+                    }
+                    dispatchGroup.notify(queue: DispatchQueue.main) {
+                        let response = ResponseNews<T>(items: items,
+                                                       profiles: profiles,
+                                                       groups: groups,
+                                                       pointer: nextPointer)
+                        completion(response)
                     }
                 case .failure(let error):
                     print("error \(error)")

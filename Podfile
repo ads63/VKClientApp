@@ -9,4 +9,5 @@ target 'VKClientApp' do
   pod 'Alamofire', '~> 5.4'
   
   pod 'RealmSwift'
+  pod 'SwiftyJSON', '~> 5.0.0'
 end
