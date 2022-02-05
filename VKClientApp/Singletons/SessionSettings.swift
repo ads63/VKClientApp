@@ -17,4 +17,5 @@ class SessionSettings {
     var filter2Join = ""
     var filterJoined = ""
     let realmService = RealmService()
+    let host = "https://api.vk.com"
 }

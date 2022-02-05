@@ -15,7 +15,8 @@ class AddGroupsViewController: UITableViewController {
     private let appSettings = AppSettings.instance
     private let sessionSettings = SessionSettings.instance
     private let realmService = SessionSettings.instance.realmService
-    var selectedIndexes = Set<IndexPath>()
+    private let queuedService = AppSettings.instance.queuedService
+    internal var selectedIndexes = Set<IndexPath>()
     var groups: Results<Group>?
     var displayedGroups: [Group] {
         return [Group](groups!).filter { (sessionSettings.filter2Join.isEmpty ||
@@ -153,7 +154,6 @@ extension AddGroupsViewController: CroupsViewControllerProtocol {
     func tapCell(cell: GroupsViewCell) {
         let indexPath = tableView.indexPath(for: cell)!
         joinGroup(index: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .fade)
     }
 
     func setHeaderFooter(view: UITableViewHeaderFooterView, text: String) {
@@ -178,13 +178,12 @@ extension AddGroupsViewController: CroupsViewControllerProtocol {
 
 extension AddGroupsViewController {
     func loadGroups2Join(filter: String = "") {
-        appSettings.apiService.searchGroups(searchString: filter)
+        queuedService.searchGroups(searchString: filter)
     }
 
     func joinGroup(index: Int) {
         let currentGroups = displayedGroups
-        appSettings.apiService.joinGroup(id: currentGroups[index].id)
-        realmService.deleteGroup(groupID: currentGroups[index].id)
+        queuedService.joinGroup(group: currentGroups[index])
     }
 
     func observeGroups() {

@@ -11,7 +11,7 @@ import SwiftyJSON
 
 final class APIService {
     private let session = SessionSettings.instance
-    private let host = "https://api.vk.com"
+    private let host = SessionSettings.instance.host
 
     func getNewsFeed<T: Decodable>(ofType: T.Type,
                                    filters: String?,

@@ -41,6 +41,10 @@
 		1693547E27468C0A00FFE851 /* NewsSourceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1693547C27468C0A00FFE851 /* NewsSourceCell.swift */; };
 		1693547F27468C0A00FFE851 /* NewsSourceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1693547D27468C0A00FFE851 /* NewsSourceCell.xib */; };
 		169354812746B6E000FFE851 /* CellConfigurationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169354802746B6E000FFE851 /* CellConfigurationProtocol.swift */; };
+		1697729F27AB16650067FFE0 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1697729E27AB16650067FFE0 /* AsyncOperation.swift */; };
+		169772A127AB16F90067FFE0 /* RestApiOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169772A027AB16F90067FFE0 /* RestApiOperation.swift */; };
+		169772A327AB1C370067FFE0 /* ParseDataOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169772A227AB1C370067FFE0 /* ParseDataOperation.swift */; };
+		169772A527AB291A0067FFE0 /* RealmDeleteOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169772A427AB291A0067FFE0 /* RealmDeleteOperation.swift */; };
 		169DD8B1276235E300769DA6 /* NewsFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169DD8B0276235E300769DA6 /* NewsFlags.swift */; };
 		16A58F7F2791D0F60038E65B /* NewsTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A58F7D2791D0F60038E65B /* NewsTextCell.swift */; };
 		16A58F802791D0F60038E65B /* NewsTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16A58F7E2791D0F60038E65B /* NewsTextCell.xib */; };
@@ -48,6 +52,9 @@
 		16BA1908270484F800EBD36B /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BA1907270484F800EBD36B /* AppSettings.swift */; };
 		16BA190B2704B4FE00EBD36B /* GroupsViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BA190A2704B4FE00EBD36B /* GroupsViewControllerProtocol.swift */; };
 		16BCDAAD270DFE240066B16C /*  Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BCDAAC270DFE240066B16C /*  Response.swift */; };
+		16C106A227ABF9F6001E548A /* RealmInsertOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C106A127ABF9F6001E548A /* RealmInsertOperation.swift */; };
+		16C106A427AC0E8F001E548A /* QueuedOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C106A327AC0E8F001E548A /* QueuedOperations.swift */; };
+		16C106AA27AED37B001E548A /* IdProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C106A927AED37B001E548A /* IdProtocol.swift */; };
 		16C49BBC27A103ED00C9F537 /* NewsAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C49BBB27A103ED00C9F537 /* NewsAttachment.swift */; };
 		16C53F252741496B003E19ED /* NewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C53F242741496B003E19ED /* NewsTableViewController.swift */; };
 		16C53F27274228C7003E19ED /* ResponseNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C53F26274228C7003E19ED /* ResponseNews.swift */; };
@@ -103,6 +110,10 @@
 		1693547C27468C0A00FFE851 /* NewsSourceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsSourceCell.swift; sourceTree = "<group>"; };
 		1693547D27468C0A00FFE851 /* NewsSourceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsSourceCell.xib; sourceTree = "<group>"; };
 		169354802746B6E000FFE851 /* CellConfigurationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellConfigurationProtocol.swift; sourceTree = "<group>"; };
+		1697729E27AB16650067FFE0 /* AsyncOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		169772A027AB16F90067FFE0 /* RestApiOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiOperation.swift; sourceTree = "<group>"; };
+		169772A227AB1C370067FFE0 /* ParseDataOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseDataOperation.swift; sourceTree = "<group>"; };
+		169772A427AB291A0067FFE0 /* RealmDeleteOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDeleteOperation.swift; sourceTree = "<group>"; };
 		169DD8B0276235E300769DA6 /* NewsFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFlags.swift; sourceTree = "<group>"; };
 		16A58F7D2791D0F60038E65B /* NewsTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTextCell.swift; sourceTree = "<group>"; };
 		16A58F7E2791D0F60038E65B /* NewsTextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTextCell.xib; sourceTree = "<group>"; };
@@ -110,6 +121,9 @@
 		16BA1907270484F800EBD36B /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		16BA190A2704B4FE00EBD36B /* GroupsViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewControllerProtocol.swift; sourceTree = "<group>"; };
 		16BCDAAC270DFE240066B16C /*  Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " Response.swift"; sourceTree = "<group>"; };
+		16C106A127ABF9F6001E548A /* RealmInsertOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmInsertOperation.swift; sourceTree = "<group>"; };
+		16C106A327AC0E8F001E548A /* QueuedOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueuedOperations.swift; sourceTree = "<group>"; };
+		16C106A927AED37B001E548A /* IdProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdProtocol.swift; sourceTree = "<group>"; };
 		16C49BBB27A103ED00C9F537 /* NewsAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAttachment.swift; sourceTree = "<group>"; };
 		16C53F242741496B003E19ED /* NewsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewController.swift; sourceTree = "<group>"; };
 		16C53F26274228C7003E19ED /* ResponseNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseNews.swift; sourceTree = "<group>"; };
@@ -183,6 +197,7 @@
 				1611E3D7275511A00062EC6D /* NewsProtocol.swift */,
 				169DD8B0276235E300769DA6 /* NewsFlags.swift */,
 				16C49BBB27A103ED00C9F537 /* NewsAttachment.swift */,
+				16C106A927AED37B001E548A /* IdProtocol.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -246,6 +261,19 @@
 			path = UIHelpers;
 			sourceTree = "<group>";
 		};
+		1697729D27AAD9AC0067FFE0 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				1697729E27AB16650067FFE0 /* AsyncOperation.swift */,
+				169772A027AB16F90067FFE0 /* RestApiOperation.swift */,
+				169772A227AB1C370067FFE0 /* ParseDataOperation.swift */,
+				169772A427AB291A0067FFE0 /* RealmDeleteOperation.swift */,
+				16C106A127ABF9F6001E548A /* RealmInsertOperation.swift */,
+				16C106A327AC0E8F001E548A /* QueuedOperations.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
 		16D77D60270327BB001973DF /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +304,7 @@
 		16DF759C26CA7E3000150AB2 /* VKClientApp */ = {
 			isa = PBXGroup;
 			children = (
+				1697729D27AAD9AC0067FFE0 /* Operations */,
 				1661E691271D5A8800E57BC0 /* RealmRequests */,
 				1640A3D62717368B0039A888 /* TableHeaders */,
 				1662A938270758AA004A52F8 /* BackendRequests */,
@@ -487,6 +516,7 @@
 				165D1DD8274D63D700CCAE51 /* PhotoNews.swift in Sources */,
 				165481A126D7CF1A002F8292 /* FriendDetailsCollectionViewController.swift in Sources */,
 				1654819A26D6A3F8002F8292 /* Group.swift in Sources */,
+				169772A327AB1C370067FFE0 /* ParseDataOperation.swift in Sources */,
 				16BA190B2704B4FE00EBD36B /* GroupsViewControllerProtocol.swift in Sources */,
 				16BCDAAD270DFE240066B16C /*  Response.swift in Sources */,
 				16BA1908270484F800EBD36B /* AppSettings.swift in Sources */,
@@ -494,11 +524,14 @@
 				16851D6A26F699B400BF3A55 /* Direction.swift in Sources */,
 				16C53F3E27450814003E19ED /* NewsLikesCell.swift in Sources */,
 				1661E693271D5AA700E57BC0 /* RealmService.swift in Sources */,
+				169772A127AB16F90067FFE0 /* RestApiOperation.swift in Sources */,
 				1640A3D327133DB70039A888 /* Image.swift in Sources */,
 				16DF759E26CA7E3000150AB2 /* AppDelegate.swift in Sources */,
 				1662A93C27076694004A52F8 /* EndPoint.swift in Sources */,
+				16C106AA27AED37B001E548A /* IdProtocol.swift in Sources */,
 				1693547E27468C0A00FFE851 /* NewsSourceCell.swift in Sources */,
 				16C73E982791A8C400B11E45 /* NewsImage.swift in Sources */,
+				1697729F27AB16650067FFE0 /* AsyncOperation.swift in Sources */,
 				16DF75A026CA7E3000150AB2 /* SceneDelegate.swift in Sources */,
 				16C49BBC27A103ED00C9F537 /* NewsAttachment.swift in Sources */,
 				1662A93727073A2A004A52F8 /* VKWebLoginController.swift in Sources */,
@@ -506,11 +539,14 @@
 				1643176A274D6EF5009695A7 /* NewsPhoto.swift in Sources */,
 				1662A93A2707592A004A52F8 /* APIService.swift in Sources */,
 				1654819D26D7A65C002F8292 /* FriendsCell.swift in Sources */,
+				169772A527AB291A0067FFE0 /* RealmDeleteOperation.swift in Sources */,
 				16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */,
 				1640A3D127133CCC0039A888 /* Photo.swift in Sources */,
 				169DD8B1276235E300769DA6 /* NewsFlags.swift in Sources */,
+				16C106A227ABF9F6001E548A /* RealmInsertOperation.swift in Sources */,
 				1611E3DF2755F4690062EC6D /* NewsRow.swift in Sources */,
 				169354812746B6E000FFE851 /* CellConfigurationProtocol.swift in Sources */,
+				16C106A427AC0E8F001E548A /* QueuedOperations.swift in Sources */,
 				16A58F7F2791D0F60038E65B /* NewsTextCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

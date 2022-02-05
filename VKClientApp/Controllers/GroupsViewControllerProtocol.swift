@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol CroupsViewControllerProtocol {
+protocol CroupsViewControllerProtocol: UITableViewController {
     func tapCell(cell: GroupsViewCell)
     func setHeaderFooter(view: UITableViewHeaderFooterView, text: String)
 }

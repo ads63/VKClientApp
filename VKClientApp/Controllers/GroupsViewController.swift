@@ -12,16 +12,17 @@ class GroupsViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
 
     private var token: NotificationToken?
-    private var selectedIndexes = Set<IndexPath>()
+    internal var selectedIndexes = Set<IndexPath>()
     private let appSettings = AppSettings.instance
     private let sessionSettings = SessionSettings.instance
     private let realmService = SessionSettings.instance.realmService
-    private var groups: Results<Group>?
+    private let queuedService = AppSettings.instance.queuedService
     private var displayedGroups: [Group] {
-        return [Group](realmService.selectMyGroups()!).filter { sessionSettings.filterJoined.isEmpty ||
-            $0.groupName!.lowercased()
-            .contains(sessionSettings.filterJoined.lowercased())
-        }
+        return [Group](realmService.selectMyGroups()!)
+            .filter { sessionSettings.filterJoined.isEmpty ||
+                $0.groupName!.lowercased()
+                .contains(sessionSettings.filterJoined.lowercased())
+            }
     }
 
     override func viewDidLoad() {
@@ -33,7 +34,6 @@ class GroupsViewController: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
         tableView.backgroundColor = appSettings.tableColor
-        groups = realmService.selectMyGroups()
         observeGroups()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -94,8 +94,8 @@ class GroupsViewController: UITableViewController {
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-        leaveGroups(indexes: selectedIndexes.map { $0.row })
-        selectedIndexes.removeAll()
+//        leaveGroups(indexes: selectedIndexes.map { $0.row })
+//        selectedIndexes.removeAll()
         return displayedGroups.count
     }
 
@@ -132,7 +132,8 @@ class GroupsViewController: UITableViewController {
     {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: selectedIndexes.map { $0 }, with: .fade)
+            leaveGroups(indexes: selectedIndexes.map { $0.row })
+            selectedIndexes.removeAll()
         }
     }
 
@@ -200,20 +201,18 @@ extension GroupsViewController: CroupsViewControllerProtocol {
 
 extension GroupsViewController {
     func loadJoinedGroups() {
-        appSettings.apiService.getUserGroups()
+        queuedService.getUserGroups()
     }
 
     func leaveGroup(index: Int) {
         let currentGroups = displayedGroups
-        appSettings.apiService.leaveGroup(id: currentGroups[index].id)
-        realmService.deleteGroup(groupID: currentGroups[index].id)
+        queuedService.leaveGroup(group: currentGroups[index])
     }
 
     func leaveGroups(indexes: [Int]) {
         let currentGroups = displayedGroups
         for index in indexes {
-            appSettings.apiService.leaveGroup(id: currentGroups[index].id)
-            realmService.deleteGroup(groupID: currentGroups[index].id)
+            queuedService.leaveGroup(group: currentGroups[index])
         }
     }
 
