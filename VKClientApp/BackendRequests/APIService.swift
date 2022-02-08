@@ -7,6 +7,8 @@
 
 import Alamofire
 import Foundation
+import PromiseKit
+import RealmSwift
 import SwiftyJSON
 
 final class APIService {
@@ -317,5 +319,83 @@ final class APIService {
                     print("error \(error)")
                 }
             }
+    }
+}
+
+extension APIService {
+    private func apiRequest(request: DataRequest) -> Promise<Data> {
+        return Promise<Data> { resolver in
+            request
+                .resume()
+                .validate(statusCode: 200..<201)
+                .validate(contentType: ["application/json"])
+                .responseData {
+                    response in
+                    switch response.result {
+                    case .success(let value):
+                        resolver.fulfill(value)
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+                }
+        }
+    }
+
+    private func parseUsersResponse(data: Data) -> Promise<[User]> {
+        return Promise<[User]> { resolver in
+            do {
+                let value = try JSONDecoder().decode(Response<User>.self, from: data)
+                resolver.fulfill(value.list)
+            } catch {
+                resolver.reject(error)
+            }
+        }
+    }
+
+    private func realmInsertUser(data: [User], dropBefore: Bool) -> Promise<Void> {
+        return Promise<Void> { resolver in
+            do {
+                let realm = try Realm(configuration: RealmService.config)
+                realm.beginWrite()
+                if dropBefore {
+                    realm.delete([User](realm.objects(User.self)))
+                }
+                realm.add(data, update: .all)
+                try realm.commitWrite()
+                resolver.fulfill(())
+            } catch {
+                resolver.reject(error)
+            }
+        }
+    }
+
+    func getFriendsByPromise(fieldList: [String] = [],
+                             offset: Int = 0)
+    {
+        let path = EndPoint.getUserFriends.rawValue
+        var fields = Set<String>(["photo_50"]) // set mandatory fields
+        fields.formUnion(fieldList) // add user defined fields
+        let parameters: Parameters = [
+            "access_token": session.token,
+            "v": session.api_version,
+            "offset": String(offset),
+            "fields": fields.joined(separator: ",")
+        ]
+        let request = AF.request(
+            host + path,
+            method: .get,
+            parameters: parameters)
+
+        Promise { result in
+            DispatchQueue.global().async {
+                self.apiRequest(request: request).pipe(to: result.resolve)
+            }
+        }.then { data in
+            self.parseUsersResponse(data: data)
+        }.then { users in
+            self.realmInsertUser(data: users, dropBefore: true)
+        }.catch { error in
+            print("\(error)")
+        }
     }
 }

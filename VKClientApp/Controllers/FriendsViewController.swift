@@ -156,7 +156,7 @@ class FriendsViewController: UITableViewController {
 
 extension FriendsViewController {
     func getFriends() {
-        appSettings.apiService.getFriends()
+        appSettings.apiService.getFriendsByPromise()
     }
 
     func observeFriends() {

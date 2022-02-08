@@ -10,4 +10,5 @@ target 'VKClientApp' do
   
   pod 'RealmSwift'
   pod 'SwiftyJSON', '~> 5.0.0'
+  pod "PromiseKit", "~> 6.8"
 end
