@@ -5,7 +5,6 @@
 //  Created by Алексей Шинкарев on 26.08.2021.
 //
 
-import Nuke
 import RealmSwift
 import UIKit
 
@@ -22,11 +21,6 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
     var pixelSize: CGFloat {
         return cellSize * UIScreen.main.scale
-    }
-
-    var resizedImageProcessors: [ImageProcessing] {
-        let imageSize = CGSize(width: pixelSize, height: pixelSize)
-        return [ImageProcessors.Resize(size: imageSize, contentMode: .aspectFill)]
     }
 
     override func viewDidLoad() {
@@ -74,13 +68,9 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
         guard let url = getUrl(index: indexPath.row,
                                width: cell.bounds.width,
                                height: cell.bounds.height) else { return cell }
-        let options = ImageLoadingOptions(placeholder: UIImage(named: "unknown"),
-                                          transition: .fadeIn(duration: 0.5),
-                                          failureImage: UIImage(named: "unknown"),
-                                          failureImageTransition: .fadeIn(duration: 0.5))
-        let request = ImageRequest(url: url,
-                                   processors: resizedImageProcessors)
-        Nuke.loadImage(with: request, options: options, into: cell.photoImage)
+        cell.photoImage.load(url: url,
+                             placeholderImage: UIImage(named: "unknown"),
+                             failureImage: UIImage(named: "unknown"))
         cell.parentViewController = self
         cell.configure()
         return cell

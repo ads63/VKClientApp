@@ -13,5 +13,5 @@ class AppSettings {
     let selectColor = UIColor.systemGray
     let apiService = APIService()
     let queuedService = QueuedOperations()
-
+    let photoService = PhotoService()
 }

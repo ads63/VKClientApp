@@ -7,7 +7,6 @@ target 'VKClientApp' do
 
   # Pods for VKClientApp
   pod 'Alamofire', '~> 5.4'
-  
   pod 'RealmSwift'
   pod 'SwiftyJSON', '~> 5.0.0'
   pod "PromiseKit", "~> 6.8"

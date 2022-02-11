@@ -5,7 +5,6 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
-import Nuke
 import UIKit
 
 class FriendCollectionViewCell: UICollectionViewCell {

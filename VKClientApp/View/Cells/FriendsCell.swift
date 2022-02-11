@@ -5,7 +5,6 @@
 //  Created by Алексей Шинкарев on 26.08.2021.
 //
 
-import Nuke
 import UIKit
 
 class FriendsCell: UITableViewCell {
@@ -49,7 +48,7 @@ class FriendsCell: UITableViewCell {
         avatarImage.isUserInteractionEnabled = true
         avatarImage.addGestureRecognizer(tapGestureRecognizer)
         guard let url = URL(string: user.avatarURL!) else { return }
-        Nuke.loadImage(with: url, into: avatarImage)
+        avatarImage.load(url: url)
     }
 
     override func awakeFromNib() {

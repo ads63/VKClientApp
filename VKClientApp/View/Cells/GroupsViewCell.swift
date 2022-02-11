@@ -5,7 +5,6 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
-import Nuke
 import UIKit
 
 class GroupsViewCell: UITableViewCell {
@@ -16,17 +15,6 @@ class GroupsViewCell: UITableViewCell {
     @IBOutlet var groupImage: UIImageView!
     @IBOutlet var groupLabel: UILabel!
 
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        // Initialization code
-//    }
-//
-//    override func setSelected(_ selected: Bool, animated: Bool) {
-//        super.setSelected(selected, animated: animated)
-//
-//        // Configure the view for the selected state
-//    }
-//
     func configure(cellColor: UIColor, selectColor: UIColor,
                    group: Group)
     {
@@ -39,7 +27,7 @@ class GroupsViewCell: UITableViewCell {
         selectedColor = selectColor
         backgroundConfiguration?.backgroundColor = cellColor
         guard let url = URL(string: group.avatarURL!) else { return }
-        Nuke.loadImage(with: url, into: groupImage)
+        groupImage.load(url: url)
     }
 
     override func prepareForReuse() {

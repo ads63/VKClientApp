@@ -5,24 +5,19 @@
 //  Created by Алексей Шинкарев on 15.10.2021.
 //
 
-import Foundation
-import Nuke
 import RealmSwift
 import UIKit
 
 class PhotoViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     let sessionSettings = SessionSettings.instance
+    let photoService = AppSettings.instance.photoService
     var index = 0
     var photoID: Int?
     var photos: Results<Photo>?
     var pixelSize: CGSize {
         return CGSize(width: imageView.bounds.width * UIScreen.main.scale,
                       height: imageView.bounds.height * UIScreen.main.scale)
-    }
-
-    var resizedImageProcessors: [ImageProcessing] {
-        return [ImageProcessors.Resize(size: pixelSize, contentMode: .aspectFit)]
     }
 
     private let appSettings = AppSettings.instance
@@ -65,18 +60,12 @@ extension PhotoViewController {
 
     @objc func swipeRight(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index > photos!.startIndex {
-            var toImage: UIImage?
             index -= 1
-            guard let url = getUrl() else { return }
-            ImagePipeline.shared.loadImage(with: url) {
-                [weak self] response in
+            guard let url = getUrl()?.absoluteString else { return }
+            photoService.getImage(url: url) {
+                [weak self] image in
                 guard let self = self else { return }
-                switch response {
-                case .failure:
-                    toImage = UIImage(named: "unknown")
-                case let .success(imageResponse):
-                    toImage = imageResponse.image
-                }
+                let toImage = image ?? UIImage(named: "unknown")
                 self.animateSwipe(direction: .right,
                                   fromImage: self.imageView.image!,
                                   toImage: toImage!)
@@ -86,18 +75,12 @@ extension PhotoViewController {
 
     @objc func swipeLeft(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index < photos!.endIndex - 1 {
-            var toImage: UIImage?
             index += 1
-            guard let url = getUrl() else { return }
-            ImagePipeline.shared.loadImage(with: url) {
-                [weak self] response in
+            guard let url = getUrl()?.absoluteString else { return }
+            photoService.getImage(url: url) {
+                [weak self] image in
                 guard let self = self else { return }
-                switch response {
-                case .failure:
-                    toImage = UIImage(named: "unknown")
-                case let .success(imageResponse):
-                    toImage = imageResponse.image
-                }
+                let toImage = image ?? UIImage(named: "unknown")
                 self.animateSwipe(direction: .left,
                                   fromImage: self.imageView.image!,
                                   toImage: toImage!)
@@ -131,12 +114,8 @@ extension PhotoViewController {
 
     private func loadPhoto() {
         guard let url = getUrl() else { return }
-        let options = ImageLoadingOptions(placeholder: UIImage(named: "unknown"),
-                                          transition: .fadeIn(duration: 0.5),
-                                          failureImage: UIImage(named: "unknown"),
-                                          failureImageTransition: .fadeIn(duration: 0.5))
-        let request = ImageRequest(url: url,
-                                   processors: resizedImageProcessors)
-        Nuke.loadImage(with: request, options: options, into: imageView)
+        imageView.load(url: url,
+                       placeholderImage: UIImage(named: "unknown"),
+                       failureImage: UIImage(named: "unknown"))
     }
 }
