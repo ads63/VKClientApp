@@ -17,10 +17,10 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
     var photoID: Int?
     let cellSpacing: CGFloat = 1
     let columns: CGFloat = 3
-    var cellSize: CGFloat = 100
+    var cellSize: CGFloat?
 
     var pixelSize: CGFloat {
-        return cellSize * UIScreen.main.scale
+        return cellSize ?? 0 * UIScreen.main.scale
     }
 
     override func viewDidLoad() {
@@ -39,7 +39,7 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        calcCellSize()
+        _ = calcCellSize()
         loadUserPhoto(userID: userID!)
     }
 
@@ -69,43 +69,12 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
                                width: cell.bounds.width,
                                height: cell.bounds.height) else { return cell }
         cell.photoImage.load(url: url,
-                             placeholderImage: UIImage(named: "unknown"),
-                             failureImage: UIImage(named: "unknown"))
+                             placeholderImage: ImageProvider.get(id: .unknown),
+                             failureImage: ImageProvider.get(id: .unknown))
         cell.parentViewController = self
         cell.configure()
         return cell
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-     // Uncomment this method to specify if the specified item should be highlighted during tracking
-     override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-         return true
-     }
-     */
-
-    /*
-     // Uncomment this method to specify if the specified item should be selected
-     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-         return true
-     }
-     */
-
-    /*
-     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-         return false
-     }
-
-     override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-         return false
-     }
-
-     override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-
-     }
-     */
 
     // MARK: - Navigation
 
@@ -126,8 +95,8 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        calcCellSize()
-        return CGSize(width: cellSize, height: cellSize)
+        guard let size = calcCellSize() else { return CGSize(width: 0.0, height: 0.0) }
+        return CGSize(width: size, height: size)
     }
 
     func collectionView(
@@ -148,17 +117,18 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
 }
 
 extension FriendDetailsCollectionViewController {
-    private func calcCellSize() {
+    private func calcCellSize() -> CGFloat? {
+        if let _ = cellSize { return cellSize }
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             let emptySpace = layout.sectionInset.left
                 + layout.sectionInset.right + (columns - 1) * cellSpacing
-            cellSize = (view.frame.size.width - emptySpace) / columns
+            cellSize = ceil((view.frame.size.width - emptySpace) / columns)
         }
+        return cellSize
     }
 
     private func loadUserPhoto(userID: Int) {
         appSettins.apiService.getUserPhotos(userID: userID)
-//        photos = realmService.selectPhotos()
     }
 
     func tapCell(cell: FriendCollectionViewCell) {

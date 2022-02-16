@@ -8,7 +8,6 @@
 import Foundation
 
 class PostNews: NewsProtocol, Decodable {
-//    static let dispatchGroup = AppSettings.instance.newsDispatchGroup
     static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
         df.dateFormat = "dd.MM.yyyy HH.mm"
@@ -25,10 +24,7 @@ class PostNews: NewsProtocol, Decodable {
         .filter { $0.type == "photo" }.map { $0.photos! }
     }
 
-    var formattedDate: String {
-        let date = Date(timeIntervalSince1970: Double(date))
-        return PostNews.dateFormatter.string(from: date)
-    }
+    var formattedDate: String
 
     func getType() -> String {
         return self.type!
@@ -67,6 +63,8 @@ class PostNews: NewsProtocol, Decodable {
             forKey: .reposts)
         self.flags.isReposted = try reposts.decode(Int.self, forKey: .isReposted)
         self.flags.repostsCount = try reposts.decode(Int.self, forKey: .count)
+        self.formattedDate = PostNews.dateFormatter
+            .string(from: Date(timeIntervalSince1970: Double(self.date)))
     }
 
     enum CodingKeys: String, CodingKey {
@@ -94,5 +92,4 @@ class PostNews: NewsProtocol, Decodable {
             case count
         }
     }
-
 }

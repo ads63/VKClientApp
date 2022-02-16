@@ -12,6 +12,7 @@ class PhotoViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     let sessionSettings = SessionSettings.instance
     let photoService = AppSettings.instance.photoService
+    let photoProvider = PhotoDataProvider()
     var index = 0
     var photoID: Int?
     var photos: Results<Photo>?
@@ -20,11 +21,9 @@ class PhotoViewController: UIViewController {
                       height: imageView.bounds.height * UIScreen.main.scale)
     }
 
-    private let appSettings = AppSettings.instance
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = appSettings.tableColor
+        view.backgroundColor = UIColor.systemTeal
         let swipeRightGestureRecognizer =
             UISwipeGestureRecognizer(target: self,
                                      action: #selector(swipeRight(sender:)))
@@ -40,32 +39,23 @@ class PhotoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         index = photos!.firstIndex { $0.id == photoID }!
-        loadPhoto()
+        photoProvider.loadPhoto(imageView: imageView,
+                                photo: photos![index] as Photo?)
     }
 }
 
 extension PhotoViewController {
-    private func getUrl() -> URL? {
-        let fullImageList = photos![index].images.sorted(by: { $0.width > $1.width })
-        var filteredImageList = fullImageList.filter {
-            sessionSettings.enabledPhotoType.contains($0.type!) &&
-                (CGFloat($0.width) >= imageView.bounds.width ||
-                    CGFloat($0.height) >= imageView.bounds.height)
-        }
-        if filteredImageList.isEmpty { filteredImageList = fullImageList }
-        guard let url = URL(string: filteredImageList.first!.imageUrl!)
-        else { return nil }
-        return url
-    }
-
     @objc func swipeRight(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index > photos!.startIndex {
             index -= 1
-            guard let url = getUrl()?.absoluteString else { return }
+            guard let photo = photos![index] as Photo? else { return }
+            guard let url = photoProvider
+                .getUrl(photo: photo,
+                        size: imageView.bounds.size)?.absoluteString else { return }
             photoService.getImage(url: url) {
                 [weak self] image in
                 guard let self = self else { return }
-                let toImage = image ?? UIImage(named: "unknown")
+                let toImage = image ?? ImageProvider.get(id: .unknown)
                 self.animateSwipe(direction: .right,
                                   fromImage: self.imageView.image!,
                                   toImage: toImage!)
@@ -76,11 +66,14 @@ extension PhotoViewController {
     @objc func swipeLeft(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index < photos!.endIndex - 1 {
             index += 1
-            guard let url = getUrl()?.absoluteString else { return }
+            guard let photo = photos![index] as Photo? else { return }
+            guard let url = photoProvider
+                .getUrl(photo: photo,
+                        size: imageView.bounds.size)?.absoluteString else { return }
             photoService.getImage(url: url) {
                 [weak self] image in
                 guard let self = self else { return }
-                let toImage = image ?? UIImage(named: "unknown")
+                let toImage = image ?? ImageProvider.get(id: .unknown)
                 self.animateSwipe(direction: .left,
                                   fromImage: self.imageView.image!,
                                   toImage: toImage!)
@@ -110,12 +103,5 @@ extension PhotoViewController {
                 }
             )
         }
-    }
-
-    private func loadPhoto() {
-        guard let url = getUrl() else { return }
-        imageView.load(url: url,
-                       placeholderImage: UIImage(named: "unknown"),
-                       failureImage: UIImage(named: "unknown"))
     }
 }

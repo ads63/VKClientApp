@@ -11,10 +11,6 @@ class FriendCollectionViewCell: UICollectionViewCell {
     @IBOutlet var photoImage: UIImageView!
     var parentViewController: FriendDetailsCollectionViewController?
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
     func configure() {
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,

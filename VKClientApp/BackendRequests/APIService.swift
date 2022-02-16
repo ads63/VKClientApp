@@ -105,44 +105,6 @@ final class APIService {
             }
     }
 
-    func getFriends(fieldList: [String] = [],
-                    offset: Int = 0)
-    {
-        let path = EndPoint.getUserFriends.rawValue
-        var fields = Set<String>(["photo_50"]) // set mandatory fields
-        fields.formUnion(fieldList) // add user defined fields
-        let parameters: Parameters = [
-            "access_token": session.token,
-            "v": session.api_version,
-            "offset": String(offset),
-            "fields": fields.joined(separator: ",")
-        ]
-
-        AF.request(
-            host + path,
-            method: .get,
-            parameters: parameters)
-            .resume()
-            .validate(statusCode: 200..<201)
-            .validate(contentType: ["application/json"])
-            .responseData {
-                [weak self] response in
-                switch response.result {
-                case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        let friends = try JSONDecoder().decode(Response<User>.self,
-                                                               from: data).list
-                        self?.session.realmService.insertUsers(users: friends)
-                    } catch {
-                        print("error \(error)")
-                    }
-                case .failure(let error):
-                    print("error \(error)")
-                }
-            }
-    }
-
     func getUserPhotos(userID: Int,
                        offset: Int = 0)
     {
@@ -161,159 +123,19 @@ final class APIService {
             .resume()
             .validate(statusCode: 200..<201)
             .validate(contentType: ["application/json"])
-            .responseData {
+            .responseData(queue: DispatchQueue.global()) {
                 [weak self] response in
                 switch response.result {
                 case .success:
                     guard let data = response.value else { return }
-                    do {
-                        let photos = try JSONDecoder().decode(Response<Photo>.self,
-                                                              from: data).list
-                        self?.session.realmService.insertPhotos(photos: photos)
-                    } catch {
-                        print("error \(error)")
-                    }
-                case .failure(let error):
-                    print("error \(error)")
-                }
-            }
-    }
-
-    func getUserGroups(fieldList: [String] = [],
-                       extended: Int = 1,
-                       offset: Int = 0)
-    {
-        var fields = Set<String>(["photo_50"]) // set mandatory fields
-        fields.formUnion(fieldList) // add user defined fields
-        let path = EndPoint.getUserGroups.rawValue
-        let parameters: Parameters = [
-            "access_token": session.token,
-            "v": session.api_version,
-            "offset": String(offset),
-            "extended": String(extended),
-            "fields": fields.joined(separator: ",")
-        ]
-
-        AF.request(
-            host + path,
-            method: .get,
-            parameters: parameters)
-            .resume()
-            .validate(statusCode: 200..<201)
-            .validate(contentType: ["application/json"])
-            .responseData {
-                [weak self] response in
-                switch response.result {
-                case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        let groups = try JSONDecoder()
-                            .decode(Response<Group>.self, from: data).list
-                        self?.session.realmService.insertGroups(groups: groups)
-                    } catch {
-                        print("error \(error)")
-                    }
-                case .failure(let error):
-                    print("error \(error)")
-                }
-            }
-    }
-
-    func searchGroups(searchString: String = "",
-                      type: String = "group",
-                      offset: Int = 0)
-    {
-        let path = EndPoint.searchGroups.rawValue
-        let parameters: Parameters = [
-            "access_token": session.token,
-            "v": session.api_version,
-            "type": type,
-            "q": "\"" + searchString + "\"",
-            "offset": String(offset)
-        ]
-
-        AF.request(
-            host + path,
-            method: .get,
-            parameters: parameters)
-            .resume()
-            .validate(statusCode: 200..<201)
-            .validate(contentType: ["application/json"])
-            .responseData {
-                [weak self] response in
-                switch response.result {
-                case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        let groups = try JSONDecoder()
-                            .decode(Response<Group>.self, from: data).list
-                        self?.session.realmService.deleteGroups(groups:
-                            [Group]((self?.session.realmService.selectNotMineGroups())!))
-                        self?.session.realmService.insertGroups(groups: groups)
-                    } catch {
-                        print("error \(error)")
-                    }
-                case .failure(let error):
-                    print("error \(error)")
-                }
-            }
-    }
-
-    func joinGroup(id: Int) {
-        let path = EndPoint.joinGroup.rawValue
-        let parameters: Parameters = [
-            "access_token": session.token,
-            "v": session.api_version,
-            "group_id": String(id)
-        ]
-        AF.request(
-            host + path,
-            method: .get,
-            parameters: parameters)
-            .resume()
-            .validate(statusCode: 200..<201)
-            .validate(contentType: ["application/json"])
-            .responseData {
-                response in
-                switch response.result {
-                case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        _ = try JSONDecoder()
-                            .decode(ResponseCode.self, from: data).result
-                    } catch {
-                        print("error \(error)")
-                    }
-                case .failure(let error):
-                    print("error \(error)")
-                }
-            }
-    }
-
-    func leaveGroup(id: Int) {
-        let path = EndPoint.leaveGroup.rawValue
-        let parameters: Parameters = [
-            "group_id": String(id),
-            "v": session.api_version,
-            "access_token": session.token
-        ]
-        AF.request(
-            host + path,
-            method: .get,
-            parameters: parameters)
-            .resume()
-            .validate(statusCode: 200..<201)
-            .validate(contentType: ["application/json"])
-            .responseData {
-                [weak self] response in
-                switch response.result {
-                case .success:
-                    guard let data = response.value else { return }
-                    do {
-                        _ = try JSONDecoder()
-                            .decode(ResponseCode.self, from: data).result
-                    } catch {
-                        print("error \(error)")
+                    DispatchQueue.global().async {
+                        do {
+                            let photos = try JSONDecoder().decode(Response<Photo>.self,
+                                                                  from: data).list
+                            self?.session.realmService.insertPhotos(photos: photos)
+                        } catch {
+                            print("error \(error)")
+                        }
                     }
                 case .failure(let error):
                     print("error \(error)")

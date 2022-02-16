@@ -15,29 +15,27 @@ class GroupsViewCell: UITableViewCell {
     @IBOutlet var groupImage: UIImageView!
     @IBOutlet var groupLabel: UILabel!
 
-    func configure(cellColor: UIColor, selectColor: UIColor,
-                   group: Group)
-    {
+    func configure(group: Group) {
         groupLabel.text = group.groupName
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
                                    action: #selector(tapCell(sender:)))
         addGestureRecognizer(tapGestureRecognizer)
-        self.cellColor = cellColor
-        selectedColor = selectColor
+        cellColor = UIColor.systemTeal
+        selectedColor = UIColor.systemGray
         backgroundConfiguration?.backgroundColor = cellColor
+        groupLabel.backgroundColor = cellColor
         guard let url = URL(string: group.avatarURL!) else { return }
         groupImage.load(url: url)
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
     @objc func tapCell(sender: UITapGestureRecognizer) {
-        backgroundConfiguration?.backgroundColor =
-            backgroundConfiguration?.backgroundColor == cellColor ?
-            selectedColor : cellColor
+        if parentTableViewController?.isSelectionEnabled ?? false {
+            backgroundConfiguration?.backgroundColor =
+                backgroundConfiguration?.backgroundColor == cellColor ?
+                selectedColor : cellColor
+            groupLabel.backgroundColor = backgroundConfiguration?.backgroundColor
+        }
         parentTableViewController?.tapCell(cell: self)
     }
 }

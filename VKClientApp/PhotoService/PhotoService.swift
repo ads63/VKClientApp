@@ -22,12 +22,14 @@ class PhotoService {
         guard let cachesDirectory = FileManager.default.urls(for: .cachesDirectory,
                                                              in: .userDomainMask)
             .first else { return pathName }
-        let url = cachesDirectory.appendingPathComponent(pathName, isDirectory: true)
+        let url = cachesDirectory.appendingPathComponent(pathName,
+                                                         isDirectory: true)
 
         if !FileManager.default.fileExists(atPath: url.path) {
-            try? FileManager.default.createDirectory(at: url,
-                                                     withIntermediateDirectories: true,
-                                                     attributes: nil)
+            try? FileManager.default
+                .createDirectory(at: url,
+                                 withIntermediateDirectories: true,
+                                 attributes: nil)
         }
 
         return pathName
@@ -47,13 +49,16 @@ class PhotoService {
         return url
     }
 
-    private func saveImageToCache(url: String, image: UIImage) {
+    private func saveImageToCache(url: String,
+                                  image: UIImage,
+                                  collector: Bool = true)
+    {
         guard let fileName = getFilePath(url: url),
               let data = image.pngData() else { return }
         FileManager.default.createFile(atPath: fileName.path,
                                        contents: data,
                                        attributes: nil)
-        garbageCollect()
+        if collector { garbageCollect() }
     }
 
     private func garbageCollect() {
@@ -63,16 +68,19 @@ class PhotoService {
         if PhotoService.isGarbageCollectorStarted ||
             intervalSinceLastGarbageCollect < garbageCollectorInterval { return }
         PhotoService.isGarbageCollectorStarted = true
-        DispatchQueue.global(qos: .utility).async {
+        DispatchQueue.global(qos: .background).async {
             let date = Date()
             let manager = FileManager.default
             guard let cachePath = self.getCachePath(),
-                  let fileNames = try? manager.contentsOfDirectory(atPath: cachePath.path)
+                  let fileNames = try? manager
+                  .contentsOfDirectory(atPath: cachePath.path)
             else { return }
             for fileName in fileNames {
                 if let filePath = self.getFilePath(url: fileName),
-                   let info = try? manager.attributesOfItem(atPath: filePath.path),
-                   let modificationDate = info[FileAttributeKey.modificationDate] as? Date
+                   let info = try? manager
+                   .attributesOfItem(atPath: filePath.path),
+                   let modificationDate =
+                   info[FileAttributeKey.modificationDate] as? Date
                 {
                     let lifeTime = date.timeIntervalSince(modificationDate)
                     if lifeTime > self.cacheLifeTime {
@@ -87,12 +95,15 @@ class PhotoService {
 
     private func getImageFromCache(url: String) -> UIImage? {
         guard let fileName = getFilePath(url: url),
-              let info = try? FileManager.default.attributesOfItem(atPath: fileName.path),
-              let modificationDate = info[FileAttributeKey.modificationDate] as? Date
+              let info = try? FileManager.default
+              .attributesOfItem(atPath: fileName.path),
+              let modificationDate =
+              info[FileAttributeKey.modificationDate] as? Date
         else { return nil }
         let lifeTime = Date().timeIntervalSince(modificationDate)
         guard lifeTime <= cacheLifeTime,
-              let image = UIImage(contentsOfFile: fileName.path) else { return nil }
+              let image = UIImage(contentsOfFile: fileName.path)
+        else { return nil }
         DispatchQueue.main.async { self.images[url] = image }
         return image
     }
@@ -116,24 +127,24 @@ class PhotoService {
             DispatchQueue.main.async { toImageView?.image = cachedImage }
             return
         }
-        if let placeholder = images[0] {
-            DispatchQueue.main.async { toImageView?.image = placeholder }
-        }
+        // set placeholder while real image load in progress
+        DispatchQueue.main.async { toImageView?.image = images[0] }
 
-        AF.request(url).responseData(queue: DispatchQueue.global()) {
-            [weak self] response in
-            guard
-                let data = response.data,
-                let image = UIImage(data: data)
-            else {
-                if let onFailure = images[2] { toImageView?.image = onFailure }
-                return
-            }
-            DispatchQueue.main.async {
-                self?.images[url] = image
-                toImageView?.image = image
-            }
-            self?.saveImageToCache(url: url, image: image)
+        AF.request(url).responseData(queue:
+            DispatchQueue.global(qos: .userInitiated)) {
+                [weak self] response in
+                guard
+                    let data = response.data,
+                    let image = UIImage(data: data)
+                else {
+                    if let onFailure = images[2] { toImageView?.image = onFailure }
+                    return
+                }
+                DispatchQueue.main.async {
+                    self?.images[url] = image
+                    toImageView?.image = image
+                }
+                self?.saveImageToCache(url: url, image: image)
         }
     }
 
@@ -141,20 +152,21 @@ class PhotoService {
         if let image = images[url] ?? getImageFromCache(url: url) {
             DispatchQueue.main.async { completion(image) }
         } else {
-            AF.request(url).responseData(queue: DispatchQueue.global()) {
-                [weak self] response in
-                guard
-                    let data = response.data,
-                    let image = UIImage(data: data)
-                else {
-                    DispatchQueue.main.async { completion(nil) }
-                    return
-                }
-                DispatchQueue.main.async {
-                    self?.images[url] = image
-                    completion(image)
-                }
-                self?.saveImageToCache(url: url, image: image)
+            AF.request(url).responseData(queue:
+                DispatchQueue.global(qos: .userInitiated)) {
+                    [weak self] response in
+                    guard
+                        let data = response.data,
+                        let image = UIImage(data: data)
+                    else {
+                        DispatchQueue.main.async { completion(nil) }
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        self?.images[url] = image
+                        completion(image)
+                    }
+                    self?.saveImageToCache(url: url, image: image)
             }
         }
     }

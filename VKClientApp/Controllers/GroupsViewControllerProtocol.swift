@@ -11,4 +11,5 @@ import UIKit
 protocol CroupsViewControllerProtocol: UITableViewController {
     func tapCell(cell: GroupsViewCell)
     func setHeaderFooter(view: UITableViewHeaderFooterView, text: String)
+    var isSelectionEnabled: Bool { get }
 }

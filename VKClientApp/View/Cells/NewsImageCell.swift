@@ -29,21 +29,11 @@ class NewsImageCell: UITableViewCell, CellConfigurationProtocol {
         aspectConstraint = nil
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
-    func configure(news: NewsRow) {
+    func configure(news: NewsRow?) {
+        guard let news = news else { return }
         let url = news.photo!
         let aspect = CGFloat(news.width) / CGFloat(news.height)
-
+        guard let newsImage = newsImage else { return }
         aspectConstraint = NSLayoutConstraint(item: newsImage,
                                               attribute: NSLayoutConstraint.Attribute.width,
                                               relatedBy: NSLayoutConstraint.Relation.equal,
@@ -52,8 +42,7 @@ class NewsImageCell: UITableViewCell, CellConfigurationProtocol {
                                               multiplier: aspect, constant: 0.0)
 
         newsImage.load(url: url,
-                       placeholderImage: UIImage(named: "camera"),
-                       failureImage: UIImage(named: "camera"))
-        backgroundConfiguration?.backgroundColor = AppSettings.instance.tableColor
+                       failureImage: ImageProvider.get(id: .camera))
+        backgroundConfiguration?.backgroundColor = UIColor.systemTeal
     }
 }

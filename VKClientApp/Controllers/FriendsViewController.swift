@@ -49,9 +49,13 @@ class FriendsViewController: UITableViewController {
                 nibName: "FriendsCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendsListCell")
-        tableView.backgroundColor = appSettings.tableColor
-        tableHeader.backgroundColor = appSettings.tableColor
         tableHeader.headerLabel.text = "My friends"
+        tableView.estimatedRowHeight = CGFloat(44.0)
+        tableView.rowHeight = CGFloat(44.0)
+        tableView.estimatedSectionHeaderHeight = CGFloat(20.0)
+        tableView.sectionHeaderHeight = CGFloat(20.0)
+        tableView.sectionFooterHeight = CGFloat(1.0)
+        tableView.estimatedSectionFooterHeight = CGFloat(1.0)
         observeFriends()
     }
 
@@ -84,7 +88,7 @@ class FriendsViewController: UITableViewController {
             let user = groupedFriends[groupKeys[indexPath.section]]?[indexPath.row]
         else { return UITableViewCell() }
         cell.parentTableViewController = self
-        cell.configure(user: user, color: appSettings.tableColor)
+        cell.configure(user: user)
         return cell
     }
 
@@ -105,45 +109,9 @@ class FriendsViewController: UITableViewController {
             .dequeueReusableHeaderFooterView(withIdentifier: "friendsSectionHeader")
             as? FriendsSectionHeader
         else { return UITableViewHeaderFooterView() }
-        header.configure(text: String(groupKeys[section]),
-                         color: appSettings.tableColor.withAlphaComponent(0.5))
+        header.configure(text: String(groupKeys[section]))
         return header
     }
-
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-         // Return false if you do not want the specified item to be editable.
-         return true
-     }
-     */
-
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-         if editingStyle == .delete {
-             // Delete the row from the data source
-             tableView.deleteRows(at: [indexPath], with: .fade)
-         } else if editingStyle == .insert {
-             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-         }
-     }
-     */
-
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-     }
-     */
-
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-         // Return false if you do not want the item to be re-orderable.
-         return true
-     }
-     */
 
     // MARK: - Navigation
 
