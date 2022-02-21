@@ -5,7 +5,6 @@
 //  Created by Алексей Шинкарев on 26.08.2021.
 //
 
-import Nuke
 import UIKit
 
 class FriendsCell: UITableViewCell {
@@ -41,15 +40,15 @@ class FriendsCell: UITableViewCell {
                                                                      right: 0))
     }
 
-    func configure(user: User, color: UIColor) {
+    func configure(user: User) {
         friendNameLabel.text = user.userName
-        backgroundConfiguration?.backgroundColor = color
+        backgroundConfiguration?.backgroundColor = UIColor.systemTeal
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                           action: #selector(tapCell(sender:)))
         avatarImage.isUserInteractionEnabled = true
         avatarImage.addGestureRecognizer(tapGestureRecognizer)
         guard let url = URL(string: user.avatarURL!) else { return }
-        Nuke.loadImage(with: url, into: avatarImage)
+        avatarImage.load(url: url, failureImage: ImageProvider.get(id: .unknown))
     }
 
     override func awakeFromNib() {

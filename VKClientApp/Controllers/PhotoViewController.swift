@@ -5,14 +5,14 @@
 //  Created by Алексей Шинкарев on 15.10.2021.
 //
 
-import Foundation
-import Nuke
 import RealmSwift
 import UIKit
 
 class PhotoViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     let sessionSettings = SessionSettings.instance
+    let photoService = AppSettings.instance.photoService
+    let photoProvider = PhotoDataProvider()
     var index = 0
     var photoID: Int?
     var photos: Results<Photo>?
@@ -21,15 +21,9 @@ class PhotoViewController: UIViewController {
                       height: imageView.bounds.height * UIScreen.main.scale)
     }
 
-    var resizedImageProcessors: [ImageProcessing] {
-        return [ImageProcessors.Resize(size: pixelSize, contentMode: .aspectFit)]
-    }
-
-    private let appSettings = AppSettings.instance
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = appSettings.tableColor
+        view.backgroundColor = UIColor.systemTeal
         let swipeRightGestureRecognizer =
             UISwipeGestureRecognizer(target: self,
                                      action: #selector(swipeRight(sender:)))
@@ -45,38 +39,23 @@ class PhotoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         index = photos!.firstIndex { $0.id == photoID }!
-        loadPhoto()
+        photoProvider.loadPhoto(imageView: imageView,
+                                photo: photos![index] as Photo?)
     }
 }
 
 extension PhotoViewController {
-    private func getUrl() -> URL? {
-        let fullImageList = photos![index].images.sorted(by: { $0.width > $1.width })
-        var filteredImageList = fullImageList.filter {
-            sessionSettings.enabledPhotoType.contains($0.type!) &&
-                (CGFloat($0.width) >= imageView.bounds.width ||
-                    CGFloat($0.height) >= imageView.bounds.height)
-        }
-        if filteredImageList.isEmpty { filteredImageList = fullImageList }
-        guard let url = URL(string: filteredImageList.first!.imageUrl!)
-        else { return nil }
-        return url
-    }
-
     @objc func swipeRight(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index > photos!.startIndex {
-            var toImage: UIImage?
             index -= 1
-            guard let url = getUrl() else { return }
-            ImagePipeline.shared.loadImage(with: url) {
-                [weak self] response in
+            guard let photo = photos![index] as Photo? else { return }
+            guard let url = photoProvider
+                .getUrl(photo: photo,
+                        size: imageView.bounds.size)?.absoluteString else { return }
+            photoService.getImage(url: url) {
+                [weak self] image in
                 guard let self = self else { return }
-                switch response {
-                case .failure:
-                    toImage = UIImage(named: "unknown")
-                case let .success(imageResponse):
-                    toImage = imageResponse.image
-                }
+                let toImage = image ?? ImageProvider.get(id: .unknown)
                 self.animateSwipe(direction: .right,
                                   fromImage: self.imageView.image!,
                                   toImage: toImage!)
@@ -86,18 +65,15 @@ extension PhotoViewController {
 
     @objc func swipeLeft(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index < photos!.endIndex - 1 {
-            var toImage: UIImage?
             index += 1
-            guard let url = getUrl() else { return }
-            ImagePipeline.shared.loadImage(with: url) {
-                [weak self] response in
+            guard let photo = photos![index] as Photo? else { return }
+            guard let url = photoProvider
+                .getUrl(photo: photo,
+                        size: imageView.bounds.size)?.absoluteString else { return }
+            photoService.getImage(url: url) {
+                [weak self] image in
                 guard let self = self else { return }
-                switch response {
-                case .failure:
-                    toImage = UIImage(named: "unknown")
-                case let .success(imageResponse):
-                    toImage = imageResponse.image
-                }
+                let toImage = image ?? ImageProvider.get(id: .unknown)
                 self.animateSwipe(direction: .left,
                                   fromImage: self.imageView.image!,
                                   toImage: toImage!)
@@ -127,16 +103,5 @@ extension PhotoViewController {
                 }
             )
         }
-    }
-
-    private func loadPhoto() {
-        guard let url = getUrl() else { return }
-        let options = ImageLoadingOptions(placeholder: UIImage(named: "unknown"),
-                                          transition: .fadeIn(duration: 0.5),
-                                          failureImage: UIImage(named: "unknown"),
-                                          failureImageTransition: .fadeIn(duration: 0.5))
-        let request = ImageRequest(url: url,
-                                   processors: resizedImageProcessors)
-        Nuke.loadImage(with: request, options: options, into: imageView)
     }
 }

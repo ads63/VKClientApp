@@ -5,7 +5,6 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
-import Nuke
 import UIKit
 
 class GroupsViewCell: UITableViewCell {
@@ -16,40 +15,27 @@ class GroupsViewCell: UITableViewCell {
     @IBOutlet var groupImage: UIImageView!
     @IBOutlet var groupLabel: UILabel!
 
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        // Initialization code
-//    }
-//
-//    override func setSelected(_ selected: Bool, animated: Bool) {
-//        super.setSelected(selected, animated: animated)
-//
-//        // Configure the view for the selected state
-//    }
-//
-    func configure(cellColor: UIColor, selectColor: UIColor,
-                   group: Group)
-    {
+    func configure(group: Group) {
         groupLabel.text = group.groupName
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
                                    action: #selector(tapCell(sender:)))
         addGestureRecognizer(tapGestureRecognizer)
-        self.cellColor = cellColor
-        selectedColor = selectColor
+        cellColor = UIColor.systemTeal
+        selectedColor = UIColor.systemGray
         backgroundConfiguration?.backgroundColor = cellColor
+        groupLabel.backgroundColor = cellColor
         guard let url = URL(string: group.avatarURL!) else { return }
-        Nuke.loadImage(with: url, into: groupImage)
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
+        groupImage.load(url: url)
     }
 
     @objc func tapCell(sender: UITapGestureRecognizer) {
-        backgroundConfiguration?.backgroundColor =
-            backgroundConfiguration?.backgroundColor == cellColor ?
-            selectedColor : cellColor
+        if parentTableViewController?.isSelectionEnabled ?? false {
+            backgroundConfiguration?.backgroundColor =
+                backgroundConfiguration?.backgroundColor == cellColor ?
+                selectedColor : cellColor
+            groupLabel.backgroundColor = backgroundConfiguration?.backgroundColor
+        }
         parentTableViewController?.tapCell(cell: self)
     }
 }

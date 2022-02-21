@@ -25,6 +25,8 @@ class GroupsViewController: UITableViewController {
             }
     }
 
+    let isSelectionEnabled = true
+
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
@@ -33,13 +35,7 @@ class GroupsViewController: UITableViewController {
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
-        tableView.backgroundColor = appSettings.tableColor
         observeGroups()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -56,7 +52,6 @@ class GroupsViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
@@ -94,8 +89,6 @@ class GroupsViewController: UITableViewController {
                             numberOfRowsInSection section: Int) -> Int
     {
         // #warning Incomplete implementation, return the number of rows
-//        leaveGroups(indexes: selectedIndexes.map { $0.row })
-//        selectedIndexes.removeAll()
         return displayedGroups.count
     }
 
@@ -107,9 +100,7 @@ class GroupsViewController: UITableViewController {
             for: indexPath) as? GroupsViewCell
         else { return UITableViewCell() }
         cell.parentTableViewController = self
-        cell.configure(cellColor: appSettings.tableColor,
-                       selectColor: appSettings.selectColor,
-                       group: displayedGroups[indexPath.row])
+        cell.configure(group: displayedGroups[indexPath.row])
         return cell
     }
 
@@ -136,31 +127,6 @@ class GroupsViewController: UITableViewController {
             selectedIndexes.removeAll()
         }
     }
-
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-     }
-     */
-
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-         // Return false if you do not want the item to be re-orderable.
-         return true
-     }
-     */
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-     }
-     */
 }
 
 extension GroupsViewController: UISearchBarDelegate {
@@ -189,13 +155,18 @@ extension GroupsViewController: CroupsViewControllerProtocol {
                                                 width: tableView.bounds.size.width,
                                                 height: 1.0))
         borderTop.backgroundColor = UIColor.separator
+        borderTop.isOpaque = true
         borderBottom.backgroundColor = UIColor.separator
+        borderBottom.isOpaque = true
         view.addSubview(borderTop)
         view.addSubview(borderBottom)
-        view.tintColor = appSettings.tableColor
+        view.contentView.backgroundColor = UIColor.systemTeal
+        view.contentView.isOpaque = true
         view.textLabel?.adjustsFontSizeToFitWidth = true
         view.textLabel?.textAlignment = .center
         view.textLabel?.text = text
+        view.textLabel?.textColor = UIColor.darkGray
+        view.textLabel?.backgroundColor = UIColor.systemTeal
     }
 }
 

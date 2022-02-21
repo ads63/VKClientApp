@@ -11,8 +11,8 @@ class FriendsSectionHeader: UITableViewHeaderFooterView {
         super.prepareForReuse()
     }
 
-    func configure(text: String, color: UIColor) {
-        self.contentView.backgroundColor = color
+    func configure(text: String) {
         self.textLabel?.text = text
+        self.textLabel?.backgroundColor = self.contentView.backgroundColor
     }
 }

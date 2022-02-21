@@ -8,5 +8,5 @@
 import Foundation
 import UIKit
 protocol CellConfigurationProtocol: UITableViewCell {
-    func configure(news: NewsRow)
+    func configure(news: NewsRow?)
 }

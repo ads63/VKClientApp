@@ -18,10 +18,7 @@ final class PhotoNews: NewsProtocol, Decodable {
     var date = 0
     var sourceID = 0
     var photos = [NewsPhoto]()
-    var formattedDate: String {
-        let date = Date(timeIntervalSince1970: Double(date))
-        return PostNews.dateFormatter.string(from: date)
-    }
+    var formattedDate: String
 
     func getType() -> String {
         return self.type!
@@ -58,5 +55,7 @@ final class PhotoNews: NewsProtocol, Decodable {
         self.photos = try photosContainer.decode(
             [NewsPhoto].self,
             forKey: .items)
+        self.formattedDate = PostNews.dateFormatter
+            .string(from: Date(timeIntervalSince1970: Double(self.date)))
     }
 }

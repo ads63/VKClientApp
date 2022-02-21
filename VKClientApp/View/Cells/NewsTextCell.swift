@@ -8,34 +8,17 @@
 import UIKit
 
 class NewsTextCell: UITableViewCell, CellConfigurationProtocol {
+    @IBOutlet var newsText: UILabel!
 
-    @IBOutlet weak var newsText: UILabel!
-    func configure(news: NewsRow) {
+    func configure(news: NewsRow?) {
+        guard let news = news else { return }
         newsText.text = news.text
         let currentSize = newsText.frame.size
-        let neededSize = newsText.sizeThatFits(CGSize(width: currentSize.width, height: CGFloat.greatestFiniteMagnitude))
+        let neededSize = newsText
+            .sizeThatFits(CGSize(width: currentSize.width,
+                                 height: CGFloat.greatestFiniteMagnitude))
+        frame.size = neededSize
+        contentView.frame.size = neededSize
         newsText.frame.size = neededSize
-        self.contentView.frame.size = neededSize
-        
-
-//        newsText.updateConstraintsIfNeeded()
-//        backgroundConfiguration?.backgroundColor = AppSettings.instance.selectColor
-//        sizeThatFits(ss)
-        self.frame.size = neededSize
-//        setNeedsUpdateConstraints()
-//        updateConstraintsIfNeeded()
-        backgroundConfiguration?.backgroundColor = AppSettings.instance.tableColor
-
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 }

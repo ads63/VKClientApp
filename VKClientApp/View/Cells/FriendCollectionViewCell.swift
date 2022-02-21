@@ -5,16 +5,11 @@
 //  Created by Алексей Шинкарев on 27.08.2021.
 //
 
-import Nuke
 import UIKit
 
 class FriendCollectionViewCell: UICollectionViewCell {
     @IBOutlet var photoImage: UIImageView!
     var parentViewController: FriendDetailsCollectionViewController?
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
 
     func configure() {
         let tapGestureRecognizer =
