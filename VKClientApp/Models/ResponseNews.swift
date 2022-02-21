@@ -12,7 +12,7 @@ struct ResponseNews<T: Decodable>: Decodable {
     var items: [T] = []
     var profiles: [User] = []
     var groups: [Group] = []
-    var nextPointer: String = ""
+    var nextPointer: String?
 
     init(items: [T], profiles: [User], groups: [Group], pointer: String) {
         self.items = items

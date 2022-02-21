@@ -25,7 +25,7 @@ final class APIService {
         var parameters: Parameters = [
             "access_token": session.token,
             "v": session.api_version,
-            "start_time": String(startTime)
+            "start_time": startTime
         ]
         if startFrom != nil {
             parameters["start_from"] = startFrom
@@ -57,7 +57,7 @@ final class APIService {
                     var items = [T]()
                     var profiles = [User]()
                     var groups = [Group]()
-                    let nextPointer = json["next_from"].stringValue
+                    let nextPointer = json["response"]["next_from"].stringValue
 
                     DispatchQueue.global().async(group: dispatchGroup) {
                         for (index, value) in itemsJSONArray.enumerated() {

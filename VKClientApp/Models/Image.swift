@@ -5,6 +5,7 @@
 //  Created by Алексей Шинкарев on 10.10.2021.
 //
 
+import CoreGraphics
 import RealmSwift
 
 final class Image: Object {
