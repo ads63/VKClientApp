@@ -8,6 +8,7 @@
 import UIKit
 
 class NewsTableViewController: UITableViewController {
+    var expandedIndexSet = [IndexPath]()
     private var dataProvider: NewsDataProvider?
     private var isRefreshNewInProgress = false
     private var isRefreshOldInProgress = false
@@ -73,7 +74,8 @@ class NewsTableViewController: UITableViewController {
             return UITableViewCell()
         }
         cell.configure(news: dataProvider?.getRow(section: indexPath.section,
-                                                  row: indexPath.row))
+                                                  row: indexPath.row),
+                       isExpanded: expandedIndexSet.contains(indexPath))
         return cell
     }
 
@@ -106,6 +108,22 @@ class NewsTableViewController: UITableViewController {
                             heightForHeaderInSection section: Int) -> CGFloat
     {
         CGFloat(2)
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath)
+    {
+        guard dataProvider?.isExpanable(section: indexPath.section,
+                                        row: indexPath.row) == true
+        else { return }
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let index = expandedIndexSet.firstIndex(of: indexPath) {
+            expandedIndexSet.remove(at: index)
+        } else {
+            expandedIndexSet.append(indexPath)
+        }
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
 }
 

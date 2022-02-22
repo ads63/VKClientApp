@@ -29,7 +29,7 @@ class NewsImageCell: UITableViewCell, CellConfigurationProtocol {
 //        aspectConstraint = nil
     }
 
-    func configure(news: NewsRow?) {
+    func configure(news: NewsRow?, isExpanded: Bool = false) {
         guard let news = news else { return }
         let url = news.photo!
 //        let aspect = CGFloat(news.width) / CGFloat(news.height)

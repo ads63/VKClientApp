@@ -23,7 +23,6 @@ final class NewsRow
     var canComment = 0
     var reposts = 0
     var isReposted = 0
-    var textView: String { return String((text ?? "").prefix(255)) }
 
     init(photo: URL?,
          width: Int,

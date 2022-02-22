@@ -37,7 +37,15 @@ final class NewsDataProvider {
         }
         return nil
     }
-
+    func isExpanable(section: Int, row: Int) -> Bool {
+        if let row = getRow(section: section, row: row),
+           row.cellType == CellType.text,
+           let text = row.text,
+           text.count > 200 {
+            return true
+        }
+        return false
+    }
     func getRowsCount(section: Int) -> Int {
         if 0 ..< newsSections.count ~= section {
             return newsSections[section].newsRows.count
