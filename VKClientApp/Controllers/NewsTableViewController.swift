@@ -121,9 +121,9 @@ class NewsTableViewController: UITableViewController {
             expandedIndexSet.remove(at: index)
         } else {
             expandedIndexSet.append(indexPath)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
 }
 
