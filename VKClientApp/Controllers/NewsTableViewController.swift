@@ -8,10 +8,14 @@
 import UIKit
 
 class NewsTableViewController: UITableViewController {
+    var expandedIndexSet = [IndexPath]()
     private var dataProvider: NewsDataProvider?
+    private var isRefreshNewInProgress = false
+    private var isRefreshOldInProgress = false
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider = NewsDataProvider(controller: self)
+
         tableView.register(
             UINib(nibName: "NewsFeedSectionHeaderView", bundle: nil),
             forHeaderFooterViewReuseIdentifier: "newsFeedSectionHeader")
@@ -40,6 +44,8 @@ class NewsTableViewController: UITableViewController {
         tableView.delegate = self
         tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableView.automaticDimension
+        setupRefreshControl()
+        tableView.prefetchDataSource = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -68,8 +74,24 @@ class NewsTableViewController: UITableViewController {
             return UITableViewCell()
         }
         cell.configure(news: dataProvider?.getRow(section: indexPath.section,
-                                                  row: indexPath.row))
+                                                  row: indexPath.row),
+                       isExpanded: expandedIndexSet.contains(indexPath))
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView,
+                            heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        // Вычисляем высоту
+        let tableWidth = tableView.bounds.width
+        guard let news = dataProvider?
+            .getRow(section: indexPath.section,
+                    row: indexPath.row),
+            let aspectRatio = news.aspectRatio
+        else {
+            return UITableView.automaticDimension
+        }
+        return tableWidth * aspectRatio
     }
 
     override func tableView(_ tableView: UITableView,
@@ -87,9 +109,73 @@ class NewsTableViewController: UITableViewController {
     {
         CGFloat(2)
     }
+
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath)
+    {
+        guard dataProvider?.isExpanable(section: indexPath.section,
+                                        row: indexPath.row) == true
+        else { return }
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let index = expandedIndexSet.firstIndex(of: indexPath) {
+            expandedIndexSet.remove(at: index)
+        } else {
+            expandedIndexSet.append(indexPath)
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+    }
+}
+
+extension NewsTableViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView,
+                   prefetchRowsAt indexPaths: [IndexPath])
+    {
+        guard let maxSection = indexPaths.map({ $0.section }).max() else { return }
+        let newsCount = dataProvider?.getSectionsCount() ?? 0
+        if maxSection > newsCount - 3,
+           !isRefreshOldInProgress
+        {
+            isRefreshOldInProgress = true
+            dataProvider?.getOldNews {
+                [weak self] addNewsCount in
+                guard let self = self else { return }
+                let indexSet = IndexSet(integersIn:
+                    newsCount ..< newsCount + addNewsCount)
+                self.tableView.insertSections(indexSet, with: .automatic)
+                self.isRefreshOldInProgress = false
+            }
+        }
+    }
 }
 
 extension NewsTableViewController {
+    private func setupRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string:
+            "Please wait for new posts...")
+        refreshControl?.tintColor = .darkGray
+        refreshControl?.addTarget(self, action: #selector(refreshNews),
+                                  for: .valueChanged)
+    }
+
+    @objc func refreshNews() {
+        // Начинаем обновление новостей
+        refreshControl?.beginRefreshing()
+        if isRefreshNewInProgress == false {
+            isRefreshNewInProgress = true
+            dataProvider?.getNewNews {
+                [weak self] newsCount in
+                if newsCount > 0 {
+                    let indexSet = IndexSet(integersIn: 0 ..< newsCount)
+                    self?.tableView.insertSections(indexSet, with: .automatic)
+                }
+                self?.isRefreshNewInProgress = false
+            }
+        }
+        refreshControl?.endRefreshing()
+    }
+
     private func getCell(indexPath: IndexPath) -> CellConfigurationProtocol? {
         if let type = dataProvider?
             .getRow(section: indexPath.section, row: indexPath.row)?.cellType

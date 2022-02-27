@@ -5,7 +5,7 @@
 //  Created by Алексей Шинкарев on 30.11.2021.
 //
 
-import Foundation
+import UIKit
 
 final class NewsRow
 {
@@ -13,6 +13,7 @@ final class NewsRow
     var photo: URL?
     var width = 1
     var height = 1
+    var aspectRatio: CGFloat?
     var text: String?
     var srcName: String?
     var date: String?
@@ -22,7 +23,6 @@ final class NewsRow
     var canComment = 0
     var reposts = 0
     var isReposted = 0
-    var textView: String { return String((text ?? "").prefix(255)) }
 
     init(photo: URL?,
          width: Int,
@@ -32,6 +32,7 @@ final class NewsRow
         self.photo = photo
         self.width = width
         self.height = height
+        if width > 0 { self.aspectRatio = CGFloat(height) / CGFloat(width) }
     }
 
     init(likes: Int,

@@ -5,7 +5,7 @@
 //  Created by Алексей Шинкарев on 14.01.2022.
 //
 
-import Foundation
+import UIKit
 final class NewsImage {
     let imageURL: URL?
     let width: Int

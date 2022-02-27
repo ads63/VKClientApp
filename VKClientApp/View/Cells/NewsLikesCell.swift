@@ -25,7 +25,7 @@ class NewsLikesCell: UITableViewCell, CellConfigurationProtocol {
         // Configure the view for the selected state
     }
 
-    func configure(news: NewsRow?) {
+    func configure(news: NewsRow?, isExpanded: Bool = false) {
         guard let news = news else { return }
         commentsCount.text = String(news.comments)
         likesCount.text = String(news.likes)

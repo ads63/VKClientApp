@@ -14,10 +14,15 @@ final class NewsDataProvider {
     private var users = [User]()
     private var groups = [Group]()
     private var newsSections = [NewsSection]()
+    private var nextFrom = [PostType: String?]()
 
     init(controller: UITableViewController?) {
         self.controller = controller
         self.rowWidth = self.controller?.tableView.bounds.width ?? 0
+    }
+
+    func getMaxNewsTime() -> Int? {
+        news.sorted { $0.getDate() > $1.getDate() }.first?.getDate()
     }
 
     func getSectionsCount() -> Int {
@@ -32,7 +37,15 @@ final class NewsDataProvider {
         }
         return nil
     }
-
+    func isExpanable(section: Int, row: Int) -> Bool {
+        if let row = getRow(section: section, row: row),
+           row.cellType == CellType.text,
+           let text = row.text,
+           text.count > 200 {
+            return true
+        }
+        return false
+    }
     func getRowsCount(section: Int) -> Int {
         if 0 ..< newsSections.count ~= section {
             return newsSections[section].newsRows.count
@@ -40,12 +53,134 @@ final class NewsDataProvider {
         return 0
     }
 
-    func getNews() {
+    func getNewNews(completion: @escaping (Int) -> Void) {
+        let startTime = 1 + (getMaxNewsTime() ?? 0)
+        let newsCountBefore = newsSections.count
         AppSettings
             .instance
             .apiService
             .getNewsFeed(ofType: PostNews.self,
                          filters: "post",
+                         startTime: startTime,
+                         completion: {
+                             [weak self] dataPost in
+                             guard let dataPost = dataPost else { return }
+                             var news = [NewsProtocol]()
+                             news
+                                 .append(contentsOf:
+                                     dataPost.items.filter {
+                                         !($0.text.isEmpty && $0.photos.isEmpty)
+                                     })
+                             self?.users.append(contentsOf: dataPost.profiles)
+                             self?.groups.append(contentsOf: dataPost.groups)
+                             AppSettings
+                                 .instance
+                                 .apiService
+                                 .getNewsFeed(ofType: PhotoNews.self,
+                                              filters: "photo",
+                                              startTime: startTime,
+                                              completion: {
+                                                  [weak self] dataPhoto in
+                                                  guard let dataPhoto = dataPhoto
+                                                  else { return }
+                                                  news
+                                                      .append(contentsOf:
+                                                          dataPhoto.items.filter {
+                                                              !$0.photos.isEmpty
+                                                          })
+                                                  self?.users.append(contentsOf:
+                                                      dataPhoto.profiles)
+                                                  self?.groups.append(contentsOf:
+                                                      dataPhoto.groups)
+                                              })
+
+                             if let users = self?.users {
+                                 self?.users = Array(Set(users))
+                             }
+                             if let groups = self?.groups {
+                                 self?.groups = Array(Set(groups))
+                             }
+                             if let sections = self?.setRows(news: news) {
+                                 self?.newsSections.insert(contentsOf: sections, at: 0)
+                             }
+                             let newsCountAfter = self?.newsSections.count ?? 0
+                             let newsAdded = newsCountAfter - newsCountBefore
+                             completion(newsAdded)
+                         })
+    }
+
+    func getOldNews(completion: @escaping (Int) -> Void) {
+        let newsCountBefore = newsSections.count
+        let startFrom = nextFrom[PostType.post] ?? nil
+        AppSettings
+            .instance
+            .apiService
+            .getNewsFeed(ofType: PostNews.self,
+                         filters: "post",
+                         startTime: 0,
+                         startFrom: startFrom,
+                         completion: {
+                             [weak self] dataPost in
+                             guard let dataPost = dataPost else { return }
+                             var news = [NewsProtocol]()
+                             news
+                                 .append(contentsOf:
+                                     dataPost.items.filter {
+                                         !($0.text.isEmpty && $0.photos.isEmpty)
+                                     })
+                             self?.users.append(contentsOf: dataPost.profiles)
+                             self?.groups.append(contentsOf: dataPost.groups)
+                             self?.nextFrom[PostType.post] = dataPost.nextPointer
+                             let startFrom = self?.nextFrom[PostType.photo] ?? nil
+                             AppSettings
+                                 .instance
+                                 .apiService
+                                 .getNewsFeed(ofType: PhotoNews.self,
+                                              filters: "photo",
+                                              startTime: 0,
+                                              startFrom: startFrom,
+                                              completion: {
+                                                  [weak self] dataPhoto in
+                                                  guard let dataPhoto = dataPhoto
+                                                  else { return }
+                                                  news
+                                                      .append(contentsOf:
+                                                          dataPhoto.items.filter {
+                                                              !$0.photos.isEmpty
+                                                          })
+                                                  self?.users.append(contentsOf:
+                                                      dataPhoto.profiles)
+                                                  self?.groups.append(contentsOf:
+                                                      dataPhoto.groups)
+                                                  self?.nextFrom[PostType.photo] =
+                                                      dataPhoto.nextPointer
+                                              })
+
+                             if let users = self?.users {
+                                 self?.users = Array(Set(users))
+                             }
+                             if let groups = self?.groups {
+                                 self?.groups = Array(Set(groups))
+                             }
+                             if let sections = self?.setRows(news: news) {
+                                 self?.newsSections.append(contentsOf: sections)
+                             }
+                             let newsCountAfter = self?.newsSections.count ?? 0
+                             let newsAdded = newsCountAfter - newsCountBefore
+                             completion(newsAdded)
+                         })
+    }
+
+    func getNews(startTime: Int = 0,
+                 startFrom: String? = nil)
+    {
+        AppSettings
+            .instance
+            .apiService
+            .getNewsFeed(ofType: PostNews.self,
+                         filters: "post",
+                         startTime: startTime,
+                         startFrom: startFrom,
                          completion: {
                              [weak self] dataPost in
                              guard let dataPost = dataPost else { return }
@@ -59,11 +194,14 @@ final class NewsDataProvider {
                                      })
                              self?.users.append(contentsOf: dataPost.profiles)
                              self?.groups.append(contentsOf: dataPost.groups)
+                             self?.nextFrom[PostType.post] = dataPost.nextPointer
                              AppSettings
                                  .instance
                                  .apiService
                                  .getNewsFeed(ofType: PhotoNews.self,
                                               filters: "photo",
+                                              startTime: startTime,
+                                              startFrom: startFrom,
                                               completion: {
                                                   [weak self] dataPhoto in
                                                   guard let dataPhoto = dataPhoto
@@ -77,26 +215,42 @@ final class NewsDataProvider {
                                                       dataPhoto.profiles)
                                                   self?.groups.append(contentsOf:
                                                       dataPhoto.groups)
+                                                  self?.nextFrom[PostType.photo] =
+                                                      dataPhoto.nextPointer
                                               })
-                             self?.news.sort { $0.getDate() > $1.getDate() }
-                             self?.setRows()
+                             if let users = self?.users {
+                                 self?.users = Array(Set(users))
+                             }
+                             if let groups = self?.groups {
+                                 self?.groups = Array(Set(groups))
+                             }
+                             self?.newsSections = self?.setRows(news: self?.news)
+                                 ?? [NewsSection]()
+
                              self?.controller?.tableView.reloadData()
                          })
     }
 
-    private func setRows() {
-        newsSections = [NewsSection]()
+    private func setRows(news: [NewsProtocol]?) -> [NewsSection] {
+        var newsSections = [NewsSection]()
+        guard var news = news else { return newsSections }
+        news.sort { $0.getDate() > $1.getDate() }
         for newsItem in news {
             switch newsItem.getType() {
             case "post":
-                setPostRows(item: newsItem)
+                if let section = setPostRows(item: newsItem) {
+                    newsSections.append(section)
+                }
             case "photo",
                  "wall_photo":
-                setPhotoRows(item: newsItem)
+                if let section = setPhotoRows(item: newsItem) {
+                    newsSections.append(section)
+                }
             default:
                 break
             }
         }
+        return newsSections
     }
 
     private func getAvatarURL(sourceID: Int) -> String? {
@@ -111,8 +265,8 @@ final class NewsDataProvider {
             users.first(where: { $0.id == sourceID })?.userName
     }
 
-    private func setPostRows(item: NewsProtocol) {
-        guard let postItem = item as? PostNews else { return }
+    private func setPostRows(item: NewsProtocol) -> NewsSection? {
+        guard let postItem = item as? PostNews else { return nil }
         let section = NewsSection()
         let avatarURL = getAvatarURL(sourceID: postItem.sourceID)
         let srcName = getSourceName(sourceID: postItem.sourceID)
@@ -133,11 +287,12 @@ final class NewsDataProvider {
                                         canComment: postItem.flags.canComment,
                                         reposts: postItem.flags.repostsCount,
                                         isReposted: postItem.flags.isReposted))
-        newsSections.append(section)
+        return section
+//        newsSections.append(section)
     }
 
-    private func setPhotoRows(item: NewsProtocol) {
-        guard let photoItem = item as? PhotoNews else { return }
+    private func setPhotoRows(item: NewsProtocol) -> NewsSection? {
+        guard let photoItem = item as? PhotoNews else { return nil }
         let section = NewsSection()
         let sourceID = photoItem.sourceID
         let avatarURL = sourceID < 0 ?
@@ -165,7 +320,8 @@ final class NewsDataProvider {
                                             reposts: photo.flags.repostsCount,
                                             isReposted: photo.flags.isReposted))
         }
-        newsSections.append(section)
+//        newsSections.append(section)
+        return section
     }
 
     private func getImage(photo: Photo, width: CGFloat) -> NewsImage {
@@ -178,4 +334,9 @@ final class NewsDataProvider {
         let url = URL(string: image.imageUrl!)
         return NewsImage(url: url, width: image.width, height: image.height)
     }
+}
+
+enum PostType: String {
+    case post
+    case photo
 }
