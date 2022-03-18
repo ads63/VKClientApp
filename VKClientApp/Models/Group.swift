@@ -26,6 +26,21 @@ final class Group: Object, IdProtocol {
     static func == (lhs: Group, rhs: Group) -> Bool {
         lhs.id == rhs.id
     }
+
+    override init() {}
+
+    init(id: Int = 0,
+         avatarURL: String? = nil,
+         groupName: String? = nil,
+         adminValue: Int = 0,
+         memberValue: Int = 0)
+    {
+        self.id = id
+        self.avatarURL = avatarURL
+        self.groupName = groupName
+        self.adminValue = adminValue
+        self.memberValue = memberValue
+    }
 }
 
 extension Group: Decodable {

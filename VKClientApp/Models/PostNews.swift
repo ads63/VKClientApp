@@ -7,15 +7,7 @@
 
 import Foundation
 
-class PostNews: NewsProtocol, Decodable {
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy HH.mm"
-        return df
-    }()
-
-    var type: String? = nil
-    var date = 0
+class PostNews: News {
     var sourceID = 0
     var text: String = ""
     var attachments = [NewsAttachment]()
@@ -24,17 +16,8 @@ class PostNews: NewsProtocol, Decodable {
         .filter { $0.type == "photo" }.map { $0.photos! }
     }
 
-    var formattedDate: String
-
-    func getType() -> String {
-        return self.type!
-    }
-
-    func getDate() -> Int {
-        return self.date
-    }
-
     required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.type = try container.decode(
             String.self,
@@ -63,8 +46,6 @@ class PostNews: NewsProtocol, Decodable {
             forKey: .reposts)
         self.flags.isReposted = try reposts.decode(Int.self, forKey: .isReposted)
         self.flags.repostsCount = try reposts.decode(Int.self, forKey: .count)
-        self.formattedDate = PostNews.dateFormatter
-            .string(from: Date(timeIntervalSince1970: Double(self.date)))
     }
 
     enum CodingKeys: String, CodingKey {

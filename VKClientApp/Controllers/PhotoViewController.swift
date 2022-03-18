@@ -11,11 +11,10 @@ import UIKit
 class PhotoViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     let sessionSettings = SessionSettings.instance
-    let photoService = AppSettings.instance.photoService
     let photoProvider = PhotoDataProvider()
     var index = 0
     var photoID: Int?
-    var photos: Results<Photo>?
+    var photos: [PhotoViewModel]?
     var pixelSize: CGSize {
         return CGSize(width: imageView.bounds.width * UIScreen.main.scale,
                       height: imageView.bounds.height * UIScreen.main.scale)
@@ -23,7 +22,7 @@ class PhotoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.systemTeal
+        view.backgroundColor = UIColor.appBackground
         let swipeRightGestureRecognizer =
             UISwipeGestureRecognizer(target: self,
                                      action: #selector(swipeRight(sender:)))
@@ -40,7 +39,7 @@ class PhotoViewController: UIViewController {
         super.viewWillAppear(animated)
         index = photos!.firstIndex { $0.id == photoID }!
         photoProvider.loadPhoto(imageView: imageView,
-                                photo: photos![index] as Photo?)
+                                photo: photos?[index])
     }
 }
 
@@ -48,11 +47,8 @@ extension PhotoViewController {
     @objc func swipeRight(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index > photos!.startIndex {
             index -= 1
-            guard let photo = photos![index] as Photo? else { return }
-            guard let url = photoProvider
-                .getUrl(photo: photo,
-                        size: imageView.bounds.size)?.absoluteString else { return }
-            photoService.getImage(url: url) {
+            guard let photo = photos?[index] else { return }
+            AppSettings.instance.apiAdapter.getImage(url: photo.largePhotoURL) {
                 [weak self] image in
                 guard let self = self else { return }
                 let toImage = image ?? ImageProvider.get(id: .unknown)
@@ -66,11 +62,8 @@ extension PhotoViewController {
     @objc func swipeLeft(sender: UISwipeGestureRecognizer) {
         if !photos!.isEmpty, index < photos!.endIndex - 1 {
             index += 1
-            guard let photo = photos![index] as Photo? else { return }
-            guard let url = photoProvider
-                .getUrl(photo: photo,
-                        size: imageView.bounds.size)?.absoluteString else { return }
-            photoService.getImage(url: url) {
+            guard let photo = photos?[index] else { return }
+            AppSettings.instance.apiAdapter.getImage(url: photo.largePhotoURL) {
                 [weak self] image in
                 guard let self = self else { return }
                 let toImage = image ?? ImageProvider.get(id: .unknown)

@@ -10,6 +10,7 @@ import UIKit
 class AppSettings {
     static let instance = AppSettings()
     let apiService = APIService()
+    let apiAdapter = APIAdapter()
     let queuedService = QueuedOperations()
     let photoService = PhotoService()
 }

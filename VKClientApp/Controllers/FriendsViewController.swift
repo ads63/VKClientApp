@@ -10,12 +10,14 @@ import UIKit
 class FriendsViewController: UITableViewController {
     @IBOutlet var tableHeader: FriendsTableHeader!
 
+
     private var token: NotificationToken?
+    private let userViewModelFactory = UserViewModelFactory()
     private let appSettings = AppSettings.instance
-    private let realmService = SessionSettings.instance.realmService
-    private var groupedFriends: [Character: [User]] {
-        return Dictionary(grouping: [User](realmService.selectUsers()!),
-                          by: { $0.userName.uppercased().first! })
+    private var friends = [UserViewModel]()
+    private var groupedFriends: [Character: [UserViewModel]] {
+        return Dictionary(grouping: friends,
+                          by: { $0.name.uppercased().first! })
     }
 
     private var groupKeys: [Character] {
@@ -49,14 +51,16 @@ class FriendsViewController: UITableViewController {
                 nibName: "FriendsCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendsListCell")
+        tableHeader.backgroundColor = UIColor.appBackground
         tableHeader.headerLabel.text = "My friends"
+        tableHeader.headerLabel.backgroundColor = UIColor.appBackground
+        tableView.backgroundColor = UIColor.appBackground
         tableView.estimatedRowHeight = CGFloat(44.0)
         tableView.rowHeight = CGFloat(44.0)
         tableView.estimatedSectionHeaderHeight = CGFloat(20.0)
         tableView.sectionHeaderHeight = CGFloat(20.0)
         tableView.sectionFooterHeight = CGFloat(1.0)
         tableView.estimatedSectionFooterHeight = CGFloat(1.0)
-        observeFriends()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -124,21 +128,10 @@ class FriendsViewController: UITableViewController {
 
 extension FriendsViewController {
     func getFriends() {
-        appSettings.apiService.getFriendsByPromise()
-    }
-
-    func observeFriends() {
-        token = realmService.selectUsers()!
-            .observe { [weak self] (changes: RealmCollectionChange) in
-                guard let tableView = self?.tableView else { return }
-                switch changes {
-                case .initial:
-                    tableView.reloadData()
-                case .update:
-                    tableView.reloadData()
-                case .error(let error):
-                    fatalError("\(error)")
-                }
-            }
+        appSettings.apiAdapter.getFriends(completion: {
+            [weak self] users in
+            self?.friends = self?.userViewModelFactory.constructViewModels(users: users) ?? [UserViewModel]()
+            self?.tableView.reloadData()
+        })
     }
 }

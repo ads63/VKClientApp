@@ -1,13 +1,13 @@
 //
-//  NewsRow.swift
+//  NewsViewModel.swift
 //  VKClientApp
 //
-//  Created by Алексей Шинкарев on 30.11.2021.
+//  Created by Алексей Шинкарев on 17.03.2022.
 //
 
 import UIKit
 
-final class NewsRow
+final class NewsViewModel
 {
     var cellType: CellType?
     var photo: URL?

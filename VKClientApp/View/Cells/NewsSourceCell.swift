@@ -12,12 +12,15 @@ class NewsSourceCell: UITableViewCell, CellConfigurationProtocol {
     @IBOutlet var sourceImage: UIImageView!
     @IBOutlet var sourceDate: UILabel!
 
-    func configure(news: NewsRow?, isExpanded: Bool = false) {
+    func configure(news: NewsViewModel?, isExpanded: Bool = false) {
         guard let news = news else { return }
         self.sourceName.text = news.srcName
         self.sourceDate.text = news.date
         guard let url = news.photo else { return }
         self.sourceImage.load(url: url)
-        backgroundConfiguration?.backgroundColor = UIColor.systemTeal
+        self.sourceName.backgroundColor = UIColor.appBackground
+        self.sourceDate.backgroundColor = UIColor.appBackground
+        self.sourceImage.backgroundColor = UIColor.appBackground
+        self.contentView.backgroundColor = UIColor.appBackground
     }
 }

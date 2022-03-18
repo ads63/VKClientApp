@@ -7,31 +7,12 @@
 
 import Foundation
 
-final class PhotoNews: NewsProtocol, Decodable {
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yyyy HH.mm"
-        return df
-    }()
-
-    var type: String?
-    var date = 0
+final class PhotoNews: News {
     var sourceID = 0
     var photos = [NewsPhoto]()
-    var formattedDate: String
-
-    func getType() -> String {
-        return self.type!
-    }
-
-    func getDate() -> Int {
-        return self.date
-    }
 
     enum CodingKeys: String, CodingKey {
-        case type
         case source_id
-        case date
         case photos
         enum PhotosKeys: String, CodingKey {
             case items
@@ -39,13 +20,8 @@ final class PhotoNews: NewsProtocol, Decodable {
     }
 
     required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(
-            String.self,
-            forKey: .type)
-        self.date = try container.decode(
-            Int.self,
-            forKey: .date)
         self.sourceID = try container.decode(
             Int.self,
             forKey: .source_id)
@@ -55,7 +31,5 @@ final class PhotoNews: NewsProtocol, Decodable {
         self.photos = try photosContainer.decode(
             [NewsPhoto].self,
             forKey: .items)
-        self.formattedDate = PostNews.dateFormatter
-            .string(from: Date(timeIntervalSince1970: Double(self.date)))
     }
 }

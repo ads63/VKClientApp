@@ -25,7 +25,7 @@ class NewsLikesCell: UITableViewCell, CellConfigurationProtocol {
         // Configure the view for the selected state
     }
 
-    func configure(news: NewsRow?, isExpanded: Bool = false) {
+    func configure(news: NewsViewModel?, isExpanded: Bool = false) {
         guard let news = news else { return }
         commentsCount.text = String(news.comments)
         likesCount.text = String(news.likes)
@@ -39,6 +39,12 @@ class NewsLikesCell: UITableViewCell, CellConfigurationProtocol {
         commentsImage.image = news.canComment == 0
             ? UIImage(systemName: "pencil.slash")
             : UIImage(systemName: "pencil")
-        backgroundConfiguration?.backgroundColor = UIColor.systemTeal
+        commentsCount.backgroundColor = UIColor.appBackground
+        likesCount.backgroundColor = UIColor.appBackground
+        repostsCount.backgroundColor = UIColor.appBackground
+        likesImage.backgroundColor = UIColor.appBackground
+        repostsImage.backgroundColor = UIColor.appBackground
+        commentsImage.backgroundColor = UIColor.appBackground
+        contentView.backgroundColor = UIColor.appBackground
     }
 }
