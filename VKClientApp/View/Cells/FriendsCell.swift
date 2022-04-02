@@ -14,7 +14,7 @@ class FriendsCell: UITableViewCell {
     @IBOutlet var avatarImage: UIImageView!
     @IBOutlet var friendNameLabel: UILabel!
 
-    @IBInspectable var shadowColor = UIColor.black {
+    @IBInspectable var shadowColor = UIColor.appShadow {
         didSet {
             setNeedsDisplay()
         }
@@ -40,15 +40,17 @@ class FriendsCell: UITableViewCell {
                                                                      right: 0))
     }
 
-    func configure(user: User) {
-        friendNameLabel.text = user.userName
-        backgroundConfiguration?.backgroundColor = UIColor.systemTeal
+    func configure(user: UserViewModel) {
+        friendNameLabel.text = user.name
+
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                           action: #selector(tapCell(sender:)))
         avatarImage.isUserInteractionEnabled = true
         avatarImage.addGestureRecognizer(tapGestureRecognizer)
-        guard let url = URL(string: user.avatarURL!) else { return }
+        guard let url = URL(string: user.avatarURL) else { return }
         avatarImage.load(url: url, failureImage: ImageProvider.get(id: .unknown))
+        friendNameLabel.backgroundColor = UIColor.appBackground
+        backgroundConfiguration?.backgroundColor = UIColor.appBackground
     }
 
     override func awakeFromNib() {

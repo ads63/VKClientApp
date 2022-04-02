@@ -26,6 +26,7 @@ final class Group: Object, IdProtocol {
     static func == (lhs: Group, rhs: Group) -> Bool {
         lhs.id == rhs.id
     }
+
 }
 
 extension Group: Decodable {

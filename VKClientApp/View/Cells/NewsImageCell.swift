@@ -29,11 +29,11 @@ class NewsImageCell: UITableViewCell, CellConfigurationProtocol {
 //        aspectConstraint = nil
     }
 
-    func configure(news: NewsRow?, isExpanded: Bool = false) {
+    func configure(news: NewsViewModel?, isExpanded: Bool = false) {
         guard let news = news else { return }
         let url = news.photo!
 //        let aspect = CGFloat(news.width) / CGFloat(news.height)
-        guard let newsImage = newsImage else { return }
+//        guard let newsImage = newsImage else { return }
 //        aspectConstraint = NSLayoutConstraint(item: newsImage,
 //                                              attribute: NSLayoutConstraint.Attribute.width,
 //                                              relatedBy: NSLayoutConstraint.Relation.equal,
@@ -43,6 +43,6 @@ class NewsImageCell: UITableViewCell, CellConfigurationProtocol {
 
         newsImage.load(url: url,
                        failureImage: ImageProvider.get(id: .camera))
-        backgroundConfiguration?.backgroundColor = UIColor.systemTeal
+        backgroundConfiguration?.backgroundColor = UIColor.appBackground
     }
 }

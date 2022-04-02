@@ -8,5 +8,5 @@
 import Foundation
 
 final class NewsSection {
-    var newsRows = [NewsRow]()
+    var newsRows = [NewsViewModel]()
 }

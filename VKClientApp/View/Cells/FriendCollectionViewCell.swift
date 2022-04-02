@@ -2,7 +2,7 @@
 //  FriendCollectionViewCell.swift
 //  VKClientApp
 //
-//  Created by Алексей Шинкарев on 27.08.2021.
+//  Created by Алексей Шинкарев on 17.03.2022.
 //
 
 import UIKit
@@ -11,11 +11,23 @@ class FriendCollectionViewCell: UICollectionViewCell {
     @IBOutlet var photoImage: UIImageView!
     var parentViewController: FriendDetailsCollectionViewController?
 
-    func configure() {
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    func configure(photo: PhotoViewModel?, size: CGSize) {
+//        sizeThatFits(size)
+//        autoresizesSubviews = true
         let tapGestureRecognizer =
             UITapGestureRecognizer(target: self,
                                    action: #selector(tapCell(sender:)))
         addGestureRecognizer(tapGestureRecognizer)
+        if let photo = photo {
+            photoImage.load(url: URL(string: photo.photoURL),
+                            placeholderImage: ImageProvider.get(id: .unknown),
+                            failureImage: ImageProvider.get(id: .unknown))
+        }
     }
 
     @objc func tapCell(sender: UITapGestureRecognizer) {

@@ -13,16 +13,15 @@ class GroupsViewController: UITableViewController {
 
     private var token: NotificationToken?
     internal var selectedIndexes = Set<IndexPath>()
+    private let groupViewModelFactory = GroupViewModelFactory()
     private let appSettings = AppSettings.instance
     private let sessionSettings = SessionSettings.instance
-    private let realmService = SessionSettings.instance.realmService
-    private let queuedService = AppSettings.instance.queuedService
-    private var displayedGroups: [Group] {
-        return [Group](realmService.selectMyGroups()!)
-            .filter { sessionSettings.filterJoined.isEmpty ||
-                $0.groupName!.lowercased()
-                .contains(sessionSettings.filterJoined.lowercased())
-            }
+    private var groups = [GroupViewModel]()
+    private var displayedGroups: [GroupViewModel] {
+        return groups.filter { sessionSettings.filterJoined.isEmpty ||
+            $0.name.lowercased()
+            .contains(sessionSettings.filterJoined.lowercased())
+        }
     }
 
     let isSelectionEnabled = true
@@ -30,12 +29,12 @@ class GroupsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        tableView.backgroundColor = UIColor.appBackground
         tableView.register(
             UINib(
                 nibName: "GroupsViewCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupsListCell")
-        observeGroups()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -154,51 +153,46 @@ extension GroupsViewController: CroupsViewControllerProtocol {
                                                 y: view.bounds.height,
                                                 width: tableView.bounds.size.width,
                                                 height: 1.0))
-        borderTop.backgroundColor = UIColor.separator
+        borderTop.backgroundColor = UIColor.appBorder
         borderTop.isOpaque = true
-        borderBottom.backgroundColor = UIColor.separator
+        borderBottom.backgroundColor = UIColor.appBorder
         borderBottom.isOpaque = true
         view.addSubview(borderTop)
         view.addSubview(borderBottom)
-        view.contentView.backgroundColor = UIColor.systemTeal
+        view.contentView.backgroundColor = UIColor.appBackground
         view.contentView.isOpaque = true
         view.textLabel?.adjustsFontSizeToFitWidth = true
         view.textLabel?.textAlignment = .center
         view.textLabel?.text = text
-        view.textLabel?.textColor = UIColor.darkGray
-        view.textLabel?.backgroundColor = UIColor.systemTeal
+        view.textLabel?.textColor = UIColor.appHeader
+        view.textLabel?.backgroundColor = UIColor.appBackground
     }
 }
 
 extension GroupsViewController {
     func loadJoinedGroups() {
-        queuedService.getUserGroups()
-    }
-
-    func leaveGroup(index: Int) {
-        let currentGroups = displayedGroups
-        queuedService.leaveGroup(group: currentGroups[index])
+        appSettings.apiAdapter.getUserGroups(completion: {
+            [weak self] groups in
+            self?.groups = self?.groupViewModelFactory
+                .constructViewModels(groups: groups) ?? [GroupViewModel]()
+            self?.tableView.reloadData()
+        })
     }
 
     func leaveGroups(indexes: [Int]) {
-        let currentGroups = displayedGroups
-        for index in indexes {
-            queuedService.leaveGroup(group: currentGroups[index])
+        let groups2Leave = displayedGroups
+            .enumerated()
+            .filter { indexes.contains($0.offset) }
+            .map { $0.element }
+        for group in groups2Leave {
+            appSettings
+                .apiAdapter
+                .leaveGroup(groupID: group.id, completion: {
+                    [weak self] groups in
+                    self?.groups = self?.groupViewModelFactory
+                        .constructViewModels(groups: groups) ?? [GroupViewModel]()
+                    self?.tableView.reloadData()
+                })
         }
-    }
-
-    func observeGroups() {
-        token = realmService.selectMyGroups()!
-            .observe { [weak self] (changes: RealmCollectionChange) in
-                guard let tableView = self?.tableView else { return }
-                switch changes {
-                case .initial:
-                    tableView.reloadData()
-                case .update:
-                    tableView.reloadData()
-                case .error(let error):
-                    fatalError("\(error)")
-                }
-            }
     }
 }

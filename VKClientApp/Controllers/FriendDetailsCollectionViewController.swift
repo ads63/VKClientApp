@@ -9,23 +9,21 @@ import RealmSwift
 import UIKit
 
 class FriendDetailsCollectionViewController: UICollectionViewController {
-    private let appSettins = AppSettings.instance
-    private let realmService = SessionSettings.instance.realmService
-    private var token: NotificationToken?
     var userID: Int?
-    var photos: Results<Photo>?
+    var photos: [PhotoViewModel]?
     var photoID: Int?
-    let cellSpacing: CGFloat = 1
-    let columns: CGFloat = 3
-    var cellSize: CGFloat?
-
-    var pixelSize: CGFloat {
-        return cellSize ?? 0 * UIScreen.main.scale
+    private let photoViewModelFactory = PhotoViewModelFactory()
+    private let appSettins = AppSettings.instance
+    private let cellSpacing: CGFloat = 1
+    private let columns: CGFloat = 3
+    private var cellSize: CGFloat?
+    private var viewSize: CGSize {
+        return CGSize(width: cellSize ?? CGFloat(0.0) * UIScreen.main.scale,
+                      height: cellSize ?? CGFloat(0.0) * UIScreen.main.scale)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         collectionView.register(
             UINib(
                 nibName: "FriendCollectionViewCell",
@@ -33,13 +31,11 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
             ),
             forCellWithReuseIdentifier: "friendDetailsCell"
         )
-        photos = realmService.selectPhotos()
-        observePhotos()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        _ = calcCellSize()
+        cellSize = calcCellSize()
         loadUserPhoto(userID: userID!)
     }
 
@@ -64,15 +60,8 @@ class FriendDetailsCollectionViewController: UICollectionViewController {
         else {
             return UICollectionViewCell()
         }
-
-        guard let url = getUrl(index: indexPath.row,
-                               width: cell.bounds.width,
-                               height: cell.bounds.height) else { return cell }
-        cell.photoImage.load(url: url,
-                             placeholderImage: ImageProvider.get(id: .unknown),
-                             failureImage: ImageProvider.get(id: .unknown))
         cell.parentViewController = self
-        cell.configure()
+        cell.configure(photo: photos?[indexPath.row], size: viewSize)
         return cell
     }
 
@@ -95,8 +84,7 @@ extension FriendDetailsCollectionViewController: UICollectionViewDelegateFlowLay
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        guard let size = calcCellSize() else { return CGSize(width: 0.0, height: 0.0) }
-        return CGSize(width: size, height: size)
+        return viewSize
     }
 
     func collectionView(
@@ -128,7 +116,16 @@ extension FriendDetailsCollectionViewController {
     }
 
     private func loadUserPhoto(userID: Int) {
-        appSettins.apiService.getUserPhotos(userID: userID)
+        let size = viewSize
+        let largeSize = viewSize
+        appSettins.apiAdapter.getUserPhotos(userID: userID, completion: {
+            [weak self] photos in
+            self?.photos = self?.photoViewModelFactory
+                .constructViewModels(photos: photos,
+                                     viewSize: size,
+                                     largeViewSize: largeSize)
+            self?.collectionView.reloadData()
+        })
     }
 
     func tapCell(cell: FriendCollectionViewCell) {
@@ -141,30 +138,5 @@ extension FriendDetailsCollectionViewController {
             withIdentifier: "photoViewSegue",
             sender: nil
         )
-    }
-
-    private func getUrl(index: Int, width: CGFloat, height: CGFloat) -> URL? {
-        let fullImageList = photos![index].images.sorted(by: { $0.width > $1.width })
-        var filteredImageList = fullImageList
-            .filter { CGFloat($0.width) >= width || CGFloat($0.height) >= height }
-        if filteredImageList.isEmpty { filteredImageList = fullImageList }
-        guard let url = URL(string: filteredImageList.first!.imageUrl!)
-        else { return nil }
-        return url
-    }
-
-    func observePhotos() {
-        token = realmService.selectPhotos()!.observe {
-            [weak self] (changes: RealmCollectionChange) in
-            guard let collectionView = self?.collectionView else { return }
-            switch changes {
-            case .initial:
-                collectionView.reloadData()
-            case .update:
-                collectionView.reloadData()
-            case .error(let error):
-                fatalError("\(error)")
-            }
-        }
     }
 }

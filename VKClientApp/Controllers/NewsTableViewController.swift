@@ -7,6 +7,13 @@
 
 import UIKit
 
+enum CellType: String {
+    case source = "sourceCell"
+    case text = "textCell"
+    case image = "imageCell"
+    case likes = "likesCell"
+}
+
 class NewsTableViewController: UITableViewController {
     var expandedIndexSet = [IndexPath]()
     private var dataProvider: NewsDataProvider?
@@ -15,7 +22,6 @@ class NewsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider = NewsDataProvider(controller: self)
-
         tableView.register(
             UINib(nibName: "NewsFeedSectionHeaderView", bundle: nil),
             forHeaderFooterViewReuseIdentifier: "newsFeedSectionHeader")
@@ -46,6 +52,8 @@ class NewsTableViewController: UITableViewController {
         tableView.rowHeight = UITableView.automaticDimension
         setupRefreshControl()
         tableView.prefetchDataSource = self
+        tableView.tableHeaderView?.backgroundColor = UIColor.appBackground
+        tableView.backgroundColor = UIColor.appBackground
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -197,11 +205,4 @@ extension NewsTableViewController {
         }
         return nil
     }
-}
-
-enum CellType: String {
-    case source = "sourceCell"
-    case text = "textCell"
-    case image = "imageCell"
-    case likes = "likesCell"
 }

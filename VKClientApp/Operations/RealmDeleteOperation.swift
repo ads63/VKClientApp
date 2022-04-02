@@ -16,12 +16,14 @@ class RealmDeleteOperation<T: Object & IdProtocol & Decodable>: Operation {
     override func main() {
         if let parseDataOperation = dependencies.first as?
             ParseDataOperation<ResponseCode>,
-           parseDataOperation.parsedData?.result == 1 {
+            parseDataOperation.parsedData?.result == 1
+        {
             deleteData()
         } else {
             if let parseDataOperation = dependencies.first as?
                 ParseDataOperation<Response<T>>,
-               parseDataOperation.parsedData != nil {
+                parseDataOperation.parsedData != nil
+            {
                 deleteData()
             }
         }
@@ -35,7 +37,7 @@ class RealmDeleteOperation<T: Object & IdProtocol & Decodable>: Operation {
                 realm.delete(realm.objects(T.self).filter(predicate))
             }
             if let dataRef = dataRef {
-               if let data = realm.resolve(dataRef) {
+                if let data = realm.resolve(dataRef) {
                     predicate = NSPredicate(format: "id == %@",
                                             argumentArray: [data.id])
                     realm.delete(realm.objects(T.self).filter(predicate!))

@@ -12,10 +12,9 @@ extension UIImageView {
               failureImage: UIImage? = nil)
     {
         guard let url = url else { return }
-        let photoService = AppSettings.instance.photoService
-        photoService.loadImage(placeholderImage: placeholderImage,
-                               toImageView: self,
-                               url: url.absoluteString,
-                               onFailureImage: failureImage)
+        AppSettings.instance.apiAdapter.loadImage(placeholderImage: placeholderImage,
+                                                  toImageView: self,
+                                                  url: url.absoluteString,
+                                                  onFailureImage: failureImage)
     }
 }

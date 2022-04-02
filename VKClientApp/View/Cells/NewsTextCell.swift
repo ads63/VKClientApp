@@ -11,12 +11,14 @@ class NewsTextCell: UITableViewCell, CellConfigurationProtocol {
     var text = ""
     @IBOutlet var newsText: UILabel!
 
-    func configure(news: NewsRow?, isExpanded: Bool = false) {
+    func configure(news: NewsViewModel?, isExpanded: Bool = false) {
         guard let news = news else { return }
         text = news.text ?? ""
-        if text.count > 200 && isExpanded == false {
+        if text.count > 200, isExpanded == false {
             setText(text: String(text.prefix(200)) + "...")
         } else { setText(text: text) }
+        backgroundColor = UIColor.appBackground
+        newsText.backgroundColor = UIColor.appBackground
     }
 
     private func setText(text: String?) {
