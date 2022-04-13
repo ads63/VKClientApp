@@ -7,6 +7,11 @@
 
 import Foundation
 import UIKit
+
+enum PostType: String {
+    case post = "post", photo = "photo"
+}
+
 final class NewsDataProvider {
     private let newsSectionFactory = NewsSectionFactory()
     private var controller: UITableViewController?
@@ -192,9 +197,4 @@ final class NewsDataProvider {
             .first?.getDate() ?? 0
         maxNewsTime = max(maxNewsTime ?? 0, newTime)
     }
-}
-
-enum PostType: String {
-    case post
-    case photo
 }
