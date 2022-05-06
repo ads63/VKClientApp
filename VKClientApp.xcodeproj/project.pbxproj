@@ -45,6 +45,9 @@
 		167012B527D92D6700C26F1F /* UIColor+ApplicationColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167012B427D92D6700C26F1F /* UIColor+ApplicationColors.swift */; };
 		167012BA27D9F2BC00C26F1F /* APIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167012B927D9F2BC00C26F1F /* APIAdapter.swift */; };
 		167012BC27D9F36900C26F1F /* APIAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167012BB27D9F36900C26F1F /* APIAdapterProtocol.swift */; };
+		167BB17A2822CFE500F1CCE2 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167BB1792822CFE500F1CCE2 /* AuthView.swift */; };
+		167BB17C28230C5000F1CCE2 /* UIApplication+endEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167BB17B28230C5000F1CCE2 /* UIApplication+endEditing.swift */; };
+		167BB17E282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167BB17D282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift */; };
 		16807BB526F9290000A232F0 /* NavigationControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16807BB426F9290000A232F0 /* NavigationControllerAnimation.swift */; };
 		16807BB726F9297100A232F0 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16807BB626F9297100A232F0 /* CustomNavigationController.swift */; };
 		16851D6A26F699B400BF3A55 /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16851D6926F699B400BF3A55 /* Direction.swift */; };
@@ -131,6 +134,9 @@
 		167012B427D92D6700C26F1F /* UIColor+ApplicationColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+ApplicationColors.swift"; sourceTree = "<group>"; };
 		167012B927D9F2BC00C26F1F /* APIAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAdapter.swift; sourceTree = "<group>"; };
 		167012BB27D9F36900C26F1F /* APIAdapterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAdapterProtocol.swift; sourceTree = "<group>"; };
+		167BB1792822CFE500F1CCE2 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		167BB17B28230C5000F1CCE2 /* UIApplication+endEditing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+endEditing.swift"; sourceTree = "<group>"; };
+		167BB17D282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewControllerSwiftUI.swift; sourceTree = "<group>"; };
 		16807BB426F9290000A232F0 /* NavigationControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerAnimation.swift; sourceTree = "<group>"; };
 		16807BB626F9297100A232F0 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		16851D6926F699B400BF3A55 /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
@@ -336,6 +342,15 @@
 			path = BackendAdapter;
 			sourceTree = "<group>";
 		};
+		167BB1782822CF9100F1CCE2 /* SwiftUIViews */ = {
+			isa = PBXGroup;
+			children = (
+				167BB1792822CFE500F1CCE2 /* AuthView.swift */,
+				167BB17B28230C5000F1CCE2 /* UIApplication+endEditing.swift */,
+			);
+			path = SwiftUIViews;
+			sourceTree = "<group>";
+		};
 		16807BB326F9280900A232F0 /* UIHelpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -424,6 +439,7 @@
 				1662A93627073A2A004A52F8 /* VKWebLoginController.swift */,
 				161A7E972719F41800AD1BF5 /* PhotoViewController.swift */,
 				16C53F242741496B003E19ED /* NewsTableViewController.swift */,
+				167BB17D282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -431,6 +447,7 @@
 		16DF75B226CA7ECC00150AB2 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				167BB1782822CF9100F1CCE2 /* SwiftUIViews */,
 				16DF75A326CA7E3000150AB2 /* Main.storyboard */,
 				1654819F26D7A667002F8292 /* Cells */,
 			);
@@ -621,7 +638,9 @@
 				165481A926D95CA8002F8292 /* GroupsViewController.swift in Sources */,
 				16D0EFEC27F8422300DDB0BC /* APIAdapterProxyProtocol.swift in Sources */,
 				165D1DD8274D63D700CCAE51 /* PhotoNews.swift in Sources */,
+				167BB17A2822CFE500F1CCE2 /* AuthView.swift in Sources */,
 				16212F4627E35D19004B23D3 /* PhotoViewModelFactory.swift in Sources */,
+				167BB17C28230C5000F1CCE2 /* UIApplication+endEditing.swift in Sources */,
 				16D0EFEA27F841FD00DDB0BC /* APIAdapterProxy.swift in Sources */,
 				165481A126D7CF1A002F8292 /* FriendDetailsCollectionViewController.swift in Sources */,
 				16E1B98D27B3FFEF009774B5 /* PhotoService.swift in Sources */,
@@ -654,6 +673,7 @@
 				1643176A274D6EF5009695A7 /* NewsPhoto.swift in Sources */,
 				1662A93A2707592A004A52F8 /* APIService.swift in Sources */,
 				1654819D26D7A65C002F8292 /* FriendsCell.swift in Sources */,
+				167BB17E282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift in Sources */,
 				169772A527AB291A0067FFE0 /* RealmDeleteOperation.swift in Sources */,
 				16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */,
 				16212F4427E35BF8004B23D3 /* GroupViewModelFactory.swift in Sources */,

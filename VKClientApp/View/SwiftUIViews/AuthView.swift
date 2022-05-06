@@ -1,0 +1,97 @@
+//
+//  AuthView.swift
+//  VKClientApp
+//
+//  Created by Алексей Шинкарев on 04.05.2022.
+//
+
+import Combine
+import SwiftUI
+
+struct AuthView: View {
+    @State private var login = ""
+    @State private var password = ""
+    @State private var shouldShowLogo = true
+    @State private var showAlert = false
+    var presentWebLogin: (() -> Void)?
+
+    private let keyboardIsOnPublisher = Publishers.Merge(
+        NotificationCenter.default.publisher(for:
+            UIResponder.keyboardWillChangeFrameNotification)
+            .map { _ in true },
+        NotificationCenter.default.publisher(for:
+            UIResponder.keyboardWillHideNotification)
+            .map { _ in false }
+    ).removeDuplicates()
+
+    var body: some View {
+        ZStack {
+            GeometryReader { geometry in
+                SwiftUI.Image("background")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
+            }
+            ScrollView(showsIndicators: false) {
+                VStack {
+                    if shouldShowLogo {
+                        Text("VKClient App")
+                            .font(.largeTitle)
+                            .foregroundColor(.blue)
+                            .padding(.top, 40)
+                    }
+                    VStack {
+                        HStack {
+                            Text("Login:")
+                            Spacer()
+                            TextField("", text: $login)
+                                .frame(maxWidth: 150)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        HStack {
+                            Text("Password:")
+                            Spacer()
+                            SecureField("", text: $password)
+                                .frame(maxWidth: 150)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                    }.frame(maxWidth: 250)
+                        .padding(.top, 50)
+                    Button(action: {
+                        if isValid() {
+                            self.presentWebLogin?()
+                        } else {
+                            self.showAlert = true
+                        }
+                    }) {
+                        Text("Log in")
+                            .font(.title)
+                            .background(Color.white)
+                            .foregroundColor(Color.blue)
+                            .padding(10)
+                            .border(Color.white, width: 10)
+                            .cornerRadius(10)
+                    }
+                    .padding(.top, 50)
+                    .padding(.bottom, 20)
+                    .disabled(login.isEmpty || password.isEmpty)
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Error"), message: Text("invalid Login/Password"), dismissButton: .default(Text("Ok")))
+                    }
+                }
+            }
+            .onReceive(keyboardIsOnPublisher) { isKeyboardOn in
+                withAnimation(Animation.easeInOut(duration: 0.5)) {
+                    self.shouldShowLogo = !isKeyboardOn
+                }
+            }
+        }.onTapGesture {
+            UIApplication.shared.endEditing()
+        }
+    }
+
+    private func isValid() -> Bool {
+        login == "Admin" && password == "123"
+    }
+}
