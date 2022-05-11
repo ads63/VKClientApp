@@ -81,6 +81,11 @@
 		16CFC2DF27BAA20F00454C9B /* PhotoDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CFC2DE27BAA20F00454C9B /* PhotoDataProvider.swift */; };
 		16D0EFEA27F841FD00DDB0BC /* APIAdapterProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EFE927F841FD00DDB0BC /* APIAdapterProxy.swift */; };
 		16D0EFEC27F8422300DDB0BC /* APIAdapterProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0EFEB27F8422300DDB0BC /* APIAdapterProxyProtocol.swift */; };
+		16D33883282BAC2E0054E0EE /* FriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D33882282BAC2E0054E0EE /* FriendView.swift */; };
+		16D33885282BACD00054E0EE /* LogoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D33884282BACD00054E0EE /* LogoBuilder.swift */; };
+		16D33887282BAD100054E0EE /* ShadowModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D33886282BAD100054E0EE /* ShadowModifier.swift */; };
+		16D33889282BAFCF0054E0EE /* NameBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D33888282BAFCF0054E0EE /* NameBuilder.swift */; };
+		16D3388B282BC09C0054E0EE /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D3388A282BC09C0054E0EE /* GroupView.swift */; };
 		16D77D62270327E0001973DF /* SessionSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D77D61270327E0001973DF /* SessionSettings.swift */; };
 		16D89AE526E7C493000031AC /* FriendsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */; };
 		16D89AE726E7C936000031AC /* FriendsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */; };
@@ -170,6 +175,11 @@
 		16CFC2DE27BAA20F00454C9B /* PhotoDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDataProvider.swift; sourceTree = "<group>"; };
 		16D0EFE927F841FD00DDB0BC /* APIAdapterProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAdapterProxy.swift; sourceTree = "<group>"; };
 		16D0EFEB27F8422300DDB0BC /* APIAdapterProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAdapterProxyProtocol.swift; sourceTree = "<group>"; };
+		16D33882282BAC2E0054E0EE /* FriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendView.swift; sourceTree = "<group>"; };
+		16D33884282BACD00054E0EE /* LogoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoBuilder.swift; sourceTree = "<group>"; };
+		16D33886282BAD100054E0EE /* ShadowModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowModifier.swift; sourceTree = "<group>"; };
+		16D33888282BAFCF0054E0EE /* NameBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameBuilder.swift; sourceTree = "<group>"; };
+		16D3388A282BC09C0054E0EE /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
 		16D77D61270327E0001973DF /* SessionSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSettings.swift; sourceTree = "<group>"; };
 		16D89AE426E7C493000031AC /* FriendsSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsSectionHeader.swift; sourceTree = "<group>"; };
 		16D89AE626E7C936000031AC /* FriendsSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendsSectionHeader.xib; sourceTree = "<group>"; };
@@ -345,6 +355,9 @@
 		167BB1782822CF9100F1CCE2 /* SwiftUIViews */ = {
 			isa = PBXGroup;
 			children = (
+				16D33881282BABF10054E0EE /* ViewBuilders */,
+				16D33880282BABDE0054E0EE /* ViewModifiers */,
+				16D3387F282BABCD0054E0EE /* Cells */,
 				167BB1792822CFE500F1CCE2 /* AuthView.swift */,
 				167BB17B28230C5000F1CCE2 /* UIApplication+endEditing.swift */,
 			);
@@ -371,6 +384,32 @@
 				16C106A327AC0E8F001E548A /* QueuedOperations.swift */,
 			);
 			path = Operations;
+			sourceTree = "<group>";
+		};
+		16D3387F282BABCD0054E0EE /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				16D33882282BAC2E0054E0EE /* FriendView.swift */,
+				16D3388A282BC09C0054E0EE /* GroupView.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		16D33880282BABDE0054E0EE /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				16D33886282BAD100054E0EE /* ShadowModifier.swift */,
+			);
+			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		16D33881282BABF10054E0EE /* ViewBuilders */ = {
+			isa = PBXGroup;
+			children = (
+				16D33884282BACD00054E0EE /* LogoBuilder.swift */,
+				16D33888282BAFCF0054E0EE /* NameBuilder.swift */,
+			);
+			path = ViewBuilders;
 			sourceTree = "<group>";
 		};
 		16D77D60270327BB001973DF /* Singletons */ = {
@@ -617,6 +656,7 @@
 			files = (
 				161A7E982719F41800AD1BF5 /* PhotoViewController.swift in Sources */,
 				1641393F26D4134600287F22 /* FriendsViewController.swift in Sources */,
+				16D3388B282BC09C0054E0EE /* GroupView.swift in Sources */,
 				16C53F252741496B003E19ED /* NewsTableViewController.swift in Sources */,
 				1640A3D8271736CE0039A888 /* FriendsTableHeader.swift in Sources */,
 				16807BB526F9290000A232F0 /* NavigationControllerAnimation.swift in Sources */,
@@ -635,9 +675,11 @@
 				1640A3D52713A4B60039A888 /* ResponseCode.swift in Sources */,
 				165481B026D9606B002F8292 /* GroupsViewCell.swift in Sources */,
 				16C53F27274228C7003E19ED /* ResponseNews.swift in Sources */,
+				16D33887282BAD100054E0EE /* ShadowModifier.swift in Sources */,
 				165481A926D95CA8002F8292 /* GroupsViewController.swift in Sources */,
 				16D0EFEC27F8422300DDB0BC /* APIAdapterProxyProtocol.swift in Sources */,
 				165D1DD8274D63D700CCAE51 /* PhotoNews.swift in Sources */,
+				16D33889282BAFCF0054E0EE /* NameBuilder.swift in Sources */,
 				167BB17A2822CFE500F1CCE2 /* AuthView.swift in Sources */,
 				16212F4627E35D19004B23D3 /* PhotoViewModelFactory.swift in Sources */,
 				167BB17C28230C5000F1CCE2 /* UIApplication+endEditing.swift in Sources */,
@@ -651,6 +693,7 @@
 				16BA1908270484F800EBD36B /* AppSettings.swift in Sources */,
 				160AC84126DFC0190044FE5D /* ShadowView.swift in Sources */,
 				16851D6A26F699B400BF3A55 /* Direction.swift in Sources */,
+				16D33883282BAC2E0054E0EE /* FriendView.swift in Sources */,
 				16C53F3E27450814003E19ED /* NewsLikesCell.swift in Sources */,
 				1661E693271D5AA700E57BC0 /* RealmService.swift in Sources */,
 				169772A127AB16F90067FFE0 /* RestApiOperation.swift in Sources */,
@@ -680,6 +723,7 @@
 				1640A3D127133CCC0039A888 /* Photo.swift in Sources */,
 				169DD8B1276235E300769DA6 /* NewsFlags.swift in Sources */,
 				167012B527D92D6700C26F1F /* UIColor+ApplicationColors.swift in Sources */,
+				16D33885282BACD00054E0EE /* LogoBuilder.swift in Sources */,
 				16C106A227ABF9F6001E548A /* RealmInsertOperation.swift in Sources */,
 				16212F4C27E3BCA4004B23D3 /* NewsSectionFactory.swift in Sources */,
 				167012BC27D9F36900C26F1F /* APIAdapterProtocol.swift in Sources */,
@@ -838,6 +882,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3FDD944J59;
 				INFOPLIST_FILE = VKClientApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -858,6 +903,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3FDD944J59;
 				INFOPLIST_FILE = VKClientApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
