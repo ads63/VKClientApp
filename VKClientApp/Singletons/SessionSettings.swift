@@ -7,11 +7,16 @@
 
 import Foundation
 
-class SessionSettings {
+class SessionSettings: ObservableObject {
     static let instance = SessionSettings()
-    var token = ""
-    var userId = 0
-    var app_Id = "7965015"
+
+    private init() {}
+
+    @Published var isUserLoggedIn = false
+    @Published var token = ""
+    @Published var userId = 0
+
+    let app_Id = "7965015"
     let api_version = "5.131"
     let enabledPhotoType = ["s", "m", "x", "y", "z", "w"]
     var filter2Join = ""

@@ -10,7 +10,7 @@ import Foundation
 typealias UserViewModel = EntityViewModel
 typealias GroupViewModel = EntityViewModel
 
-final class EntityViewModel {
+final class EntityViewModel: Identifiable {
     let id: Int
     let name: String
     let avatarURL: String
