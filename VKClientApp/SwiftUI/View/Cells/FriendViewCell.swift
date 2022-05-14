@@ -1,26 +1,26 @@
 //
-//  FriendView.swift
+//  FriendViewCell.swift
 //  VKClientApp
 //
 //  Created by Алексей Шинкарев on 11.05.2022.
 //
-
+import SDWebImageSwiftUI
 import SwiftUI
 
-var friendName = Text("my test friend")
-var friendLogo = SwiftUI.Image("unknown")
+var friend = UserViewModel(id: 0, name: "my test friend", avatarURL: "unknown")
 
 // MARK: Content
 
-struct FriendView: View {
+struct FriendViewCell: View {
+    var friend: UserViewModel
     var body: some View {
         HStack {
             LogoBuilder {
-                friendLogo
+                WebImage(url: URL(string: friend.avatarURL))
             }
             Spacer()
             NameBuilder {
-                friendName
+                Text(friend.name)
             }
         }.padding(10)
     }
@@ -30,6 +30,6 @@ struct FriendView: View {
 
 struct FriendView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendView()
+        FriendViewCell(friend: friend)
     }
 }

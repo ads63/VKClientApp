@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-final class Group: Object, IdProtocol {
+final class Group: Object, IdProtocol, Identifiable {
     @objc dynamic var id: Int = 0
     @objc dynamic var avatarURL: String?
     @objc dynamic var groupName: String?

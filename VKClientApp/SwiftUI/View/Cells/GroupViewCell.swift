@@ -1,26 +1,27 @@
 //
-//  GroupView.swift
+//  GroupViewCell.swift
 //  VKClientApp
 //
 //  Created by Алексей Шинкарев on 11.05.2022.
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
-var groupName = Text("сообщество")
-var groupLogo = SwiftUI.Image("globe")
+var group = GroupViewModel(id: 0, name: "сообщество", avatarURL: "globe")
 
 // MARK: Content
 
-struct GroupView: View {
+struct GroupViewCell: View {
+    var group: GroupViewModel
     var body: some View {
         HStack {
             LogoBuilder {
-                groupLogo
+                WebImage(url: URL(string: group.avatarURL))
             }
             Spacer()
             NameBuilder {
-                groupName
+                Text(group.name)
             }
 
         }.padding(10)
@@ -31,6 +32,6 @@ struct GroupView: View {
 
 struct GroupView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupView()
+        GroupViewCell(group: group)
     }
 }

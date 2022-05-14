@@ -5,12 +5,13 @@
 //  Created by Алексей Шинкарев on 11.05.2022.
 //
 
+import SDWebImageSwiftUI
 import SwiftUI
 
 struct LogoBuilder: View {
-    var content: SwiftUI.Image
+    var content: WebImage
 
-    init(@ViewBuilder content: () -> SwiftUI.Image) {
+    init(@ViewBuilder content: () -> WebImage) {
         self.content = content()
     }
 
@@ -18,8 +19,8 @@ struct LogoBuilder: View {
         content
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 60, height: 60)
-            .cornerRadius(30)
+            .frame(width: 40, height: 40)
+            .cornerRadius(20)
             .modifier(ShadowModifier(shadowColor: .black, shadowRadius: 6, x: 3, y: 3))
     }
 }

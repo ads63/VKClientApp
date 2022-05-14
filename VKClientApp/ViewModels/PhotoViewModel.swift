@@ -6,7 +6,7 @@
 //
 
 import Foundation
-final class PhotoViewModel {
+final class PhotoViewModel: Identifiable {
     let id: Int
     let photoURL: String
     let largePhotoURL: String

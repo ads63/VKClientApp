@@ -9,9 +9,10 @@ import SwiftUI
 import UIKit
 
 class LoginViewControllerSwiftUI: UIViewController {
+    @State private var shouldShowMainView: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        let authView = AuthView()
+        let authView = AuthView(isUserLoggedIn: $shouldShowMainView)
         let hostingController = UIHostingController(rootView: authView)
         hostingController.rootView.presentWebLogin = {
             let destinationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "VC_WEB_LOGIN")
