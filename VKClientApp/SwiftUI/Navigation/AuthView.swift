@@ -13,6 +13,7 @@ struct AuthView: View {
     @State private var password = ""
     @State private var shouldShowLogo = true
     @State private var showAlert = false
+    @Binding var isUserLoggedIn: Bool
     var presentWebLogin: (() -> Void)?
 
     private let keyboardIsOnPublisher = Publishers.Merge(
@@ -39,7 +40,7 @@ struct AuthView: View {
                         Text("VKClient App")
                             .font(.largeTitle)
                             .foregroundColor(.blue)
-                            .padding(.top, 40)
+                            .padding(.top, 10)
                     }
                     VStack {
                         HStack {
@@ -57,10 +58,11 @@ struct AuthView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                     }.frame(maxWidth: 250)
-                        .padding(.top, 50)
+                        .padding(.top, 20)
                     Button(action: {
                         if isValid() {
                             self.presentWebLogin?()
+                            isUserLoggedIn = true
                         } else {
                             self.showAlert = true
                         }
@@ -73,7 +75,7 @@ struct AuthView: View {
                             .border(Color.white, width: 10)
                             .cornerRadius(10)
                     }
-                    .padding(.top, 50)
+                    .padding(.top, 10)
                     .padding(.bottom, 20)
                     .disabled(login.isEmpty || password.isEmpty)
                     .alert(isPresented: $showAlert) {

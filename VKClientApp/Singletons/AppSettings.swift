@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 class AppSettings {
     static let instance = AppSettings()
+
+    private init() {}
+
     let apiService = APIService()
     let apiAdapter = APIAdapterProxy()
     let queuedService = QueuedOperations()

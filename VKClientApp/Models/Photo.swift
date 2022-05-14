@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-final class Photo: Object {
+final class Photo: Object, Identifiable {
     @objc dynamic var id = 0
     var images = List<Image>()
 

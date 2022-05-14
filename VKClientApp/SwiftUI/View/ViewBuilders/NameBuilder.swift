@@ -18,6 +18,6 @@ struct NameBuilder: View {
         content
             .font(.system(size: 16))
             .fixedSize(horizontal: false, vertical: true)
-            .frame(width: 250, height: 60, alignment: .leading)
+            .frame(width: 250, height: 40, alignment: .leading)
     }
 }
