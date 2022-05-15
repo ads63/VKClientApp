@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import CodingStyle
 
 struct AuthView: View {
     @State private var login = ""
@@ -14,6 +15,7 @@ struct AuthView: View {
     @State private var shouldShowLogo = true
     @State private var showAlert = false
     @Binding var isUserLoggedIn: Bool
+    @CodingStyle(coding: .camel) var appName = "My VK client app"
     var presentWebLogin: (() -> Void)?
 
     private let keyboardIsOnPublisher = Publishers.Merge(
@@ -37,8 +39,8 @@ struct AuthView: View {
             ScrollView(showsIndicators: false) {
                 VStack {
                     if shouldShowLogo {
-                        Text("VKClient App")
-                            .font(.largeTitle)
+                        Text(appName)
+                            .font(.title)
                             .foregroundColor(.blue)
                             .padding(.top, 10)
                     }
