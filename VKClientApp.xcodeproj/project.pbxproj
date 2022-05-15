@@ -45,6 +45,7 @@
 		167012B527D92D6700C26F1F /* UIColor+ApplicationColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167012B427D92D6700C26F1F /* UIColor+ApplicationColors.swift */; };
 		167012BA27D9F2BC00C26F1F /* APIAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167012B927D9F2BC00C26F1F /* APIAdapter.swift */; };
 		167012BC27D9F36900C26F1F /* APIAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167012BB27D9F36900C26F1F /* APIAdapterProtocol.swift */; };
+		16784B73283119840062AE6F /* CodingStyle in Frameworks */ = {isa = PBXBuildFile; productRef = 16784B72283119840062AE6F /* CodingStyle */; };
 		167BB17A2822CFE500F1CCE2 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167BB1792822CFE500F1CCE2 /* AuthView.swift */; };
 		167BB17C28230C5000F1CCE2 /* UIApplication+endEditing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167BB17B28230C5000F1CCE2 /* UIApplication+endEditing.swift */; };
 		167BB17E282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167BB17D282426F000F1CCE2 /* LoginViewControllerSwiftUI.swift */; };
@@ -225,6 +226,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				16784B73283119840062AE6F /* CodingStyle in Frameworks */,
 				16D338A7282D0EB10054E0EE /* SDWebImageSwiftUI in Frameworks */,
 				16B30A01282EE3A40061CC76 /* ASCollectionView in Frameworks */,
 				79DC6B4A446BB954A75D7610 /* Pods_VKClientApp.framework in Frameworks */,
@@ -622,6 +624,7 @@
 			packageProductDependencies = (
 				16D338A6282D0EB10054E0EE /* SDWebImageSwiftUI */,
 				16B30A00282EE3A40061CC76 /* ASCollectionView */,
+				16784B72283119840062AE6F /* CodingStyle */,
 			);
 			productName = VKClientApp;
 			productReference = 16DF759A26CA7E3000150AB2 /* VKClientApp.app */;
@@ -653,6 +656,7 @@
 			packageReferences = (
 				16D338A5282D0EB10054E0EE /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				16B309FF282EE3A40061CC76 /* XCRemoteSwiftPackageReference "ASCollectionView" */,
+				16784B71283119840062AE6F /* XCRemoteSwiftPackageReference "CodingStyle" */,
 			);
 			productRefGroup = 16DF759B26CA7E3000150AB2 /* Products */;
 			projectDirPath = "";
@@ -1009,6 +1013,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		16784B71283119840062AE6F /* XCRemoteSwiftPackageReference "CodingStyle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ads63/CodingStyle/";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
 		16B309FF282EE3A40061CC76 /* XCRemoteSwiftPackageReference "ASCollectionView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apptekstudios/ASCollectionView";
@@ -1028,6 +1040,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		16784B72283119840062AE6F /* CodingStyle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 16784B71283119840062AE6F /* XCRemoteSwiftPackageReference "CodingStyle" */;
+			productName = CodingStyle;
+		};
 		16B30A00282EE3A40061CC76 /* ASCollectionView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 16B309FF282EE3A40061CC76 /* XCRemoteSwiftPackageReference "ASCollectionView" */;
