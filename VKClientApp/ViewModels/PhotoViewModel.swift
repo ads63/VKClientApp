@@ -8,12 +8,14 @@
 import Foundation
 final class PhotoViewModel: Identifiable {
     let id: Int
+    let likes: Likes?
     let photoURL: String
     let largePhotoURL: String
 
-    init(id: Int, photoURL: String?, largePhotoURL: String?) {
+    init(id: Int, photoURL: String?, largePhotoURL: String?, likes: Likes?) {
         self.id = id
         self.photoURL = photoURL ?? ""
         self.largePhotoURL = largePhotoURL ?? ""
+        self.likes = likes
     }
 }
