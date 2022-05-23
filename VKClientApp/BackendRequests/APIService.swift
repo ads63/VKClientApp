@@ -113,7 +113,8 @@ final class APIService {
             "access_token": session.token,
             "v": session.api_version,
             "offset": String(offset),
-            "owner_id": String(userID)
+            "owner_id": String(userID),
+            "extended": 1
         ]
 
         AF.request(

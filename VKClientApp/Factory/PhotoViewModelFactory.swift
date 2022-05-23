@@ -24,7 +24,9 @@ final class PhotoViewModelFactory {
     {
         return PhotoViewModel(id: photo.id,
                               photoURL: getUrl(photo: photo, size: viewSize),
-                              largePhotoURL: getUrl(photo: photo, size: largeViewSize))
+                              largePhotoURL: getUrl(photo: photo, size: largeViewSize),
+                              isLiked: photo.isLiked,
+                              likesCount: photo.likesCount)
     }
 
     private func getUrl(photo: Photo?, size: CGSize) -> String {

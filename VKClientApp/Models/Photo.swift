@@ -9,6 +9,8 @@ import RealmSwift
 
 final class Photo: Object, Identifiable {
     @objc dynamic var id = 0
+    @objc dynamic var likesCount = 0
+    @objc dynamic var isLiked = 0
     var images = List<Image>()
 
     override static func primaryKey() -> String? {
@@ -24,6 +26,11 @@ extension Photo: Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case sizes
+        case likes
+        enum LikesKeys: String, CodingKey {
+            case count
+            case user_likes
+        }
     }
 
     convenience init(from decoder: Decoder) throws {
@@ -33,5 +40,10 @@ extension Photo: Decodable {
             Int.self,
             forKey: .id)
         self.images = try container.decode(List<Image>.self, forKey: .sizes)
+        let likesContainer = try container
+            .nestedContainer(keyedBy: CodingKeys.LikesKeys.self,
+                             forKey: .likes)
+        self.isLiked = try likesContainer.decode(Int.self, forKey: .user_likes)
+        self.likesCount = try likesContainer.decode(Int.self, forKey: .count)
     }
 }
