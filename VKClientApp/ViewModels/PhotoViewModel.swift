@@ -6,7 +6,7 @@
 //
 
 import Foundation
-final class PhotoViewModel: Identifiable {
+final class PhotoViewModel: Identifiable, Equatable {
     let id: Int
     let photoURL: String
     let largePhotoURL: String
@@ -24,5 +24,9 @@ final class PhotoViewModel: Identifiable {
         self.largePhotoURL = largePhotoURL ?? ""
         self.isLiked = isLiked ?? 0
         self.likesCount = likesCount ?? 0
+    }
+
+    static func == (lhs: PhotoViewModel, rhs: PhotoViewModel) -> Bool {
+        return lhs.id == rhs.id
     }
 }
