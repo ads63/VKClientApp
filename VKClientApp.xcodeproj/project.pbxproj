@@ -112,6 +112,9 @@
 		16DF75A726CA7E3100150AB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16DF75A626CA7E3100150AB2 /* Assets.xcassets */; };
 		16E1B98D27B3FFEF009774B5 /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E1B98C27B3FFEF009774B5 /* PhotoService.swift */; };
 		16E1B9C927B4443B009774B5 /* UIImageView+load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E1B9C827B4443B009774B5 /* UIImageView+load.swift */; };
+		16E5AB8C284E75AA009EA1A4 /* PhotoHeightPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E5AB8B284E75AA009EA1A4 /* PhotoHeightPreferenceKey.swift */; };
+		16E5AB8E284E7625009EA1A4 /* SelectionsPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E5AB8D284E7625009EA1A4 /* SelectionsPreferenceKey.swift */; };
+		16E5AB90284E7659009EA1A4 /* SelectionsRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E5AB8F284E7659009EA1A4 /* SelectionsRectangle.swift */; };
 		79DC6B4A446BB954A75D7610 /* Pods_VKClientApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A350B130D609C2E3EE59E2EA /* Pods_VKClientApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -220,6 +223,9 @@
 		16DF75AB26CA7E3100150AB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16E1B98C27B3FFEF009774B5 /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		16E1B9C827B4443B009774B5 /* UIImageView+load.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+load.swift"; sourceTree = "<group>"; };
+		16E5AB8B284E75AA009EA1A4 /* PhotoHeightPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoHeightPreferenceKey.swift; sourceTree = "<group>"; };
+		16E5AB8D284E7625009EA1A4 /* SelectionsPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionsPreferenceKey.swift; sourceTree = "<group>"; };
+		16E5AB8F284E7659009EA1A4 /* SelectionsRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionsRectangle.swift; sourceTree = "<group>"; };
 		24DAD545DE6003A51EAD0990 /* Pods-VKClientApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientApp.debug.xcconfig"; path = "Target Support Files/Pods-VKClientApp/Pods-VKClientApp.debug.xcconfig"; sourceTree = "<group>"; };
 		5D68C32E2062892D43EDE1C0 /* Pods-VKClientApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientApp.release.xcconfig"; path = "Target Support Files/Pods-VKClientApp/Pods-VKClientApp.release.xcconfig"; sourceTree = "<group>"; };
 		A350B130D609C2E3EE59E2EA /* Pods_VKClientApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VKClientApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -462,6 +468,7 @@
 		16D3388D282CC1FC0054E0EE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				16E5AB8A284E7540009EA1A4 /* Preferences */,
 				16D3389D282D051A0054E0EE /* ViewModels */,
 				16D33898282CD0620054E0EE /* Views */,
 				16D33881282BABF10054E0EE /* ViewBuilders */,
@@ -606,6 +613,16 @@
 				16E1B9C827B4443B009774B5 /* UIImageView+load.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		16E5AB8A284E7540009EA1A4 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				16E5AB8B284E75AA009EA1A4 /* PhotoHeightPreferenceKey.swift */,
+				16E5AB8D284E7625009EA1A4 /* SelectionsPreferenceKey.swift */,
+				16E5AB8F284E7659009EA1A4 /* SelectionsRectangle.swift */,
+			);
+			path = Preferences;
 			sourceTree = "<group>";
 		};
 		45E89E3D005568CD444640EA /* Frameworks */ = {
@@ -771,9 +788,11 @@
 				16C53F3A274507E5003E19ED /* NewsImageCell.swift in Sources */,
 				16B4EFDE27DFC87C00A0D4AA /* News.swift in Sources */,
 				1611E3D8275511A00062EC6D /* NewsProtocol.swift in Sources */,
+				16E5AB8E284E7625009EA1A4 /* SelectionsPreferenceKey.swift in Sources */,
 				16D33893282CC8550054E0EE /* WebViewNavigationDelegate.swift in Sources */,
 				16DF75A226CA7E3000150AB2 /* LoginViewController.swift in Sources */,
 				16807BB726F9297100A232F0 /* CustomNavigationController.swift in Sources */,
+				16E5AB8C284E75AA009EA1A4 /* PhotoHeightPreferenceKey.swift in Sources */,
 				1654819726D6A365002F8292 /* User.swift in Sources */,
 				1611E3DD2755F43B0062EC6D /* NewsSection.swift in Sources */,
 				1640A3D52713A4B60039A888 /* ResponseCode.swift in Sources */,
@@ -786,6 +805,7 @@
 				16D338AD282D130E0054E0EE /* PhotosViewModel.swift in Sources */,
 				16D338AB282D115B0054E0EE /* GroupsViewModel.swift in Sources */,
 				165D1DD8274D63D700CCAE51 /* PhotoNews.swift in Sources */,
+				16E5AB90284E7659009EA1A4 /* SelectionsRectangle.swift in Sources */,
 				16D33889282BAFCF0054E0EE /* NameBuilder.swift in Sources */,
 				167BB17A2822CFE500F1CCE2 /* AuthView.swift in Sources */,
 				16212F4627E35D19004B23D3 /* PhotoViewModelFactory.swift in Sources */,
